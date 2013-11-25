@@ -1,4 +1,4 @@
-openMetaAnalysis <- function(content,lefthand,righthand, type, cofactorlabel, topic, theme) {
+binary <- function(content,lefthand,righthand, type, cofactorlabel, topic, theme) {
 temp <- content
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
 temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
