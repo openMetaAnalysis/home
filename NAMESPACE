@@ -1,4 +1,4 @@
-export(openMetaAnalysis)
+export(binary)
 import(meta)
 import(rmeta)
 import(RJSONIO)
