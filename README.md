@@ -1,4 +1,4 @@
-openMetaAnalysis
+openMetaAnalysis for binary outcomes
 ==================
 
 You may view and interact with this meta-analysis at [this link] (https://public.opencpu.org/ocpu/github/openMetaAnalysis/binary/www) at [OpenCPU] (https://public.opencpu.org)
