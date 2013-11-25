@@ -1,7 +1,7 @@
 openMetaAnalysis
 ==================
 
-You may view and interact with this meta-analysis at [this link] (https://public.opencpu.org/ocpu/github/badgettrg/openMetaAnalysis/www) at [OpenCPU] (https://public.opencpu.org)
+You may view and interact with this meta-analysis at [this link] (https://public.opencpu.org/ocpu/github/openMetaAnalysis/binary/www) at [OpenCPU] (https://public.opencpu.org)
 
 Why put meta-analyses in this interactive, public format?
 -----------------------------------------------------
@@ -16,9 +16,9 @@ Meta-analysis is a structured method to robustly represent medical knowledge. Ho
 
 Do you want to improve this meta-analysis?
 --------------------------------------------
-*     You may copy this meta-analysis by clicking '[Forking](https://github.com/badgettrg/openMetaAnalysis/fork).' You are then free to...
-*     Alternatively, you may contribute to this meta-analysis by opening a [Pull Request](https://github.com/badgettrg/openMetaAnalysis/pulls) then when finished editing and revising...
+*     You may copy this meta-analysis by clicking '[Forking](https://github.com/openMetaAnalysis/binary/fork).' You are then free to...
+*     Alternatively, you may contribute to this meta-analysis by opening a [Pull Request](https://github.com/openMetaAnalysis/binary/pulls) then when finished editing and revising...
 
 Do you want use this meta-analysis to make your own meta-analysis of a different topic?
 -----------------------------------------------------------------------------------------
-* You may copy this meta-analysis by clicking '[Fork](https://github.com/badgettrg/openMetaAnalysis/fork).' You are then free to...
+* You may copy this meta-analysis by clicking '[Fork](https://github.com/openMetaAnalysis/binary/fork).' You are then free to...
