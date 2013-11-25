@@ -1,11 +1,11 @@
-Package: openMetaAnalysis
+Package: binary
 Type: OpenCPU Application
-Title: openMetaAnalysis application for OpenCPU
+Title: openMetaAnalysis application for binary outcomes at OpenCPU
 Version: 0.1
 Date: 2013-11-05
 Author: Robert Badgett
 Maintainer: Robert Badgett <rbadgett@kumc.edu>
-Description: OpenCPU application for meta-analysis using package rmeta.
+Description: OpenCPU application for meta-analysis of binary outcomes using package meta.
 License: GPL
 Depends:
     meta
