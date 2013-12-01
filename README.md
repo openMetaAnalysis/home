@@ -1,24 +1,21 @@
-openMetaAnalysis for binary outcomes
+openMetaAnalysis
 ==================
 
-You may view and interact with this meta-analysis at [this link] (https://public.opencpu.org/ocpu/github/openMetaAnalysis/binary/www) at [OpenCPU] (https://public.opencpu.org)
+You may view and interact with and example meta-analysis at [this link] (https://public.opencpu.org/ocpu/github/openMetaAnalysis/binary/www) at [OpenCPU] (https://public.opencpu.org)
 
 Why put meta-analyses in this interactive, public format?
 -----------------------------------------------------
-Problem:
-
-1.    Wikipedia may be reaching limits with its ability to represent complicated knowledge ([details](http://www.technologyreview.com/featuredstory/520446/the-decline-of-wikipedia/)).Using ideas from [Clay Shirky: How the Internet will (one day) transform government] (http://www.ted.com/talks/clay_shirky_how_the_internet_will_one_day_transform_government.html), GitHub seems a natural method to spread medical knowledge with the efficient use of team science.
-
-Meta-analysis is a structured method to robustly represent medical knowledge. However, meta-analyses are also encountering problems.
+###Problem:
 
 1.    Meta-analyses quickly become outdated.(PMID: [17638714](http://pubmed.gov/17638714))
 2.    Meta-analyses frequently overlap each other without coordination.(PMID: [23873947](http://pubmed.gov/23873947))
 
-Do you want to improve this meta-analysis?
---------------------------------------------
-*     You may copy this meta-analysis by clicking '[Forking](https://github.com/openMetaAnalysis/binary/fork).' You are then free to...
-*     Alternatively, you may contribute to this meta-analysis by opening a [Pull Request](https://github.com/openMetaAnalysis/binary/pulls) then when finished editing and revising...
+###Solution:
+Collaborative and continuous meta-analysis, supported by open-source, cloud development. While wikis also offer a solution, they are reaching limits in their ability to represent complex knowledge.([details](http://www.technologyreview.com/featuredstory/520446/the-decline-of-wikipedia/)) GitHub, originally developed for collaborative development of software, has been proposed as a method to publish legislative information with transparent tracking of development.([details](http://www.ted.com/talks/clay_shirky_how_the_internet_will_one_day_transform_government.html)) Likewise, GitHub can host medical knowledge, support team science(PMID: [18619407](http://pubmed.gov/18619407)), and provide collaboration beyond what is possible with wikis. GitHub transparently tracks updates to meta-analyses and provides links to related, alternative, or competing, analyses. Collaboration with GitHub complements the functions of open data repositories such as [DRYAD](http://datadryad.org/) and [YODA](http://medicine.yale.edu/core/projects/yodap/index.aspx). There is no reason an open meta-anlaysis should ever go out of date. Anyone can revise it or copy it to make alternative analyses. Similar to [wikigenes](https://www.wikigenes.org/), authors' contributions are tracked for academic credit.
 
-Do you want use this meta-analysis to make your own meta-analysis of a different topic?
------------------------------------------------------------------------------------------
-* You may copy this meta-analysis by clicking '[Fork](https://github.com/openMetaAnalysis/binary/fork).' You are then free to...
+###Example:
+[Vitamin D for fracture prevention](https://github.com/openMetaAnalysis/Vitamin-D-for-fracture-prevention/blob/master/README.md).  We invite authors interested in vitamin D to revise and update this example of an open meta-analysis.
+
+Do you want to improve OpenMetaAnalysis?
+--------------------------------------------
+You may edit any of the [repository files for openMetaAnalysis](https://github.com/openMetaAnalysis/binary).
