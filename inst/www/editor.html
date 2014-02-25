@@ -57,6 +57,7 @@ $( "#dialog" ).dialog();
 	temp = temp.replace(/,$/g, '')
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("binary", {
 	  type: $("#type").val(),
+	  measure: $("#measure").val(),
 	  cofactorlabel: $("#cofactorlabel").val(),
 	  content: temp,
 	  topic: $("#topic").val(),
@@ -79,12 +80,12 @@ $( "#dialog" ).dialog();
   $("#showeditor").on("click", function(e){
     e.preventDefault();
     if ($("#editorcontainer").css("display") == "none"){
-		$("#editorcontainer").css("display","block")
-		$("#target").css("display","block")
+		$("#editorcontainer").css("display","inline")
+		$("#target").css("display","inline")
 		$("#introduction").css("display","none")
 		}
 	else {
-		$("#introduction").css("display","block")
+		$("#introduction").css("display","inline")
 		$("#editorcontainer").css("display","none")
 		$("#target").css("display","none")
 	}
@@ -92,8 +93,16 @@ $( "#dialog" ).dialog();
 
   $("#type").on("change", function(e){
     e.preventDefault();
-    if ($("#type").val() == "metaregression"){$("#cofactorlabel").css("display","block")}
-	else {$("#cofactorlabel").css("display","none")}
+    if ($("#type").val() == "metaregression")
+		{
+		$("#cofactorlabel").css("display","inline")
+		$("#measure").css("display","none")
+		}
+	else
+		{
+		$("#cofactorlabel").css("display","none")
+		$("#measure").css("display","inline")
+		}
   });
   
   $("#addcommas").on("click", function(e){
@@ -113,29 +122,34 @@ $( "#dialog" ).dialog();
   $(".example").click(function(){
 	if($(this).val()=="ex_1a") {
 		$("#type").val("ignore");
-		$("#topic").val("Vitamin D supplementation for fracture prevention");
+		$("#measure").css("display","inline")
 		$("#cofactorlabel").css("display","none")
-		editor.setValue("Law, 24, 1762, 20, 1955, 0,\nLips , 135, 1291, 122, 1287, 0,\nLyons, 202, 1725, 209, 1715, 0,\nTrivedi , 43, 1345, 62, 1341, 0,\nChapuy, 255, 1176, 308, 1127, 0,\nChapuy, 97, 393, 55, 190, 0,\nDawson-Hughes, 11, 187, 26, 202, 0,\nGrant, 349, 2649, 341, 2643, 0,\nHarwood, 8, 114, 5, 37, 0,\nJackson, 2102, 18176, 2158, 18106, 0,\nMeyer, 69, 569, 76, 575, 0,\nPfeifer , 3, 70, 6, 67, 0,\nPfeifer , 9, 121, 16, 121, 0,\nSalovaara, 78, 1586, 94, 1609, 0,\nSanders, 171, 1131, 135, 1125, 0,",1);
+		$("#measure").val("RR");
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 0,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 0,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 0,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 0,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 0,\nHarwood, 200, 14695863, 8, 114, 5, 37, 0,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 0,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 0,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 0,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 0,",1);
 		}
 	if($(this).val()=="ex_1b") {
 		$("#type").val("subgroup");
-		$("#topic").val("Vitamin D supplementation for fracture prevention");
+		$("#measure").css("display","inline")
 		$("#cofactorlabel").css("display","none")
-		editor.setValue("Law, 24, 1762, 20, 1955, 'INeffective dose',\nLips , 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 202, 1725, 209, 1715, 'Effective dose',\nTrivedi , 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 11, 187, 26, 202, 'Effective dose',\nGrant, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 69, 569, 76, 575, 'INeffective dose',\nPfeifer , 3, 70, 6, 67, 'Effective dose',\nPfeifer , 9, 121, 16, 121, 'Effective dose',\nSalovaara, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 171, 1131, 135, 1125, 'INeffective dose',",1);
+		$("#measure").val("RR");
+		$("#topic").val("Vitamin D supplementation for fracture prevention");
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 'INeffective dose',\nLips, 1996, 8554248, 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 'Effective dose',\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 2002, 11991447, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 'Effective dose',\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 200, 14695863, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 2002, 11918228, 69, 569, 76, 575, 'INeffective dose',\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 'Effective dose',\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 'Effective dose',\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 'INeffective dose',",1);
 		}
 	if($(this).val()=="ex_2a") {
 		$("#type").val("metaregression");
 		$("#topic").val("Vitamin D supplementation for fracture prevention");
-		$("#cofactorlabel").css("display","block")
+		$("#measure").css("display","none")
+		$("#cofactorlabel").css("display","inline")
 		$("#cofactorlabel").val("Final vitamin D level");
-		editor.setValue("Law, 24, 1762, 20, 1955, 77,\nLips , 135, 1291, 122, 1287, 54,\nLyons, 202, 1725, 209, 1715, 80,\nTrivedi , 43, 1345, 62, 1341, 74.3,\nChapuy, 255, 1176, 308, 1127, 106,\nChapuy, 97, 393, 55, 190, 77.5,\nDawson-Hughes, 11, 187, 26, 202, 112,\nGrant, 349, 2649, 341, 2643, 62,\nHarwood, 8, 114, 5, 37, 44,\nJackson, 2102, 18176, 2158, 18106, 61.4,\nMeyer, 69, 569, 76, 575, 64,\nPfeifer , 3, 70, 6, 67, 66.1,\nPfeifer , 9, 121, 16, 121, 84.5,\nSalovaara, 78, 1586, 94, 1609, 74.6,\nSanders, 171, 1131, 135, 1125, 65,\n",1);
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 77,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 54,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 80,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 74.3,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 106,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 77.5,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 112,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 62,\nHarwood, 200, 14695863, 8, 114, 5, 37, 44,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 61.4,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 64,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 66.1,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 84.5,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 74.6,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 65,\n",1);
 		}
 	if($(this).val()=="ex_2b") {
 		$("#type").val("metaregression");
+		$("#measure").css("display","none")
 		$("#topic").val("Vitamin D supplementation for fracture prevention");
 		$("#cofactorlabel").css("display","block")
 		$("#cofactorlabel").val("Change in vitamin D level");
-		editor.setValue("Law, 24, 1762, 20, 1955, 18,\nLips , 135, 1291, 122, 1287, 27,\nLyons, 202, 1725, 209, 1715, 26,\nTrivedi , 43, 1345, 62, 1341, 20.9,\nChapuy, 255, 1176, 308, 1127, 66,\nChapuy, 97, 393, 55, 190, 56.2,\nDawson-Hughes, 11, 187, 26, 202, 35.2,\nGrant, 349, 2649, 341, 2643, 24,\nHarwood, 8, 114, 5, 37, 20.5,\nJackson, 2102, 18176, 2158, 18106, 13.4,\nMeyer, 69, 569, 76, 575, 17,\nPfeifer , 3, 70, 6, 67, 40.4,\nPfeifer , 9, 121, 16, 121, 29.1,\nSalovaara, 78, 1586, 94, 1609, 24.6,\nSanders, 171, 1131, 135, 1125, 8,\n",1);
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 18,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 27,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 26,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 20.9,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 66,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 56.2,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 35.2,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 24,\nHarwood, 200, 14695863, 8, 114, 5, 37, 20.5,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 13.4,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 17,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 40.4,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 29.1,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 24.6,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 8,\n",1);
 		}
   });
 
@@ -307,24 +321,25 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div id="">Seven columns: 1) study name, 2) events in intervention group, 3) total in intervention group, 4) events in control group, 5) total in control group, 6) cofactor. <br/>
+<div id="">Seven columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) events in intervention group, 5) total in intervention group, 6) events in control group, 7) total in control group, 8) cofactor. <br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="editor" style="width:600px;">Law, 24, 1762, 20, 1955, 0,
-Lips , 135, 1291, 122, 1287, 0,
-Lyons, 202, 1725, 209, 1715, 0,
-Trivedi , 43, 1345, 62, 1341, 0,
-Chapuy, 255, 1176, 308, 1127, 0,
-Chapuy, 97, 393, 55, 190, 0,
-Dawson-Hughes, 11, 187, 26, 202, 0,
-Grant, 349, 2649, 341, 2643, 0,
-Harwood, 8, 114, 5, 37, 0,
-Jackson, 2102, 18176, 2158, 18106, 0,
-Meyer, 69, 569, 76, 575, 0,
-Pfeifer , 3, 70, 6, 67, 0,
-Pfeifer , 9, 121, 16, 121, 0,
-Salovaara, 78, 1586, 94, 1609, 0,
-Sanders, 171, 1131, 135, 1125, 0,
-</div>	
+<div id="editor" style="width:600px;"></div>
+<!--Law, 2006, 16641143, 24, 1762, 20, 1955, 0,
+Lips, 1996, 8554248, 135, 1291, 122, 1287, 0,
+Lyons, 2007, 17473911, 202, 1725, 209, 1715, 0,
+Trivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,
+Chapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,
+Chapuy, 2002, 11991447, 97, 393, 55, 190, 0,
+Dawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,
+Grant, 2005, 15885294, 349, 2649, 341, 2643, 0,
+Harwood, 200, 14695863, 8, 114, 5, 37, 0,
+Jackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,
+Meyer, 2002, 11918228, 69, 569, 76, 575, 0,
+Pfeifer, 2000, 10841179, 3, 70, 6, 67, 0,
+Pfeifer, 2009, 18629569, 9, 121, 16, 121, 0,
+Salovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,
+Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
+	
             <br />
 
             <div>
@@ -333,7 +348,11 @@ Sanders, 171, 1131, 135, 1125, 0,
               <option value="subgroup">Subgroup analysis</option>
               <option value="metaregression">Meta-regression analysis</option>
             </select>&nbsp;&nbsp;
-            <input type="text" id="cofactorlabel" value="Label for cofactor" style="display:none;width:250px;float:right"/> 
+			<select id="measure" style="display:block;width:250px;float:right">
+              <option value="OR" selected>Odds ratio</option>
+              <option value="RR">Relative risk</option>
+            </select>
+            <input type="text" id="cofactorlabel" placeholder="Label for cofactor" style="display:none;width:250px;float:right"/> 
 			</div>
 			<div>&nbsp;</div>
             <div>
@@ -350,7 +369,7 @@ Sanders, 171, 1131, 135, 1125, 0,
 			</div>
             <div>
             <label>Topic (for title - optional):</label> 
-            <input type="text" id="topic" style="float:right;width:250px"/> 
+            <input type="text" id="topic" placeholder="Topic" style="float:right;width:250px"/> 
             <select id="theme" style="display:none">
               <option value="white" selected>None theme</option>
               <option value="KU">KU</option>
@@ -363,9 +382,10 @@ Sanders, 171, 1131, 135, 1125, 0,
       <div style="width:350px;float:right">
 	          <form name="form2" action="#" style="width:350px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:350px;height:625px;">
-		  <legend style="font-weight:bold">Alternative analyses</legend>
+		  <legend style="font-weight:bold">Example analyses</legend>
+		  <div id="">Below are various approaches to meta-analysis of vitamin D for the prevention of osteoporotic fractures.</div>
 			<h3 style="margin-bottom:0px">Subgroups</h3>
-			<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a" checked /><label for="ex_1a">Include all studies; no subgroups (<a href="">source data at GitHub</a>)</label></div>
+			<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a" /><label for="ex_1a">Include all studies; no subgroups (<a href="">source data at GitHub</a>)</label></div>
 			<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Subgroup</label></div>
 			<h3 style="margin-bottom:0px">Meta-regressions</h3>
 			<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">Meta-regression of final Vitamin D level</label></div>
