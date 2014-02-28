@@ -1,5 +1,6 @@
-binary <- function(content, measure, year, pmid, lefthand,righthand, type, cofactorlabel, topic, theme) {
+binary <- function(content, measure, year, pmid, sort, lefthand, righthand, type, cofactorlabel, topic, theme) {
 temp <- content
+# Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
 temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
 #temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
@@ -27,7 +28,7 @@ if (type=="ignore")
 	{
 	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm= measure, method="I", studlab=paste(Study), title = topic)
 	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, 1/meta1$w.random, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE)
+	forest(meta1, 1/meta1$w.random, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
@@ -37,7 +38,7 @@ if (type=="subgroup")
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", studlab=paste(Study), title = topic, byvar=cofactor)
 	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, 1/meta1$w.random, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE)
+	forest(meta1, 1/meta1$w.random, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
