@@ -117,8 +117,7 @@ $( "#dialog" ).dialog();
   $("#addcommas").on("click", function(e){
     e.preventDefault();
     temp = editor.getValue()
-	//http://www.w3schools.com/js/js_obj_string.asp
-	temp = temp.replace(/\r/g, ',')
+	temp = temp.replace(/\n/g, ',\n')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/ +/g, ', ')
@@ -204,7 +203,7 @@ $( "#dialog" ).dialog();
       for(var row in data) {
 	  if($("#header").val() == "FALSE" || [row] > 0 ){
         for(var item in data[row]) {
-          html += data[row][item];// + ', '; //Issue? 11/16/2013
+          html += data[row][item] + ', ';
         }
         html += '\r\n';
       }
