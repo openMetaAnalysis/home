@@ -1,4 +1,4 @@
-binary <- function(content, measure, year, pmid, sort, lefthand, righthand, type, cofactorlabel, topic, theme) {
+binary <- function(content, measure, year, pmid, sortby, lefthand, righthand, type, cofactorlabel, topic, theme) {
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
@@ -8,7 +8,7 @@ temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
 temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
 temp <- paste('"',temp,'"',sep = '')
-temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=8, byrow=TRUE,dimnames = list(NULL, c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total","cofactor")))')
+temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=8, byrow=TRUE, dimnames = list(NULL, c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total","cofactor")))')
 x<-eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
 myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
@@ -19,6 +19,18 @@ myframe$exp_events<-as.numeric(as.character(str_trim(myframe$exp_events)))
 myframe$exp_total<-as.numeric(as.character(str_trim(myframe$exp_total)))
 myframe$control_events<-as.numeric(as.character(str_trim(myframe$control_events)))
 myframe$control_total<-as.numeric(as.character(str_trim(myframe$control_total)))
+if (sortby=="weight")
+	{
+	sortvalue <- NULL
+	}
+if (sortby=="cofactor")
+	{
+	sortvalue <- myframe$cofactor
+	}
+if (sortby=="year")
+	{
+	sortvalue <- myframe$year
+	}
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
@@ -26,9 +38,13 @@ SkyBlue = "#6DC6E7"
 
 if (type=="ignore")
 	{
-	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm= measure, method="I", studlab=paste(Study), title = topic)
+	meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, method="I", studlab=paste(Study,", ", year, sep=""), title = topic)
+	if (sortby=="weight")
+		{
+		sortvalue <- 1/meta1$w.random
+		}
 	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, 1/meta1$w.random, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
@@ -36,9 +52,12 @@ if (type=="subgroup")
 	{
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
-	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", studlab=paste(Study), title = topic, byvar=cofactor)
-	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, 1/meta1$w.random, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", studlab=paste(Study,", ", year, sep=""), title = topic, byvar=cofactor)
+	if (sortby=="weight")
+		{
+		sortvalue <- 1/meta1$w.random
+		}	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
+	forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}

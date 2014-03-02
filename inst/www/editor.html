@@ -57,7 +57,7 @@ $( "#dialog" ).dialog();
 	temp = temp.replace(/,$/g, '')
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("binary", {
 	  type: $("#type").val(),
-	  sort: $("#sort").val(),
+	  sortby: $("#sortby").val(),
 	  measure: $("#measure").val(),
 	  cofactorlabel: $("#cofactorlabel").val(),
 	  content: temp,
@@ -134,7 +134,7 @@ $( "#dialog" ).dialog();
 		$("#measure").css("display","inline")
 		$("#cofactorform").css("display","none")
 		$("#measure").val("RR");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 0,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 0,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 0,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 0,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 0,\nHarwood, 200, 14695863, 8, 114, 5, 37, 0,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 0,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 0,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 0,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 0,",1);
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 0,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 0,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 0,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 0,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 0,\nHarwood, 2000, 14695863, 8, 114, 5, 37, 0,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 0,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 0,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 0,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 0,",1);
 		}
 	if($(this).val()=="ex_1b") {
 		$("#type").val("subgroup");
@@ -142,7 +142,7 @@ $( "#dialog" ).dialog();
 		$("#cofactorform").css("display","none")
 		$("#measure").val("RR");
 		$("#topic").val("Vitamin D supplementation for fracture prevention");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 'INeffective dose',\nLips, 1996, 8554248, 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 'Effective dose',\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 2002, 11991447, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 'Effective dose',\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 200, 14695863, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 2002, 11918228, 69, 569, 76, 575, 'INeffective dose',\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 'Effective dose',\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 'Effective dose',\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 'INeffective dose',",1);
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 'INeffective dose',\nLips, 1996, 8554248, 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 'Effective dose',\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 2002, 11991447, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 'Effective dose',\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 2000, 14695863, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 2002, 11918228, 69, 569, 76, 575, 'INeffective dose',\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 'Effective dose',\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 'Effective dose',\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 'INeffective dose',",1);
 		}
 	if($(this).val()=="ex_2a") {
 		$("#type").val("metaregression");
@@ -150,7 +150,7 @@ $( "#dialog" ).dialog();
 		$("#measure").css("display","none")
 		$("#cofactorform").css("display","inline")
 		$("#cofactorlabel").val("Final vitamin D level");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 77,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 54,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 80,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 74.3,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 106,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 77.5,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 112,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 62,\nHarwood, 200, 14695863, 8, 114, 5, 37, 44,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 61.4,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 64,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 66.1,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 84.5,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 74.6,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 65,\n",1);
+		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 77,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 54,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 80,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 74.3,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 106,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 77.5,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 112,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 62,\nHarwood, 2000, 14695863, 8, 114, 5, 37, 44,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 61.4,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 64,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 66.1,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 84.5,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 74.6,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 65,\n",1);
 		}
 	if($(this).val()=="ex_2b") {
 		$("#type").val("metaregression");
@@ -341,7 +341,7 @@ Chapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,
 Chapuy, 2002, 11991447, 97, 393, 55, 190, 0,
 Dawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,
 Grant, 2005, 15885294, 349, 2649, 341, 2643, 0,
-Harwood, 200, 14695863, 8, 114, 5, 37, 0,
+Harwood, 2000, 14695863, 8, 114, 5, 37, 0,
 Jackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,
 Meyer, 2002, 11918228, 69, 569, 76, 575, 0,
 Pfeifer, 2000, 10841179, 3, 70, 6, 67, 0,
@@ -364,9 +364,9 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 			</div>
 			<div>
             <label>Sort order:</label>
-			<select id="sort" style="display:inline;width:250px">
+			<select id="sortby" style="display:inline;width:250px">
               <option value="cofactor">Cofactor (ascending)</option>
-              <option value="weight selected">Weight (descending)</option>
+              <option value="weight" selected>Weight (descending)</option>
               <option value="year">Year (ascending)</option>
             </select>
 			</div>
