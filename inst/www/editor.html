@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Change all events in intervention to 40; then change all events in intervention among high-dose studies to 25 -->
 <head>
 <title>openMetaAnalysis for binary outcomes - editor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,6 +90,20 @@ $( "#dialog" ).dialog();
 		$("#introduction").css("display","inline")
 		$("#editorcontainer").css("display","none")
 		$("#target").css("display","none")
+	}
+  });
+
+  $("#instruct").on("click", function(e){
+    e.preventDefault();
+    if ($("#column_names").css("display") == "none"){
+		$("#column_names").css("display","inline")
+		$("#fieldset").css("height","700px")
+		$("#topic").val("Example data set")
+		$("#measure").val("RR");
+		}
+	else {
+		$("#column_names").css("display","none")
+		$("#fieldset").css("height","650px")
 	}
   });
 
@@ -319,7 +334,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
       <div style="width:600px;float:left;">
 
         <form id="paramform" target="target" style="width:600px;">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:650px;">
+          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:650px;" id="fieldset">
             <legend style="font-weight:bold">Enter inputs</legend>
             <div>To perform a <a href="https://en.wikipedia.org/wiki/Meta-analysis">meta-analysis</a>:</div>
 			<ul>
@@ -331,7 +346,13 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 			</ul>
 <div id="">Seven columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) events in intervention group, 5) total in intervention group, 6) events in control group, 7) total in control group, 8) cofactor. <br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="editor" style="width:600px;"></div>
+<div id="">The initial data shown below is fictitious and is <a href="#" id="instruct">instructional</a>.</div>
+<div id="column_names" style="display:none"><img src="column_names.png"/></div>
+<div id="editor" style="width:600px;">Downs, 2012, 12345678, 50, 100, 50, 100, high-dose,
+Jones, 2013, 12345678, 50, 100, 50, 100, low-dose,
+Smith, 2014, 12345678, 50, 100, 50, 100, high-dose,
+Snead, 2015, 12345678, 50, 100, 50, 100, low-dose,
+Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 <!--Law, 2006, 16641143, 24, 1762, 20, 1955, 0,
 Lips, 1996, 8554248, 135, 1291, 122, 1287, 0,
 Lyons, 2007, 17473911, 202, 1725, 209, 1715, 0,
