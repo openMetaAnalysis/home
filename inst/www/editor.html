@@ -33,9 +33,21 @@ $(function() {
 $( "#dialog" ).dialog();
 });
 
-    if(isAPIAvailable()) {
-      $('#files').bind('change', handleFileSelect);
-    }
+	var hash = window.location.hash 
+	if (hash.length > 1) //location.hash.substring.length
+		{
+		if (hash.indexOf('instruct')>0)
+			{
+			$("#column_names").css("display","inline")
+			$("#fieldset").css("height","700px")
+			$("#topic").val("Example data set")
+			$("#measure").val("RR");
+			}
+		}
+
+	if(isAPIAvailable()) {
+	  $('#files').bind('change', handleFileSelect);
+	}
 
   //optional, requires jquery-ui.
   $("#plotdiv").resizable()
