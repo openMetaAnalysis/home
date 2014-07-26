@@ -1,3 +1,9 @@
+#Uses http://cran.r-project.org/web/packages/meta/
+#Alternatives:
+# http://cran.r-project.org/web/packages/metafor/ (allows continuity correction)
+# http://cran.r-project.org/web/packages/rmeta/
+# Discussion of continuity correction:
+# http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
 binary <- function(content, measure, year, pmid, sortby, lefthand, righthand, type, cofactorlabel, topic, theme) {
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
@@ -31,6 +37,14 @@ if (sortby=="year")
 	{
 	sortvalue <- myframe$year
 	}
+for(i in 1:length(myframe$Study))
+{
+if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
+	{
+	#myframe$exp_events[i] == 0.5 
+	#myframe$control_events[i] == 0.5
+	}
+}
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
@@ -38,13 +52,15 @@ SkyBlue = "#6DC6E7"
 
 if (type=="ignore")
 	{
-	meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, method="I", studlab=paste(Study,", ", year, sep=""), title = topic)
+	meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), title = topic)
 	if (sortby=="weight")
 		{
 		sortvalue <- 1/meta1$w.random
 		}
 	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	#Below temp removed 7/26/2014 while sc@imbi.uni-freiburg.de fixed sortvar
+	#forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	forest(meta1, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
@@ -52,12 +68,14 @@ if (type=="subgroup")
 	{
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
-	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", studlab=paste(Study,", ", year, sep=""), title = topic, byvar=cofactor)
+	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), title = topic, byvar=cofactor)
 	if (sortby=="weight")
 		{
 		sortvalue <- 1/meta1$w.random
 		}	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	#Below temp removed 7/26/2014 while sc@imbi.uni-freiburg.de fixed sortvar
+	#forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	forest(meta1, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
