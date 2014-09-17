@@ -1,4 +1,4 @@
-export(home)
+export(analyze)
 import(meta)
 import(rmeta)
 import(RJSONIO)
