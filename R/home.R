@@ -4,7 +4,7 @@
 # http://cran.r-project.org/web/packages/rmeta/
 # Discussion of continuity correction:
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
-binary <- function(content, measure, year, pmid, sortby, lefthand, righthand, type, cofactorlabel, topic, theme) {
+analyze <- function(content, measure, year, pmid, sortby, lefthand, righthand, type, cofactorlabel, topic, theme) {
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
