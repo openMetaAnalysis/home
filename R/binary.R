@@ -21,9 +21,23 @@ myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
 myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
-myframe$exp_events<-as.numeric(as.character(str_trim(myframe$exp_events)))
+PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
+if (PosParenth1 > 0)
+	{
+	PosParenth2 <-regexpr(")", myframe$exp_events, fixed=TRUE)
+	myframe$exp_mean<-as.numeric(substring(myframe$exp_events, 1, PosParenth1 - 1))
+	myframe$exp_sd<-as.numeric(substring(myframe$exp_events, PosParenth1 + 1, PosParenth2 - 1))
+	PosParenth1 <-regexpr("(", myframe$control_events, fixed=TRUE)
+	PosParenth2 <-regexpr(")", myframe$control_events, fixed=TRUE)
+	myframe$control_mean<-as.numeric(substring(myframe$control_events, 1, PosParenth1 - 1))
+	myframe$control_sd<-as.numeric(substring(myframe$control_events, PosParenth1 + 1, PosParenth2 - 1))
+	}
+else
+	{
+	myframe$exp_events<-as.numeric(as.character(str_trim(myframe$exp_events)))
+	myframe$control_events<-as.numeric(as.character(str_trim(myframe$control_events)))
+	}
 myframe$exp_total<-as.numeric(as.character(str_trim(myframe$exp_total)))
-myframe$control_events<-as.numeric(as.character(str_trim(myframe$control_events)))
 myframe$control_total<-as.numeric(as.character(str_trim(myframe$control_total)))
 if (sortby=="weight")
 	{
@@ -49,16 +63,24 @@ attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
-
 if (type=="ignore")
 	{
-	meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), title = topic)
+	if (PosParenth1 > 0)
+		{
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic)
+		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
+		}
+	else
+		{
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic)
+		xlimits=c(0.1, 10)
+		}
 	if (sortby=="weight")
 		{
 		sortvalue <- 1/meta1$w.random
 		}
 	#forest(meta1, leftcols="studlab",rightcols=FALSE, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue",comb.fixed=FALSE,print.tau2=FALSE)
-	forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	forest(meta1, sortvalue, xlim=xlimits,ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
@@ -66,7 +88,16 @@ if (type=="subgroup")
 	{
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
-	meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), title = topic, byvar=cofactor)
+	if (PosParenth1 > 0)
+		{
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
+		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
+		}
+	else
+		{
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
+		xlimits=c(0.1, 10)
+		}
 	if (sortby=="weight")
 		{
 		sortvalue <- 1/meta1$w.random
@@ -89,7 +120,7 @@ if (type=="metaregression")
 	abline(h=0, v=0, col = "gray90")
 	abline(lm(y ~ x, data = myframe, weights = studyweights))
 	legendtext = "Correlation of cofactor and odds ratio:\n"
-	legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =",round(summary(metaregression)$coefficients[2,4],3))
+	legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =",round(summary(metaregression)$coef[2,4],3))
 	legend("topright", legend=legendtext,lty=1, lwd = 2, inset=0.05)
 	if ( cofactorlabel != "")
 		{
