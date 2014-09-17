@@ -2,7 +2,7 @@
 <html lang="en">
 <!-- Change all events in intervention to 40; then change all events in intervention among high-dose studies to 25 -->
 <head>
-<title>openMetaAnalysis for binary outcomes - editor</title>
+<title>openMetaAnalysis - editor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -68,7 +68,7 @@ $( "#dialog" ).dialog();
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#plotdiv').r_fun_plot("binary", {
+	var req = $('#target').contents().find('#plotdiv').r_fun_plot("analyze", {
 	  type: $("#type").val(),
 	  sortby: $("#sortby").val(),
 	  measure: $("#measure").val(),
