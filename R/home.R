@@ -81,7 +81,6 @@ if (type=="ignore")
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
 	forest(meta1, sortvalue, xlim=xlimits, ff.hetstat="plain", col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
-	#grid.text(topic, layout.pos.col = 2, layout.pos.row = 1, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
 if (type=="subgroup")
