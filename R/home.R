@@ -101,7 +101,7 @@ if (type=="subgroup")
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	forest(meta1, sortvalue, xlim=c(0.1, 10),ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
+	forest(meta1, sortvalue,ff.hetstat="plain",col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
 if (type=="metaregression")
