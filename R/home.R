@@ -65,14 +65,15 @@ SkyBlue = "#6DC6E7"
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")
 	{
+	# from http://cran.r-project.org/web/packages/meta/
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""))
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = TRUE, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
 		}
 	if (sortby=="weight")
@@ -85,16 +86,17 @@ if (type=="ignore")
 	}
 if (type=="subgroup")
 	{
+	# from http://cran.r-project.org/web/packages/meta/
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="I", hakn = TRUE, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
 		xlimits=c(0.1, 10)
 		}
 	if (sortby=="weight")
@@ -106,6 +108,7 @@ if (type=="subgroup")
 	}
 if (type=="metaregression")
 	{
+	# From http://cran.r-project.org/web/packages/rmeta/ **remeta**
 	myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
 	meta1 <- meta.DSL(myframe[["exp_total"]], myframe[["control_total"]], myframe[["exp_events"]], myframe[["control_events"]],names=Study,conf.level=0.95)
 	studyweights <- 1 / (meta1$tau2 + meta1$selogs^2)
