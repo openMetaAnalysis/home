@@ -62,7 +62,7 @@ if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
-analyticmethod = "\nRandom effects model\nwith Hartung-Knapp adjustment\n\n"
+analyticmethod = "\n\nRandom effects model\nwith Hartung-Knapp adjustment\n\n\n"
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")
 	{
@@ -82,7 +82,7 @@ if (type=="ignore")
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=text.random, fs.random=10, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
 if (type=="subgroup")
@@ -104,7 +104,7 @@ if (type=="subgroup")
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=text.random, fs.random=10, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	}
 if (type=="metaregression")
