@@ -62,7 +62,7 @@ if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
-analyticmethod = "\n\nRandom effects model\nwith Hartung-Knapp adjustment\n\n\n"
+analyticmethod = "Random effects model (Hartung-Knapp)"
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")
 	{
@@ -92,12 +92,12 @@ if (type=="subgroup")
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = TRUE, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = TRUE, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
 		xlimits=c(0.1, 10)
 		}
 	if (sortby=="weight")
