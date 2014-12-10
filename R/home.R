@@ -62,6 +62,7 @@ if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
+pubbiastext = "Test for funnel plot asymmetry"
 analyticmethod = "Random effects model (Hartung-Knapp)"
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")
@@ -71,11 +72,32 @@ if (type=="ignore")
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""))
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
+		#Publication bias
+		if (length(myframe$Study)>9)
+			{
+			pubbias = metabias(meta1, method.bias="linreg", plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Egger) p= ",round(pubbias$p.value,3),sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
 		}
 	else
 		{
 		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = TRUE, method="Inverse", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
+		#Publication bias / small study effect
+		if (length(myframe$Study)>9)
+			{
+			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+			pubbias = metabias(meta1.as, plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Rucker) p= ",round(pubbias$p.value,3),sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
 		}
 	if (sortby=="weight")
 		{
@@ -84,6 +106,7 @@ if (type=="ignore")
 	#stop(paste(topic,lefthand, righthand, sep=", "))
 	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
+	grid.text(pubbiastext, 0.25, 0.02, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="subgroup")
 	{
@@ -94,11 +117,32 @@ if (type=="subgroup")
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
+		#Publication bias
+		if (length(myframe$Study)>9)
+			{
+			pubbias = metabias(meta1, method.bias="linreg", plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Egger) p= ",round(pubbias$p.value,3),sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
 		}
 	else
 		{
 		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = TRUE, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
 		xlimits=c(0.1, 10)
+		#Publication bias / small study effect
+		if (length(myframe$Study)>9)
+			{
+			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+			pubbias = metabias(meta1.as, plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Rucker) p= ",round(pubbias$p.value,3),sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
 		}
 	if (sortby=="weight")
 		{
@@ -106,6 +150,7 @@ if (type=="subgroup")
 		}
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
+	grid.text(pubbiastext, 0.25, 0.02, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="metaregression")
 	{
