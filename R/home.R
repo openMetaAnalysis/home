@@ -76,7 +76,7 @@ if (type=="ignore")
 		if (length(myframe$Study)>9)
 			{
 			pubbias = metabias(meta1, method.bias="linreg", plotit=FALSE)
-			pubbiastext = paste(pubbiastext, " (Egger) p= ",round(pubbias$p.value,3),sep="");
+			pubbiastext = paste(pubbiastext, " (Egger): p= ",round(pubbias$p.value,3),sep="");
 			}
 		else
 			{
@@ -92,7 +92,7 @@ if (type=="ignore")
 			{
 			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
 			pubbias = metabias(meta1.as, plotit=FALSE)
-			pubbiastext = paste(pubbiastext, " (Rucker) p= ",round(pubbias$p.value,3),sep="");
+			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
 			}
 		else
 			{
@@ -105,8 +105,10 @@ if (type=="ignore")
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
 	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
-	grid.text(pubbiastext, 0.25, 0.02, gp = gpar(fontsize = 12, fontface = "bold"))
+	#main=textGrob(topic, gp=gpar(cex=3), just="top")
+	grid.text(pubbiastext, 0.1, 0.02, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="subgroup")
 	{
@@ -120,8 +122,9 @@ if (type=="subgroup")
 		#Publication bias
 		if (length(myframe$Study)>9)
 			{
-			pubbias = metabias(meta1, method.bias="linreg", plotit=FALSE)
-			pubbiastext = paste(pubbiastext, " (Egger) p= ",round(pubbias$p.value,3),sep="");
+			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure)
+			pubbias = metabias(meta1.egger, method.bias="linreg", plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Egger): p= ",round(pubbias$p.value,3),sep="");
 			}
 		else
 			{
@@ -137,7 +140,7 @@ if (type=="subgroup")
 			{
 			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
 			pubbias = metabias(meta1.as, plotit=FALSE)
-			pubbiastext = paste(pubbiastext, " (Rucker) p= ",round(pubbias$p.value,3),sep="");
+			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
 			}
 		else
 			{
@@ -150,7 +153,14 @@ if (type=="subgroup")
 		}
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
-	grid.text(pubbiastext, 0.25, 0.02, gp = gpar(fontsize = 12, fontface = "bold"))
+	grid.text(pubbiastext, 0.1, 0.02, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	#Test for subgroup differences
+	#Hartung-Knapp gives Q = 0 if a subgroup has single member
+	meta1 <- update(meta1,hakn = FALSE)
+	byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
+	byvartext = sprintf(byvartext, fmt='%#.3f');
+	byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
+	grid.text(byvartext, 0.1, 0.05, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="metaregression")
 	{
