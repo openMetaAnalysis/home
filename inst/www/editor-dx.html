@@ -72,7 +72,7 @@ $( "#dialog" ).dialog();
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#plotdiv').r_fun_plot("intervention", {
+	var req = $('#target').contents().find('#plotdiv').r_fun_plot("analyze", {
 	  type: $("#type").val(),
 	  sortby: $("#sortby").val(),
 	  measure: $("#measure").val(),
@@ -341,7 +341,7 @@ columns:100px 2;
 /* Menu from http://codepen.io/philhoyt/pen/ujHzd */
 #primary_nav_wrap
 {
-	margin-top:15px;
+	margin-top:15px
 }
 
 #primary_nav_wrap ul
@@ -384,7 +384,7 @@ columns:100px 2;
 #primary_nav_wrap ul a:hover
 {
 	background:#0022B4;
-	color:#FFFFFF;
+		color:#FFFFFF;
 }
 
 #primary_nav_wrap ul ul
@@ -430,7 +430,6 @@ color:black;
 border-color:#0022B4;
 background-color: #6DC6E7
 }
-
 </style>
 </head>
 
@@ -464,11 +463,11 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 
 	  <div id="editorcontainer" style="display:block">
       <div style="width:600px;float:left;">
-
+<div style="font-weight:bold">Under construction</div>
         <form id="paramform" target="target" style="width:600px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:700px;" id="fieldset">
             <legend style="font-weight:bold">Enter inputs</legend>
-            <div>To perform a <a href="https://en.wikipedia.org/wiki/Meta-analysis">meta-analysis</a> of interventions (11/30/2014 converted to Hartung and Knapp estimators for broader confidence intervals. See PMID <a href="Http://pubmed.gov/24727843">24727843</a>):</div>
+            <div>To perform a <a href="https://en.wikipedia.org/wiki/Meta-analysis">meta-analysis</a> of diagnosis using hierarchical bivariate model:</div>
 			<ul>
 			<li>Revise or replace the example data below as needed or</li>
 			<li>Upload a csv file formatted like this <a href="example.csv">example</a>.<br/>
@@ -476,32 +475,22 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div id="">Eight columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) events of mean (SD) in intervention group, 5) total in intervention group, 6) events or mean (SD) in control group, 7) total in control group, 8) cofactor. <br/>
+<div id="">Eight columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) TP, 5) FP, 6) FN, 7) TN, 8) cofactor. <br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="">The initial data shown below is fictitious and is <a href="#" id="instruct">instructional</a>.</div>
+<div id="">The initial data shown below is <a href="#" id="instruct">instructional</a>.</div>
 <div id="column_names" style="display:none"><img src="column_names.png"/></div>
-<div id="editor" style="width:600px;">Downs, 2012, 12345678, 50, 100, 50, 100, high-dose,
-Jones, 2013, 12345678, 50, 100, 50, 100, low-dose,
-Smith, 2014, 12345678, 50, 100, 50, 100, high-dose,
-Snead, 2015, 12345678, 50, 100, 50, 100, low-dose,
-Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
-<!--Law, 2006, 16641143, 24, 1762, 20, 1955, 0,
-Lips, 1996, 8554248, 135, 1291, 122, 1287, 0,
-Lyons, 2007, 17473911, 202, 1725, 209, 1715, 0,
-Trivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,
-Chapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,
-Chapuy, 2002, 11991447, 97, 393, 55, 190, 0,
-Dawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,
-Grant, 2005, 15885294, 349, 2649, 341, 2643, 0,
-Harwood, 2000, 14695863, 8, 114, 5, 37, 0,
-Jackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,
-Meyer, 2002, 11918228, 69, 569, 76, 575, 0,
-Pfeifer, 2000, 10841179, 3, 70, 6, 67, 0,
-Pfeifer, 2009, 18629569, 9, 121, 16, 121, 0,
-Salovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,
-Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
-	
-            <br />
+<div id="editor" style="width:600px;">Remy-Jardin, 1992, 1410342, 18, 1, 0, 23, 'CTPA',
+Blum, 1994, 8017318, 7, 0, 0, 3, 'CTPA',
+Goodman, 1995, 7754875, 7, 1, 4, 8, 'CTPA',
+Remy-Jardin, 1996, 8756918, 39, 0, 4, 32, 'CTPA', 
+Drucker, 1998, 9769837, 8, 1, 7, 31, 'CTPA',
+Garg, 1998, 9646814, 4, 0, 2, 18, 'CTPA',
+Qanadli, 2000, 11058644, 56, 3, 3, 89,  'CTPA',  
+Ruiz, 2003, 12664123, 21,  7, 2, 31, 'CTPA',
+Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',
+Van Strijen, 2005, 15634261, 88, 17, 48, 92, 'CTPA',
+PIOPED II, 2006, 16738268, 150, 25, 31, 567, 'CTPA',</div>
+<br />
 
             <div>
 			<select id="type">
@@ -510,10 +499,7 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
               <option value="metaregression">Meta-regression analysis</option>
             </select>&nbsp;&nbsp;
 			<select id="measure" style="display:inline;width:250px;float:right">
-              <option value="OR" selected>Odds ratio</option>
-              <option value="RR">Relative risk</option>
-              <option value="MD">Mean difference</option>
-              <option value="SMD">Standardized mean difference</option>
+              <option value="SNSP" selected>Sensitivity and specificity</option>
             </select>
 			</div>
 			<div>
@@ -524,7 +510,7 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
               <option value="year">Year (ascending)</option>
             </select>
 			</div>
-			<div id="labels" style="display:inline">
+			<div id="labels" style="display:none">
 			<label>Left label:</label>
 			<select id="lefthand">
 			  <option value="favors experimental" selected>favors experimental</option>
@@ -555,30 +541,8 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 	          <form name="form2" action="#" style="width:350px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:350px;height:700px;">
 		  <legend style="font-weight:bold">Example analyses</legend>
-		  <div id="">Below are various approaches to meta-analysis of vitamin D for the prevention of osteoporotic fractures.</div>
-			<h3 style="margin-bottom:0px">Meta-analysis of binary outcomes</h3>
-			<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a" /><label for="ex_1a">Include all studies; no subgroups</label></div>
-			<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Subgroup</label></div>
-			<h3 style="margin-bottom:0px">Meta-analysis of continuous outcomes</h3>
-			<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a" /><label for="ex_2a">Include all studies; no subgroups</label></div>
-			<div id=""><a href="#" class="hastip">About standardized mean differences</a>
-				<div class="tooltiptext">
-				The standardized mean difference (SMD) is:<br/>
-				<img src="smd.png" alt="SMD"/><br/>
-				In the interpretation of SMD:
-				<ul>
-					<li>0.2 represents a small effect</li>
-					<li>0.5 a moderate effect</li>
-					<li>> 0.8 a large effect</li> 
-				</ul>
-				<div id="">The 'standardization' allows pooling of different types of outcomes.</div>
-				<div id="">From: Cochrane Handbook. 12.6  <a href="http://handbook.cochrane.org/chapter_12/12_6_2_re_expressing_smds_using_rules_of_thumb_for_effect_sizes.htm">Interpreting results from continuous outcomes (including standardized mean differences)</a></div>
-				</div>
-			</div>
-			<h3 style="margin-bottom:0px">Meta-regressions</h3>
-			<div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Meta-regression of final Vitamin D level</label></div>
-			<div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Meta-regression of change in Vitamin D level</label></div>
-	  </fieldset>
+<div>Under construction</div>
+		  </fieldset>
 </form>
 	</div>
 	

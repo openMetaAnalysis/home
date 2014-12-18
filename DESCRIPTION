@@ -17,6 +17,9 @@ Imports:
     reshape2,
     grid,
 	meta,
-	rmeta
+	rmeta,
+	mada,
+	metafor
 Collate:
-    'home.R'
+	'diagnosis.R'
+    'intervention.R'
