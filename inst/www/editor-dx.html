@@ -72,7 +72,7 @@ $( "#dialog" ).dialog();
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#plotdiv').r_fun_plot("analyze", {
+	var req = $('#target').contents().find('#output').r_fun_plot("diagnosis", {
 	  type: $("#type").val(),
 	  sortby: $("#sortby").val(),
 	  measure: $("#measure").val(),
@@ -487,9 +487,7 @@ Drucker, 1998, 9769837, 8, 1, 7, 31, 'CTPA',
 Garg, 1998, 9646814, 4, 0, 2, 18, 'CTPA',
 Qanadli, 2000, 11058644, 56, 3, 3, 89,  'CTPA',  
 Ruiz, 2003, 12664123, 21,  7, 2, 31, 'CTPA',
-Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',
-Van Strijen, 2005, 15634261, 88, 17, 48, 92, 'CTPA',
-PIOPED II, 2006, 16738268, 150, 25, 31, 567, 'CTPA',</div>
+Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',</div>
 <br />
 
             <div>
@@ -550,6 +548,7 @@ PIOPED II, 2006, 16738268, 150, 25, 31, 567, 'CTPA',</div>
 	</div>
 	<div id="">Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then alter dimensions in the url of the window of the image.</div>
 	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;display:block" name="target" width="700px" height="600px" src="output.html">
+	<div id="output"></div>
 	</iframe>
 	
 </body>
