@@ -25,7 +25,7 @@ myframe$TP<-as.numeric(as.character(str_trim(myframe$TP)))
 myframe$FP<-as.numeric(as.character(str_trim(myframe$FP)))
 myframe$FN<-as.numeric(as.character(str_trim(myframe$FN)))
 myframe$TN<-as.numeric(as.character(str_trim(myframe$TN)))
-
+msg = ""
 if (sortby=="weight")
 	{
 	sortvalue <- NULL
@@ -44,23 +44,43 @@ KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 pubbiastext = "Test for funnel plot asymmetry"
 analyticmethod = "Hierarchical model (bivariate)"
-#par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
+msg = "<h3>Under construction</h3>\n"
+
+meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe)
+
+#Start of SVG
+height = 20 + length(myframe$Study) * 20
+svgtext = paste("<svg x=\"0px\" y=\"0px\" width=\"600px\" height=\"", height, "px\" viewBox=\"0 0 600 ", height, "\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">")
+for(i in 1: length(myframe$Study))
+	{
+	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" target=\"_blank\"><text x=\"10\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
+	#svgtext = paste(svgtext,"<text x=\"200\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">*</text>")
+	#Sensitivity
+	x = 200 + 100 * meta1$sens[[1]][i]
+	svgtext = paste(svgtext,"<text x=\"",x,"\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$sens[[1]][i]*100,1),"</text>",sep="")
+	#Specificity
+	x = 400 + 100 * meta1$spec[[1]][i]
+	svgtext = paste(svgtext,"<text x=\"",x,"\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$spec[[1]][i]*100,1),"</text>\n",sep="")
+	}
+#End of SVG
+svgtext = paste(svgtext, "</svg>")
+msg = paste(msg, svgtext)
+
 if (type=="ignore")
 	{
-	  list(
-		message = "Under construction"
-	  )
+	meta1 <- perfect.trees(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe)
+	msg = paste(msg, "\n<div>Sensitivity=", round(meta1$coefficients[2]*100,1), "%</div>",sep="")
+	msg = paste(msg, "\n<div>Specificity=", round(meta1$coefficients[3]*100,1), "%</div>",sep="")
 	}
 if (type=="subgroup")
 	{
-	  list(
-		message = "Under construction"
-	  )
+	msg = "Under construction (s)"
 	}
-if (type=="metaregression")
+if (type=="metaregression (m)")
 	{
-	  list(
-		message = "Under construction"
-	  )
+	msg = "Under construction"
 	}
+  list(
+	message = msg
+  )
 }

@@ -20,10 +20,10 @@
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
 
 <!-- jquery-csv from http://code.google.com/p/jquery-csv/ -->
-<script src="https://jquery-csv.googlecode.com/git/src/jquery.csv.js"></script>
+<script src="//jquery-csv.googlecode.com/git/src/jquery.csv.js"></script>
 
 <!-- http://jqueryui.com/dialog/ -->
-<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
 <!-- Ajax.org Cloud9 Editor from http://ace.c9.io/#nav=api&api=editor -->
 <script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -32,10 +32,6 @@
 
 <script> 
 $(document).ready(function(){
-
-$(function() {
-$( "#dialog" ).dialog();
-});
 
 	var hash = window.location.hash 
 	if (hash.length > 1) //location.hash.substring.length
@@ -61,40 +57,40 @@ $( "#dialog" ).dialog();
   editor.getSession().setUseWrapMode(true);
   
     $("#submitbutton").on("click", function(){
-    //disable the button to prevent multiple clicks
-    $("#submitbutton").attr("disabled", "disabled");
-	temp = editor.getSession().getValue()
-	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
-	temp = temp.replace(/\r?\n/g, '')
-	temp = temp.replace(/\s+$/g, '')
-	temp = temp.replace(/$\s+/g, '')
-	temp = temp.replace(/,$/g, '')
+		//disable the button to prevent multiple clicks
+		$("#submitbutton").attr("disabled", "disabled");
+		temp = editor.getSession().getValue()
+		//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
+		temp = temp.replace(/\r?\n/g, '')
+		temp = temp.replace(/\s+$/g, '')
+		temp = temp.replace(/$\s+/g, '')
+		temp = temp.replace(/,$/g, '')
+		  
+		//perform the request
+		var req = opencpu.r_fun_json("diagnosis", {
+			type: $("#type").val(),
+			sortby: $("#sortby").val(),
+			measure: $("#measure").val(),
+			cofactorlabel: $("#cofactorlabel").val(),
+			content: temp,
+			topic: $("#topic").val(),
+			lefthand: $("#lefthand").val(),
+			righthand: $("#righthand").val(),
+			theme : $("#theme").val()
+		  }, function(output){
+				$("#output").html(output.message)
+			});
 	  
-	//perform the request
-	var req = opencpu.r_fun_json("diagnosis", {
-	type: $("#type").val(),
-	sortby: $("#sortby").val(),
-	measure: $("#measure").val(),
-	cofactorlabel: $("#cofactorlabel").val(),
-	content: temp,
-	topic: $("#topic").val(),
-	lefthand: $("#lefthand").val(),
-	righthand: $("#righthand").val(),
-	theme : $("#theme").val()
-	  }, function(output){
-          $("#output").text(output.message);
-        });
-        
-        //if R returns an error, alert the error message
-        req.fail(function(){
-          alert("Server error: " + req.responseText);
-        });
-        
-        //after request complete, re-enable the button 
-        req.always(function(){
-          $("#submitbutton").removeAttr("disabled")
-        });
-      });
+			//if R returns an error, alert the error message
+			req.fail(function(){
+			  alert("Server error: " + req.responseText);
+			});
+			
+			//after request complete, re-enable the button 
+			req.always(function(){
+			  $("#submitbutton").removeAttr("disabled")
+			});
+		  });
 	  
   //button handlers
 
@@ -157,41 +153,6 @@ $( "#dialog" ).dialog();
 		$("#sortby").val("year");
 		$("#topic").val("Vitamin D supplementation for fracture prevention");
 		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 0,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 0,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 0,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 0,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 0,\nHarwood, 2000, 14695863, 8, 114, 5, 37, 0,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 0,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 0,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 0,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 0,",1);
-		}
-	if($(this).val()=="ex_1b") {
-		$("#type").val("subgroup");
-		$("#measure").css("display","inline")
-		$("#cofactorform").css("display","none")
-		$("#measure").val("RR");
-		$("#sortby").val("year");
-		$("#topic").val("Vitamin D supplementation for fracture prevention");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 'INeffective dose',\nLips, 1996, 8554248, 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 'Effective dose',\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 2002, 11991447, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 'Effective dose',\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 2000, 14695863, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 2002, 11918228, 69, 569, 76, 575, 'INeffective dose',\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 'Effective dose',\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 'Effective dose',\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 'INeffective dose',",1);
-		}
-	if($(this).val()=="ex_2a") {
-		$("#type").val("ignore");
-		$("#topic").val("Nebulised hypertonic saline solution for reducing length of stay from acute bronchiolitis in infants");
-		$("#measure").css("display","inline")
-		$("#cofactorform").css("display","none")
-		$("#measure").val("MD");
-		$("#sortby").val("year");
-		editor.setValue("Mandeberg, 2002, 12576370, 3(1.2), 27, 4(1.9), 25, HS,\nTal, 2006, 16599051, 2.6(1.4), 21, 3.5(1.7), 20, HS,\nKuzik, 2007, 17719935, 2.6(1.9), 47, 3.5(2.9), 49, HS,\nLuo, 2010, 19674354, 6(1.2), 50, 7.4(1.5), 43, HS,\nLuo, 2011, 20636429, 4.8(1.2), 57, 6.4(1.4), 55, HS,\nDel Giudice, 2012, 22697080, 4.9(1.3), 52, 5.6(1.6), 54, HS,\nWu, 2014, 24862623, 3.16(2.11), 197, 3.92(5.24) , 211, HS,",1);
-		}
-	if($(this).val()=="ex_3a") {
-		$("#type").val("metaregression");
-		$("#topic").val("Vitamin D supplementation for fracture prevention");
-		$("#measure").css("display","none")
-		$("#cofactorform").css("display","inline")
-		$("#cofactorlabel").val("Final vitamin D level");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 77,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 54,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 80,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 74.3,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 106,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 77.5,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 112,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 62,\nHarwood, 2000, 14695863, 8, 114, 5, 37, 44,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 61.4,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 64,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 66.1,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 84.5,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 74.6,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 65,\n",1);
-		}
-	if($(this).val()=="ex_3b") {
-		$("#type").val("metaregression");
-		$("#measure").css("display","none")
-		$("#topic").val("Vitamin D supplementation for fracture prevention");
-		$("#cofactorform").css("display","inline")
-		$("#cofactorlabel").val("Change in vitamin D level");
-		$("#sortby").val("cofactor");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 18,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 27,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 26,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 20.9,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 66,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 56.2,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 35.2,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 24,\nHarwood, 200, 14695863, 8, 114, 5, 37, 20.5,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 13.4,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 17,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 40.4,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 29.1,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 24.6,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 8,\n",1);
 		}
   });
 
@@ -316,7 +277,7 @@ margin-left: auto;
   border-radius: 4px;
 }
 
-#plotbutton{
+#submitbutton{
   width: 120px;
   margin-left: 20px;
 }
@@ -416,12 +377,6 @@ columns:100px 2;
 color:black;
 border-color:#0022B4;
 background-color: #6DC6E7
-}
-#output{
-	height: 40px;
-	width: 500px;
-	border: 1px solid gray;
-	padding: 3px;
 }
 </style>
 </head>
@@ -524,7 +479,7 @@ Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',</div>
               <option value="KU">KU</option>
             </select>
 			</div> 
-            <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot (below)</button>
+		<button id="submitbutton" type="button">Submit (answer will show below)</button>
           </fieldset>
         </form>
       </div>
@@ -539,10 +494,8 @@ Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',</div>
 	
 	<div style="clear:both">&nbsp;</div>
 	</div>
-	<div id="">Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then alter dimensions in the url of the window of the image.</div>
-	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;display:block" name="target" width="700px" height="600px" src="output.html">
-	<div id="output"></div>
-	</iframe>
+
+    <p id="output"></p>
 	
 </body>
 </html>

@@ -8,6 +8,14 @@ Maintainer: Robert Badgett <rbadgett@kumc.edu>
 Description: OpenCPU application for meta-analysis of binary outcomes using package meta.
 License: GPL
 Depends:
+	lme4,
+	mpt,
+	Matrix,
+    meta
+Imports:
+	lme4,
+	mpt,
+	Matrix,
     meta
 Imports:
     ggplot2,
@@ -19,6 +27,7 @@ Imports:
 	meta,
 	rmeta,
 	mada,
+	Metatron,
 	metafor
 Collate:
 	'diagnosis.R'
