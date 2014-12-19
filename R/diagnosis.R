@@ -44,33 +44,46 @@ KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 pubbiastext = "Test for funnel plot asymmetry"
 analyticmethod = "Hierarchical model (bivariate)"
-msg = "<h3>Under construction</h3>\n"
+msg = ""
 
 meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe)
 
 #Start of SVG
-height = 20 + length(myframe$Study) * 20
-svgtext = paste("<svg x=\"0px\" y=\"0px\" width=\"600px\" height=\"", height, "px\" viewBox=\"0 0 600 ", height, "\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">")
+height = 50 + length(myframe$Study) * 20
+svgtext = paste("<svg x=\"0px\" y=\"0px\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">")
 for(i in 1: length(myframe$Study))
 	{
-	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" target=\"_blank\"><text x=\"10\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
-	#svgtext = paste(svgtext,"<text x=\"200\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">*</text>")
+	#Column names
+	svgtext = paste(svgtext, "<text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text></a><text x=\"250\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text>",sep="")
+	#Citation
+	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" target=\"_blank\"><text x=\"10\" y=\"" , 10 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
 	#Sensitivity
-	x = 200 + 100 * meta1$sens[[1]][i]
-	svgtext = paste(svgtext,"<text x=\"",x,"\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$sens[[1]][i]*100,1),"</text>",sep="")
+	x = 300 + 100 * meta1$sens[[1]][i]
+		#text
+		svgtext = paste(svgtext,"<text x=\"200\" y=\"" , 10 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$sens[[1]][i]*100,0)," (", round(meta1$sens$sens.ci[i,1]*100,0) ," - ", round( meta1$sens$sens.ci[i,2]*100,0), ")</text>",sep="")
+		#point estimate
+		svgtext = paste(svgtext,"<circle cx=\"", x, "\" cy=\"" , 10 + i*20 ,"\" r=\"3\" stroke-width=\"0\" style=\"fill:black;\"/>",sep="")
+		#Confidence intervals
+		cl.lower = 300 + 100 * meta1$sens$sens.ci[i,1]
+		ci.upper = 300 + 100 * meta1$sens$sens.ci[i,2]
+		svgtext = paste(svgtext,"<line x1=\"" , cl.lower ,"\" y1=\"" , 10 + i*20 ,"\" x2=\"" , ci.upper ,"\" y2=\"" , 10 + i*20 ,"\" style=\"stroke:rgba(0,0,0,1);stroke-width:2\" />", sep="")
 	#Specificity
-	x = 400 + 100 * meta1$spec[[1]][i]
-	svgtext = paste(svgtext,"<text x=\"",x,"\" y=\"" , i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$spec[[1]][i]*100,1),"</text>\n",sep="")
+	x = 550 + 100 * meta1$spec[[1]][i]
+		#text
+		svgtext = paste(svgtext,"<text x=\"450\" y=\"" , 10 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$spec[[1]][i]*100,0)," (", round(meta1$spec$spec.ci[i,1]*100,0) ," - ", round( meta1$spec$spec.ci[i,2]*100,0), ")</text>",sep="")
+		#point estimate
+		svgtext = paste(svgtext,"<circle cx=\"", x, "\" cy=\"" , 10 + i*20 ,"\" r=\"3\" stroke-width=\"0\" style=\"fill:black;\"/>",sep="")
+		#Confidence intervals
+		cl.lower = 550 + 100 * meta1$spec$spec.ci[i,1]
+		ci.upper = 550 + 100 * meta1$spec$spec.ci[i,2]
+		svgtext = paste(svgtext,"<line x1=\"" , cl.lower ,"\" y1=\"" , 10 + i*20 ,"\" x2=\"" , ci.upper ,"\" y2=\"" , 10 + i*20 ,"\" style=\"stroke:rgba(0,0,0,1);stroke-width:2\" />", sep="")
 	}
-#End of SVG
-svgtext = paste(svgtext, "</svg>")
-msg = paste(msg, svgtext)
 
 if (type=="ignore")
 	{
 	meta1 <- perfect.trees(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe)
-	msg = paste(msg, "\n<div>Sensitivity=", round(meta1$coefficients[2]*100,1), "%</div>",sep="")
-	msg = paste(msg, "\n<div>Specificity=", round(meta1$coefficients[3]*100,1), "%</div>",sep="")
+	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 25 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">Summary</text><text x=\"200\" y=\"" , 25 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coefficients[[2]][1]*100,0)," (", round(meta1$sens$sens.ci[i,1]*100,0) ," - ", round(meta1$sens$sens.ci[i,1]*100,0), ")</text><text x=\"450\" y=\"" , 25 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coefficients[[3]][1]*100,0)," (", round(meta1$spec$spec.ci[i,1]*100,0) ," - ", round( meta1$spec$spec.ci[i,2]*100,0), ")</text>",sep="")
+	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">(hierarchical bivariate model)</text>",sep="")
 	}
 if (type=="subgroup")
 	{
@@ -80,7 +93,12 @@ if (type=="metaregression (m)")
 	{
 	msg = "Under construction"
 	}
-  list(
+
+	#End of SVG
+	svgtext = paste(svgtext, "</svg>")
+
+	msg = paste("<div>Under construction</div><h3>", topic, "</h3>\n",svgtext,msg,sep="")
+	list(
 	message = msg
   )
 }
