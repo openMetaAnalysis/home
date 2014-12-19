@@ -53,9 +53,6 @@ $( "#dialog" ).dialog();
 	  $('#files').bind('change', handleFileSelect);
 	}
 
-  //optional, requires jquery-ui.
-  $("#plotdiv").resizable()
-
   //For Ajax.org Cloud9 Editor
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/github");
@@ -63,51 +60,44 @@ $( "#dialog" ).dialog();
   editor.setFontSize("14px");
   editor.getSession().setUseWrapMode(true);
   
-  // drawplot
-  function drawplot(){
-    $("#plotbutton").attr("disabled", "disabled")
+    $("#submitbutton").on("click", function(){
+    //disable the button to prevent multiple clicks
+    $("#submitbutton").attr("disabled", "disabled");
 	temp = editor.getSession().getValue()
 	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
 	temp = temp.replace(/\r?\n/g, '')
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#output').r_fun_plot("diagnosis", {
-	  type: $("#type").val(),
-	  sortby: $("#sortby").val(),
-	  measure: $("#measure").val(),
-	  cofactorlabel: $("#cofactorlabel").val(),
-	  content: temp,
-	  topic: $("#topic").val(),
-	  lefthand: $("#lefthand").val(),
-	  righthand: $("#righthand").val(),
-	  theme : $("#theme").val()
-    }).always(function(){
-      $("#plotbutton").removeAttr("disabled");
-    }).fail(function(){
-      alert("HTTP error " + req.status + ": " + req.responseText);
-    });
-  }
-
+	  
+	//perform the request
+	var req = opencpu.r_fun_json("diagnosis", {
+	type: $("#type").val(),
+	sortby: $("#sortby").val(),
+	measure: $("#measure").val(),
+	cofactorlabel: $("#cofactorlabel").val(),
+	content: temp,
+	topic: $("#topic").val(),
+	lefthand: $("#lefthand").val(),
+	righthand: $("#righthand").val(),
+	theme : $("#theme").val()
+	  }, function(output){
+          $("#output").text(output.message);
+        });
+        
+        //if R returns an error, alert the error message
+        req.fail(function(){
+          alert("Server error: " + req.responseText);
+        });
+        
+        //after request complete, re-enable the button 
+        req.always(function(){
+          $("#submitbutton").removeAttr("disabled")
+        });
+      });
+	  
   //button handlers
-  $("#plotbutton").on("click", function(e){
-    e.preventDefault();
-    drawplot();
-  });
 
-  $("#showeditor").on("click", function(e){
-    e.preventDefault();
-    if ($("#editorcontainer").css("display") == "none"){
-		$("#editorcontainer").css("display","inline")
-		$("#target").css("display","inline")
-		$("#introduction").css("display","none")
-		}
-	else {
-		$("#introduction").css("display","inline")
-		$("#editorcontainer").css("display","none")
-		$("#target").css("display","none")
-	}
-  });
 
   $("#instruct").on("click", function(e){
     e.preventDefault();
@@ -360,11 +350,8 @@ columns:100px 2;
 	color:#FFFFFF;
 	text-decoration:none;
 	font-weight:bold;
-	//font-weight:700;
-	//font-size:12px;
 	line-height:32px;
 	padding:0 15px;
-	//font-family:"HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif
 }
 
 #primary_nav_wrap ul li
@@ -429,6 +416,12 @@ columns:100px 2;
 color:black;
 border-color:#0022B4;
 background-color: #6DC6E7
+}
+#output{
+	height: 40px;
+	width: 500px;
+	border: 1px solid gray;
+	padding: 3px;
 }
 </style>
 </head>
