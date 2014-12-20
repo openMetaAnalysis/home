@@ -51,14 +51,14 @@ meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe)
 #Start of SVG
 height = 175 + length(myframe$Study) * 20
 svgtext = paste("<svg x=\"0px\" y=\"0px\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">")
+#Column names
+svgtext = paste(svgtext, "<text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"250\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text>",sep="")
 for(i in 1: length(myframe$Study))
 	{
-	#Column names
-	svgtext = paste(svgtext, "<text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text></a><text x=\"250\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text>",sep="")
 	#Citation
 	studysize = TP[i] + FP[i] + FN[i] + TN[i]
 	prevalence = round(100*(TP[i] + FN[i])/studysize,0)
-	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" title=\"Study size is ",studysize,". Prevalence of the outcome is ",prevalence,"%. Click citation to open abstract at PubMed in a new window.\"target=\"_blank\"><text x=\"10\" y=\"" , 15 + i*20 ,"\" fill=\"rgba(0,0,255,1)\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
+	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" title=\"Study size is ",studysize,". Prevalence of the outcome is ",prevalence,"%. Click citation to open abstract at PubMed in a new window.\" target=\"_blank\"><text x=\"10\" y=\"" , 15 + i*20 ,"\" fill=\"rgba(0,0,255,1)\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
 	#Sensitivity
 	x = 300 + 100 * meta1$sens[[1]][i]
 		#text
@@ -91,9 +91,9 @@ if (type=="ignore")
 	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 65 + i*20 ,"\" fill=\"black\">(hierarchical bivariate model)</text>",sep="")
 	#vertical lines for sn and sp
 	#sensitivity
-	svgtext = paste(svgtext, "<line x1=\"", 300 + 100 * meta1$coefficients[[2]][1], "\" y1=\"25\" x2=\"", 300 + 100 * meta1$coefficients[[2]][1], "\" y2=", 25 + i*20 ," style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\"></line>", sep="")
+	svgtext = paste(svgtext, "<line x1=\"", 300 + 100 * meta1$coefficients[[2]][1], "\" y1=\"25\" x2=\"", 300 + 100 * meta1$coefficients[[2]][1], "\" y2=\"", 25 + i*20 ,"\" style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\"></line>", sep="")
 	#specificity
-	svgtext = paste(svgtext, "<line x1=\"", 550 + 100 * meta1$coefficients[[3]][1], "\" y1=\"25\" x2=\"", 550 + 100 * meta1$coefficients[[3]][1], "\" y2=", 25 + i*20 ," style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\"></line>", sep="")
+	svgtext = paste(svgtext, "<line x1=\"", 550 + 100 * meta1$coefficients[[3]][1], "\" y1=\"25\" x2=\"", 550 + 100 * meta1$coefficients[[3]][1], "\" y2=\"", 25 + i*20 ,"\" style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\"></line>", sep="")
 	#AUC
 	auc <- AUC(phm(myframe))
 	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 85 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">Area under the ROC curve: ", round(auc$AUC[[1]][1],3), "</text>",sep="")
