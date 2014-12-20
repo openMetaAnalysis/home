@@ -106,7 +106,7 @@ if (type=="ignore")
 	ppv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
 	PostTestOdds = PreTestOdds * LRneg
 	npv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
-	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 105 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">At the mean prevalence of ", prevalence, "% (odds = ",round(PreTestOdds,2),") of ", totalstudied," subjects studied:</text>",sep="")
+	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 105 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">At the mean prevalence of ", prevalence, "% (odds = ",round(PreTestOdds,2),") among ", totalstudied," subjects studied:</text>",sep="")
 	svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 120 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">Positive predictive value is: ", ppv, "%</text>",sep="")
 	svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 135 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">Negative predictive value is: ", npv, "%</text>",sep="")
 	svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", prevalence, "&amp;sensitivity=", round(meta1$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta1$coefficients[[3]][1]*100,0), "\" title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 155 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
