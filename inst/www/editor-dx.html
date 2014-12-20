@@ -149,10 +149,10 @@ $(document).ready(function(){
 		$("#type").val("ignore");
 		$("#measure").css("display","inline")
 		$("#cofactorform").css("display","none")
-		$("#measure").val("RR");
+		$("#measure").val("Sensitivity and specificity");
 		$("#sortby").val("year");
-		$("#topic").val("Vitamin D supplementation for fracture prevention");
-		editor.setValue("Law, 2006, 16641143, 24, 1762, 20, 1955, 0,\nLips, 1996, 8554248, 135, 1291, 122, 1287, 0,\nLyons, 2007, 17473911, 202, 1725, 209, 1715, 0,\nTrivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,\nChapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,\nChapuy, 2002, 11991447, 97, 393, 55, 190, 0,\nDawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,\nGrant, 2005, 15885294, 349, 2649, 341, 2643, 0,\nHarwood, 2000, 14695863, 8, 114, 5, 37, 0,\nJackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,\nMeyer, 2002, 11918228, 69, 569, 76, 575, 0,\nPfeifer, 2000, 10841179, 3, 70, 6, 67, 0,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 0,\nSalovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,\nSanders, 2010, 20460620, 171, 1131, 135, 1125, 0,",1);
+		$("#topic").val("Computed tomographic pulmonary angiography for diagnosing pulmonary embolism");
+		editor.setValue("Remy-Jardin, 1992, 1410342, 18, 1, 0, 23, 'CTPA',\nBlum, 1994, 8017318, 7, 0, 0, 3, 'CTPA',\nGoodman, 1995, 7754875, 7, 1, 4, 8, 'CTPA',\nRemy-Jardin, 1996, 8756918, 39, 0, 4, 32, 'CTPA',\nDrucker, 1998, 9769837, 8, 1, 7, 31, 'CTPA',\nGarg, 1998, 9646814, 4, 0, 2, 18, 'CTPA',\nQanadli, 2000, 11058644, 56, 3, 3, 89,  'CTPA',\nNilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',\nRuiz, 2003, 12664123, 21,  7, 2, 31, 'CTPA',\nVan Strijen, 2005, 15634261, 88, 17, 48, 92, 'CTPA',\nPIOPED II, 2006, 16738268, 150, 25, 31, 567, 'CTPA',",1);
 		}
   });
 
@@ -434,8 +434,10 @@ Remy-Jardin, 1996, 8756918, 39, 0, 4, 32, 'CTPA',
 Drucker, 1998, 9769837, 8, 1, 7, 31, 'CTPA',
 Garg, 1998, 9646814, 4, 0, 2, 18, 'CTPA',
 Qanadli, 2000, 11058644, 56, 3, 3, 89,  'CTPA',  
+Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',
 Ruiz, 2003, 12664123, 21,  7, 2, 31, 'CTPA',
-Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',</div>
+Van Strijen, 2005, 15634261, 88, 17, 48, 92, 'CTPA',
+PIOPED II, 2006, 16738268, 150, 25, 31, 567, 'CTPA',</div>
 <br />
 
             <div>
@@ -487,7 +489,7 @@ Nilsson, 2002, 12626206, 30, 2, 3, 55, 'CTPA',</div>
 	          <form name="form2" action="#" style="width:350px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:350px;height:700px;">
 		  <legend style="font-weight:bold">Example analyses</legend>
-<div>Under construction</div>
+			<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a" /><label for="ex_1a">Computed tomographic pulmonary angiography for diagnosing pulmonary embolism</label></div>
 		  </fieldset>
 </form>
 	</div>

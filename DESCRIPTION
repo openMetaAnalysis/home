@@ -2,7 +2,7 @@ Package: home
 Type: OpenCPU Application
 Title: openMetaAnalysis application for binary outcomes at OpenCPU
 Version: 0.1
-Date: 2013-11-05
+Date: 2014-12-19
 Author: Robert Badgett
 Maintainer: Robert Badgett <rbadgett@kumc.edu>
 Description: OpenCPU application for meta-analysis of binary outcomes using package meta.
@@ -10,13 +10,7 @@ License: GPL
 Depends:
 	lme4,
 	mpt,
-	Matrix,
-    meta
-Imports:
-	lme4,
-	mpt,
-	Matrix,
-    meta
+	Matrix
 Imports:
     ggplot2,
     httr,
@@ -24,8 +18,8 @@ Imports:
     stringr,
     reshape2,
     grid,
-	meta,
 	rmeta,
+    meta,
 	mada,
 	Metatron,
 	metafor
