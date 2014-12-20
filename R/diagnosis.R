@@ -50,7 +50,7 @@ meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe)
 
 #Start of SVG
 height = 175 + length(myframe$Study) * 20
-svgtext = paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg x=\"0px\" y=\"0px\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" fill=\"white\"xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">")
+svgtext = paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg x=\"0px\" y=\"0px\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" fill=\"white\"xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">",sep="")
 #Column names
 svgtext = paste(svgtext, "<text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"250\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text>",sep="")
 for(i in 1: length(myframe$Study))
