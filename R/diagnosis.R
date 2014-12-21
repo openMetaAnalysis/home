@@ -62,7 +62,7 @@ for(i in 1: length(myframe$Study))
 	studysize[i] = TP[i] + FP[i] + FN[i] + TN[i]
 	withoutcome[i] = TP[i] + FN[i]
 	prevalence[i] = round(100*(TP[i] + FN[i])/studysize[i],0)
-	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" title=\"Study size is ",studysize[i],". Prevalence of the outcome is ",prevalence[i],"%. Click citation to open abstract at PubMed in a new window.\" target=\"_blank\"><text x=\"10\" y=\"" , 15 + i*20 ,"\" fill=\"rgba(0,0,255,1)\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
+	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" xlink:title=\"Study size is ",studysize[i],". Prevalence of the outcome is ",prevalence[i],"%. Click citation to open abstract at PubMed in a new window.\" target=\"_blank\"><text x=\"10\" y=\"" , 15 + i*20 ,"\" fill=\"rgba(0,0,255,1)\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
 	#Sensitivity
 	x = 300 + 100 * meta1$sens[[1]][i]
 		#text
@@ -118,7 +118,7 @@ if (type=="ignore")
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 135 + i*20 ,"\">At the prevalences studied (pooled ", pooledprevalence, "%, median ", median(prevalence), ", range ", round(min(prevalence),0)," - ", round(max(prevalence),0),", odds ",round(PreTestOdds,2),"):</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 150 + i*20 ,"\">Positive predictive value is: ", ppv, "%</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 165 + i*20 ,"\">Negative predictive value is: ", npv, "%</text>",sep="")
-		svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta1$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta1$coefficients[[3]][1]*100,0), "\" title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 180 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
+		svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta1$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta1$coefficients[[3]][1]*100,0), "\" xlink:title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 180 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
 	#About the studies
 		svgtext = paste(svgtext, "<!-- About the studies --><text x=\"10\" y=\"" , 205 + i*20 ,"\" style=\"font-weight:bold\">About the studies:</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 220 + i*20 ,"\">",totalstudied," persons (median ",median(studysize),", range ",min(studysize)," - ",max(studysize),") in ",length(myframe$Study)," studies.</text>",sep="")
