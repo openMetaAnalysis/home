@@ -52,7 +52,7 @@ studysize=array(0,length(myframe$names))
 withoutcome=array(0,length(myframe$names))
 
 #Start of SVG
-height = 220 + length(myframe$Study) * 20
+height = 235 + length(myframe$Study) * 20
 svgtext = paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg x=\"0\" y=\"0\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">",sep="")
 #Column names
 svgtext = paste(svgtext, "<!-- Header of plot--><text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"250\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text><!-- Start of studies-->",sep="")
@@ -106,22 +106,23 @@ if (type=="ignore")
 		auc <- AUC(phm(myframe))
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 95 + i*20 ,"\" style=\"font-weight:bold\">Area under the ROC curve: ", round(auc$AUC[[1]][1],3), "</text>",sep="")
 	#Bayesian analysis
-	totalstudied = sum(TP)+sum(FP)+sum(FN)+sum(TN)
-	pooledprevalence = (sum(TP)+sum(FN))/(totalstudied)
-	PreTestOdds = pooledprevalence / (1 - pooledprevalence)
-	pooledprevalence = round(pooledprevalence*100,0)
-	PostTestOdds = PreTestOdds * LRpos
-	ppv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
-	PostTestOdds = PreTestOdds * LRneg
-	npv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
-	svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 115 + i*20 ,"\">At the prevalences studied (pooled ", pooledprevalence, "%, median ", median(prevalence), ", range ", round(min(prevalence),0)," - ", round(max(prevalence),0),", odds ",round(PreTestOdds,2),"):</text>",sep="")
-	svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 130 + i*20 ,"\">Positive predictive value is: ", ppv, "%</text>",sep="")
-	svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 145 + i*20 ,"\">Negative predictive value is: ", npv, "%</text>",sep="")
-	svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta1$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta1$coefficients[[3]][1]*100,0), "\" title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 165 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 115 + i*20 ,"\" style=\"font-weight:bold\">Predictive values:</text>",sep="")
+		totalstudied = sum(TP)+sum(FP)+sum(FN)+sum(TN)
+		pooledprevalence = (sum(TP)+sum(FN))/(totalstudied)
+		PreTestOdds = pooledprevalence / (1 - pooledprevalence)
+		pooledprevalence = round(pooledprevalence*100,0)
+		PostTestOdds = PreTestOdds * LRpos
+		ppv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
+		PostTestOdds = PreTestOdds * LRneg
+		npv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 135 + i*20 ,"\">At the prevalences studied (pooled ", pooledprevalence, "%, median ", median(prevalence), ", range ", round(min(prevalence),0)," - ", round(max(prevalence),0),", odds ",round(PreTestOdds,2),"):</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 150 + i*20 ,"\">Positive predictive value is: ", ppv, "%</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 165 + i*20 ,"\">Negative predictive value is: ", npv, "%</text>",sep="")
+		svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta1$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta1$coefficients[[3]][1]*100,0), "\" title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 180 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
 	#About the studies
-		svgtext = paste(svgtext, "<!-- About the studies --><text x=\"10\" y=\"" , 185 + i*20 ,"\" style=\"font-weight:bold\">About the studies:</text>",sep="")
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 200 + i*20 ,"\">",totalstudied," persons (median ",median(studysize),", range ",min(studysize)," - ",max(studysize),") in ",length(myframe$Study)," studies.</text>",sep="")
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 215 + i*20 ,"\">",sum(withoutcome)," persons with the outcome (median ",median(withoutcome),", range ",min(withoutcome)," - ",max(withoutcome),").</text>",sep="")
+		svgtext = paste(svgtext, "<!-- About the studies --><text x=\"10\" y=\"" , 205 + i*20 ,"\" style=\"font-weight:bold\">About the studies:</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 220 + i*20 ,"\">",totalstudied," persons (median ",median(studysize),", range ",min(studysize)," - ",max(studysize),") in ",length(myframe$Study)," studies.</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 235 + i*20 ,"\">",sum(withoutcome)," persons with the outcome (median ",median(withoutcome),", range ",min(withoutcome)," - ",max(withoutcome),").</text>",sep="")
 	}
 	svgtext = paste(svgtext, "</g>",sep="")
 if (type=="subgroup")
