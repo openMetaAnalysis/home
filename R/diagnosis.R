@@ -152,6 +152,7 @@ if (type=="metaregression (m)")
 	# From mada's reitsma
 	#(fit <- reitsma(Hayashino, formula = cbind(tsens, tfpr) ~ Year))
 	#summary(fit) ## sensitivities significantly lower for SAQ
+	#Could automatically check for sig of year, studysize, prevalence
 	}
 
 	#End of SVG
