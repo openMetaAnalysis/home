@@ -94,35 +94,33 @@ if (type=="ignore")
 	# cochran.Q(meta1$DOR[[1]],1/studysize) # to be used later in heterogeneity testing
 	# Could also use mada's  equality of sensitivities and specificities
 	#The meta-analysis
-	meta1 <- perfect.trees(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe)
+	meta2 <- perfect.trees(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe)
 	#vertical lines for sn and sp
 		#sensitivity
-		svgtext = paste(svgtext, "<!-- Vertical summary lines --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 300 + 100 * meta1$coef[[2]][1], "\" y1=\"25\" x2=\"", 300 + 100 * meta1$coef[[2]][1], "\" y2=\"", 25 + i*20 ,"\" />", sep="")
+		svgtext = paste(svgtext, "<!-- Vertical summary lines --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 300 + 100 * meta2$coef[[2]][1], "\" y1=\"25\" x2=\"", 300 + 100 * meta2$coef[[2]][1], "\" y2=\"", 25 + i*20 ,"\" />", sep="")
 		#specificity
-		svgtext = paste(svgtext, "<line x1=\"", 550 + 100 * meta1$coef[[3]][1], "\" y1=\"25\" x2=\"", 550 + 100 * meta1$coef[[3]][1], "\" y2=\"", 25 + i*20 ,"\"/></g>", sep="")
+		svgtext = paste(svgtext, "<line x1=\"", 550 + 100 * meta2$coef[[3]][1], "\" y1=\"25\" x2=\"", 550 + 100 * meta2$coef[[3]][1], "\" y2=\"", 25 + i*20 ,"\"/></g>", sep="")
 	#Summary text
 		svgtext = paste(svgtext, "<!-- Summary text --><g fill=\"black\" style=\"color:black;opacity:1\"><text x=\"10\" y=\"" , 40 + i*20 ,"\" style=\"font-weight:bold\">Summary</text>",sep="")
 		#Sens
-		ci.l = round(100*inv.logit(meta1$coef[2,2] - 1.96*meta1$coef[2,3]),0)
-		ci.u = round(100*inv.logit(meta1$coef[2,2] + 1.96*meta1$coef[2,3]),0)
-		svgtext = paste(svgtext,"<text x=\"200\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
+		ci.l = round(100*inv.logit(meta2$coef[2,2] - 1.96*meta2$coef[2,3]),0)
+		ci.u = round(100*inv.logit(meta2$coef[2,2] + 1.96*meta2$coef[2,3]),0)
+		svgtext = paste(svgtext,"<text x=\"200\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
-		svgtext = paste(svgtext,"<text x=\"", 300 + -10 + 100 * meta1$coef[[2]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coef[[2]][1]*100,0),"</text>",sep="")
+		svgtext = paste(svgtext,"<text x=\"", 300 + -10 + 100 * meta2$coef[[2]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0),"</text>",sep="")
 		#Spec
-		ci.l = round(100*inv.logit(meta1$coef[3,2] - 1.96*meta1$coef[3,3]),0)
-		ci.u = round(100*inv.logit(meta1$coef[3,2] + 1.96*meta1$coef[3,3]),0)
-		svgtext = paste(svgtext,"<text x=\"450\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">", round(meta1$coef[[3]][1]*100,0), " (",ci.l ," - ", ci.u, ")</text>",sep="")
+		ci.l = round(100*inv.logit(meta2$coef[3,2] - 1.96*meta2$coef[3,3]),0)
+		ci.u = round(100*inv.logit(meta2$coef[3,2] + 1.96*meta2$coef[3,3]),0)
+		svgtext = paste(svgtext,"<text x=\"450\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">", round(meta2$coef[[3]][1]*100,0), " (",ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
-		svgtext = paste(svgtext,"<text x=\"", 550 + -10 + 100 * meta1$coef[[3]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coef[[3]][1]*100,0),"</text>",sep="")
-		LRpos = meta1$coef[[2]][1]  / (1 - meta1$coef[[3]][1])
-		LRneg = (1 - meta1$coef[[2]][1]) / meta1$coef[[3]][1]
+		svgtext = paste(svgtext,"<text x=\"", 550 + -10 + 100 * meta2$coef[[3]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[3]][1]*100,0),"</text>",sep="")
+		LRpos = meta2$coef[[2]][1]  / (1 - meta2$coef[[3]][1])
+		LRneg = (1 - meta2$coef[[2]][1]) / meta2$coef[[3]][1]
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 60 + i*20 ,"\">Likelihood ratios: positive ",round(LRpos,1),"; negative ",round(LRneg,1),"</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 75 + i*20 ,"\">(hierarchical bivariate model)</text>",sep="")
 	#AUC
 		auc <- AUC(phm(myframe))
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 95 + i*20 ,"\" style=\"font-weight:bold\">Area under the ROC curve: ", round(auc$AUC[[1]][1],3), "</text>",sep="")
-	#Heterogeneity
-		#svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 95 + i*20 ,"\" style=\"font-weight:bold\">Heterogeneity (Cochran's Q of diagnostic odds ratio): ", "", "</text>",sep="")
 	#predictive values
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 115 + i*20 ,"\" style=\"font-weight:bold\">Predictive values:</text>",sep="")
 		totalstudied = sum(TP)+sum(FP)+sum(FN)+sum(TN)
@@ -135,11 +133,19 @@ if (type=="ignore")
 		npv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 135 + i*20 ,"\">At the prevalences studied (pooled ", pooledprevalence, "%, median ", median(prevalence), ", range ", round(min(prevalence),0)," - ", round(max(prevalence),0),", odds ",round(PreTestOdds,2),"):</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 150 + i*20 ,"\">Positive ", ppv, "%; negative ", npv, "%</text>",sep="")
-		svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta1$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta1$coefficients[[3]][1]*100,0), "\" xlink:title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 165 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
+		svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta2$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta2$coefficients[[3]][1]*100,0), "\" xlink:title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 165 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
+	#Heterogeneity exploration
+		#svgtext = paste(svgtext, "<!-- Heterogeneity exploration --><text x=\"10\" y=\"" , 185 + i*20 ,"\" style=\"font-weight:bold\">Heterogeneity exploration:</text>",sep="")
+		#svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 200 + i*20 ,"\">Equality (chi-square) of sensitivities ", sprintf("%.3f",meta1$sens.htest['p.value'][1]),"; specificities ", sprintf("%.3f",meta1$spec.htest['p.value'][1]),"</text>",sep="")
+		#Yearreg <- reitsma(myframe, formula = cbind(tsens, tfpr) ~ year)
+		#Prevreg <- reitsma(myframe, formula = cbind(tsens, tfpr) ~ prevalence)
+		#Sizereg <- reitsma(myframe, formula = cbind(tsens, tfpr) ~ studysize)
+		#svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 215 + i*20 ,"\">Regression with diagnostic odds ratio: year pending; study size pending; prevalence pending.</text>",sep="")
+		#svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 195 + i*20 ,"\">Correlation of sensitivities and false positive rates: ",totalstudied,"</text>",sep="")
 	#About the studies
-		svgtext = paste(svgtext, "<!-- About the studies --><text x=\"10\" y=\"" , 185 + i*20 ,"\" style=\"font-weight:bold\">About the studies:</text>",sep="")
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 205 + i*20 ,"\">",totalstudied," persons (median ",median(studysize),", range ",min(studysize)," - ",max(studysize),") in ",length(myframe$Study)," studies.</text>",sep="")
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 220 + i*20 ,"\">",sum(withoutcome)," persons with the outcome (median ",median(withoutcome),", range ",min(withoutcome)," - ",max(withoutcome),").</text>",sep="")
+		svgtext = paste(svgtext, "<!-- About the studies --><text x=\"10\" y=\"" , 190 + i*20 ,"\" style=\"font-weight:bold\">About the studies:</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 210 + i*20 ,"\">",totalstudied," persons (median ",median(studysize),", range ",min(studysize)," - ",max(studysize),") in ",length(myframe$Study)," studies.</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 225+ i*20 ,"\">",sum(withoutcome)," persons with the outcome (median ",median(withoutcome),", range ",min(withoutcome)," - ",max(withoutcome),").</text>",sep="")
 	}
 	svgtext = paste(svgtext, "</g>",sep="")
 if (type=="subgroup")
