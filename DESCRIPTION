@@ -12,7 +12,8 @@ Depends:
 	mpt,
 	Matrix
 Imports:
-    ggplot2,
+    boot,
+	ggplot2,
     httr,
     RJSONIO,
     stringr,
