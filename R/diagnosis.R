@@ -103,14 +103,14 @@ if (type=="ignore")
 	#Summary text
 		svgtext = paste(svgtext, "<!-- Summary text --><g fill=\"black\" style=\"color:black;opacity:1\"><text x=\"10\" y=\"" , 40 + i*20 ,"\" style=\"font-weight:bold\">Summary</text>",sep="")
 		#Sens
-		ci.l = round(100*inv.logit(meta1$coef[2,2] - 1.6*meta1$coef[2,3]),0)
-		ci.u = round(100*inv.logit(meta1$coef[2,2] + 1.6*meta1$coef[2,3]),0)
+		ci.l = round(100*inv.logit(meta1$coef[2,2] - 1.96*meta1$coef[2,3]),0)
+		ci.u = round(100*inv.logit(meta1$coef[2,2] + 1.96*meta1$coef[2,3]),0)
 		svgtext = paste(svgtext,"<text x=\"200\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
 		svgtext = paste(svgtext,"<text x=\"", 300 + -10 + 100 * meta1$coef[[2]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coef[[2]][1]*100,0),"</text>",sep="")
 		#Spec
-		ci.l = round(100*inv.logit(meta1$coef[3,2] - 1.6*meta1$coef[3,3]),0)
-		ci.u = round(100*inv.logit(meta1$coef[3,2] + 1.6*meta1$coef[3,3]),0)
+		ci.l = round(100*inv.logit(meta1$coef[3,2] - 1.96*meta1$coef[3,3]),0)
+		ci.u = round(100*inv.logit(meta1$coef[3,2] + 1.96*meta1$coef[3,3]),0)
 		svgtext = paste(svgtext,"<text x=\"450\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">", round(meta1$coef[[3]][1]*100,0), " (",ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
 		svgtext = paste(svgtext,"<text x=\"", 550 + -10 + 100 * meta1$coef[[3]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta1$coef[[3]][1]*100,0),"</text>",sep="")
