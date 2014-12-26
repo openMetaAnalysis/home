@@ -153,14 +153,14 @@ if (type=="subgroup")
 		}
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE,print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
-	grid.text(pubbiastext, 0.1, 0.02, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	#Test for subgroup differences
 	#Hartung-Knapp gives Q = 0 if a subgroup has single member
 	meta1 <- update(meta1,hakn = FALSE)
 	byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
 	byvartext = sprintf(byvartext, fmt='%#.3f');
 	byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
-	grid.text(byvartext, 0.1, 0.05, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="metaregression")
 	{
