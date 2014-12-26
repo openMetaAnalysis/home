@@ -162,7 +162,7 @@ if (type=="metaregression (m)")
 	}
 
 	#End of SVG
-	svgtext = paste(svgtext, "</svg>")
+	svgtext = paste(svgtext, "Sorry, your browser does not support inline SVG for dynamic graphics.</svg>")
 
 	msg = paste("<div>Under construction</div><h3 style=\"font-family:Arial, Helvetica, sans-serif\">", topic, "</h3>\n",svgtext,msg,sep="")
 	msg = paste(msg,"<table style=\"background-color:#CFCFCF\" border=\"0\"><tbody><tr><td><a class=\"selectall\" href=\"javascript:document.getElementById('svgfile').select()\">Select source code for graphics below</a> (then press control and C together to copy.)<br><textarea id=\"svgfile\" cols=\"80\" rows=\"10\" wrap=\"virtual\" onfocus=\"this.select()\">",svgtext,"</textarea></td></tr></tbody></table>",sep="")
