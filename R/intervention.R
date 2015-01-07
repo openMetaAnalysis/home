@@ -63,7 +63,8 @@ attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 pubbiastext = "Test for funnel plot asymmetry"
-analyticmethod = "Random effects model (Hartung-Knapp)"
+analyticmethod = "Random effects model"
+if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")
 	{
