@@ -4,7 +4,7 @@
 # http://cran.r-project.org/web/packages/rmeta/
 # Discussion of continuity correction:
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
-intervention <- function(content, measure, year, pmid, sortby, lefthand, righthand, type, cofactorlabel, topic, theme) {
+intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, theme) {
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
@@ -70,7 +70,7 @@ if (type=="ignore")
 	# from http://cran.r-project.org/web/packages/meta/
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
@@ -85,7 +85,7 @@ if (type=="ignore")
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = TRUE, method="Inverse", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, method="Inverse", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
@@ -117,7 +117,7 @@ if (type=="subgroup")
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
 		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
@@ -133,7 +133,7 @@ if (type=="subgroup")
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = TRUE, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
@@ -164,11 +164,13 @@ if (type=="subgroup")
 	}
 if (type=="metaregression")
 	{
-	# From http://cran.r-project.org/web/packages/rmeta/ **remeta**
+	# From http://cran.r-project.org/web/packages/rmeta/ **rmeta**
 	myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
 	meta1 <- meta.DSL(myframe[["exp_total"]], myframe[["control_total"]], myframe[["exp_events"]], myframe[["control_events"]],names=Study,conf.level=0.95)
 	studyweights <- 1 / (meta1$tau2 + meta1$selogs^2)
 	x <- myframe$cofactor
+	if (independent_variable=="year"){x <- myframe$year}
+	if (independent_variable=="ce"){x <- myframe$control_events/myframe$control_total}
 	y <- meta1$logs
 	metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
 	plot(y ~ x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n")
