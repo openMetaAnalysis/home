@@ -41,15 +41,22 @@ $( "#dialog" ).dialog();
 	var hash = window.location.hash 
 	if (hash.length > 1) //location.hash.substring.length
 		{
-		if (hash.indexOf('instruct')>0)
+		if (hash.indexOf('instruct')>0 || hash.indexOf('teach')>0)
 			{
 			$("#column_names").css("display","inline")
 			$("#fieldset").css("height","775px")
 			$("#topic").val("Example data set")
 			$("#measure").val("RR");
+			$(".hastip").css("display","inline")
+			$(".teach").css("display","block")
 			}
 		}
-
+	else
+		{
+		$(".hastip").css("display","none")
+		$(".teach").css("display","none")
+		}
+		
 	if(isAPIAvailable()) {
 	  $('#files').bind('change', handleFileSelect);
 	}
@@ -178,6 +185,15 @@ $( "#dialog" ).dialog();
   });
 
   $(".example").click(function(){
+	if($(this).val()=="ex_1") {
+		$("#type").val("ignore");
+		$("#measure").css("display","inline")
+		$("#metaregressionform").css("display","none")
+		$("#measure").val("RR");
+		$("#sortby").val("year");
+		$("#topic").val("'Soma' for reducing social discord (from Brave New World by Aldous Huxley)");
+		editor.setValue("Downs, 2012, 12345678, 50, 100, 50, 100, high-dose,\nJones, 2013, 12345678, 50, 100, 50, 100, low-dose,\nSmith, 2014, 12345678, 50, 100, 50, 100, high-dose,\nSnead, 2015, 12345678, 50, 100, 50, 100, low-dose,\nParks, 2016, 12345678, 50, 100, 50, 100, high-dose,",1);
+		}
 	if($(this).val()=="ex_1a") {
 		$("#type").val("ignore");
 		$("#measure").css("display","inline")
@@ -440,6 +456,14 @@ columns:100px 2;
 	display:block
 }
 
+ul.teach{
+	font-style:italic;
+	margin-left:5px;
+	padding-left:10px;
+	margin-top:1px;
+	margin-bottom:1px;
+}
+
 /* Tooltip */
 .tooltiptext{
 	display: none;
@@ -471,6 +495,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 <li><a href="#" class="menuitem">Editors</a>
 	<ul>
 	<li><a href="https://openmetaanalysis.ocpu.io/home/www/editor.html" class="menuitem">Intervention</a></li>
+	<li><a href="https://openmetaanalysis.ocpu.io/home/www/editor.html#instruct" class="menuitem">Intervention (instructional)</a></li>
 	<li><a href="https://openmetaanalysis.ocpu.io/home/www/editor-dx.html" class="menuitem">Diagnosis</a></li>
 	<li ><a href="https://openmetaanalysis.ocpu.io/home/www/arrows.html" class="menuitem">Arrows Plot</a></li>
 	</ul>
@@ -479,6 +504,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 <li><a href="http://openmetaanalysis.github.io/using_github.html" class="menuitem">Using GitHub</a></li>
 </ul>
 </nav>
+</div>
 <div style="clear:both">&nbsp;</div>
 
 	  <div id="editorcontainer" style="display:block">
@@ -495,10 +521,10 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div id="">Eight columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) events of mean (SD) in intervention group, 5) total in intervention group, 6) events or mean (SD) in control group, 7) total in control group, 8) cofactor. <br/>
+<div >Eight columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) events of mean (SD) in intervention group, 5) total in intervention group, 6) events or mean (SD) in control group, 7) total in control group, 8) cofactor. <br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="">The initial data shown below is fictitious and is <a href="#" id="instruct">instructional</a>.</div>
-<div id="column_names" style="display:none"><img src="column_names.png"/></div>
+<div >The initial data shown below is fictitious and is <a href="#" id="instruct">instructional</a>.</div>
+<div id="column_names" style="display:none"><img src="column_names.png" alt="Image of column names"/></div>
 <div id="editor" style="width:600px;">Downs, 2012, 12345678, 50, 100, 50, 100, high-dose,
 Jones, 2013, 12345678, 50, 100, 50, 100, low-dose,
 Smith, 2014, 12345678, 50, 100, 50, 100, high-dose,
@@ -567,7 +593,7 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 			<label>Right label:</label> 			
 			<select id="righthand">
 			  <option value="favors experimental">favors experimental</option>
-			  <option value="favors control"selected>favors control</option>
+			  <option value="favors control" selected>favors control</option>
 			</select>
 			</div> 
 			<div style="clear:both"> 
@@ -586,13 +612,30 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 	          <form name="form2" action="#" style="width:350px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:350px;height:700px;">
 		  <legend style="font-weight:bold">Example analyses</legend>
-		  <div id="">Below are various approaches to meta-analysis of vitamin D for the prevention of osteoporotic fractures.</div>
+		  <div >Fictitious example based on <a href="http://en.wikipedia.org/wiki/Brave_New_World">Brave New World</a></div>
+			<div><input type="radio" name="example" class="example" value="ex_1" id="ex_1" /><label for="ex_1">Simple dataset</label>
+				<i>
+				<div class="teach">Before making the plot</div>
+				<ul class="teach">
+				<li>Do you believe Soma will show a benefit when the studies are pooled?</li>
+				</ul>
+				<div class="teach">Now, look at the plot</div>
+				<ul class="teach">
+				<li>What does I-squared indicate?</li>
+				</ul>
+				</i>
+			</div>
 			<h3 style="margin-bottom:0px">Meta-analysis of binary outcomes</h3>
-			<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a" /><label for="ex_1a">Include all studies; no subgroups</label></div>
-			<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Subgroup</label></div>
+		  <div >Example: <a href="https://github.com/openMetaAnalysis/Vitamin-D-for-fracture-prevention/blob/master/README.md">vitamin D for the prevention of osteoporotic fractures</a>.</div>
+			<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a" /><label for="ex_1a">Include all studies; no subgroups</label> 
+			<i class="teach">When pooled, is there a significant difference? What does i-squared suggest?</i></div>
+			<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Subgroup</label> 
+			<i class="teach">What does subgrouping reveal?</i></div>
+
 			<h3 style="margin-bottom:0px">Meta-analysis of continuous outcomes</h3>
+		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">hypertonic saline to reduce length of stay in hospitalized children with bronchiolitis</a></div>
 			<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a" /><label for="ex_2a">Include all studies; no subgroups</label></div>
-			<div id=""><a href="#" class="hastip">About standardized mean differences</a>
+			<div ><a href="#" class="hastip">About standardized mean differences</a>
 				<div class="tooltiptext">
 				The standardized mean difference (SMD) is:<br/>
 				<img src="smd.png" alt="SMD"/><br/>
@@ -602,22 +645,29 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 					<li>0.5 a moderate effect</li>
 					<li>> 0.8 a large effect</li> 
 				</ul>
-				<div id="">The 'standardization' allows pooling of different types of outcomes.</div>
-				<div id="">From: Cochrane Handbook. 12.6  <a href="http://handbook.cochrane.org/chapter_12/12_6_2_re_expressing_smds_using_rules_of_thumb_for_effect_sizes.htm">Interpreting results from continuous outcomes (including standardized mean differences)</a></div>
+				<div >The 'standardization' allows pooling of different types of outcomes.</div>
+				<div >From: Cochrane Handbook. 12.6  <a href="http://handbook.cochrane.org/chapter_12/12_6_2_re_expressing_smds_using_rules_of_thumb_for_effect_sizes.htm">Interpreting results from continuous outcomes (including standardized mean differences)</a></div>
 				</div>
 			</div>
-			<h3 style="margin-bottom:0px">Meta-regressions</h3>
-			<div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Meta-regression of final Vitamin D level</label></div>
-			<div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Meta-regression of change in Vitamin D level</label></div>
+			<h3 style="margin-bottom:0px">Meta-regression</h3>
+		  <div >Example: <a href="https://github.com/openMetaAnalysis/Vitamin-D-for-fracture-prevention/blob/master/README.md">vitamin D for the prevention of osteoporotic fractures</a>.</div>
+			<div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Meta-regression of final Vitamin D level.</label>
+			<i class="teach">What is the relationship between the final vitamin D level and the risk of fracture?</i>
+			</div>
+			<div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Meta-regression of change in Vitamin D level</label> 
+			<i class="teach">What is the relationship between the change in vitamin D level and the risk of fracture?</i>
+			</div>
 	  </fieldset>
 </form>
 	</div>
 	
 	<div style="clear:both">&nbsp;</div>
 	</div>
-	<div id="">Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then alter dimensions in the url of the window of the image.</div>
+	<div >Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then alter dimensions in the url of the window of the image.</div>
 	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;display:block" name="target" width="700px" height="600px" src="output.html">
 	</iframe>
+	
+</div>
 	
 </body>
 </html>
