@@ -17,6 +17,7 @@ temp <- paste('"',temp,'"',sep = '')
 temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=8, byrow=TRUE, dimnames = list(NULL, c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total","cofactor")))')
 x<-eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
+remove(x)
 myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
@@ -165,36 +166,53 @@ if (type=="subgroup")
 	}
 if (type=="metaregression")
 	{
-	# From http://cran.r-project.org/web/packages/rmeta/ **rmeta**
 	myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
-	meta1 <- meta.DSL(myframe[["exp_total"]], myframe[["control_total"]], myframe[["exp_events"]], myframe[["control_events"]],names=Study,conf.level=0.95)
-	studyweights <- 1 / (meta1$tau2 + meta1$selogs^2)
-	x <- myframe$cofactor
-	if (independent_variable=="year"){x <- myframe$year}
-	if (independent_variable=="ce"){x <- myframe$control_events/myframe$control_total}
-	y <- meta1$logs
-	metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
-	plot(y ~ x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n")
-	points(y ~ x,cex=10*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
-	text(x=x, y=y,labels=paste(Study), cex=0.65, pos=4,adj=0,font=1,col='black')
-	abline(h=0, v=0, col = "gray90")
-	abline(lm(y ~ x, data = myframe, weights = studyweights))
-	legendtext = "Correlation of cofactor and odds ratio:\n"
-	legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =",round(summary(metaregression)$coef[2,4],3))
-	legend("topright", legend=legendtext,lty=1, lwd = 2, inset=0.05)
-	if ( cofactorlabel != "")
-		{
-		mtext(side=1,line=2,paste("Cofactor: ",cofactorlabel), font=2)
+	myframe$x <- myframe$cofactor
+	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
+	attach(myframe)
+	if (PosParenth1 > 0){
+		if (independent_variable=="ce"){myframe$x <- myframe$control_mean}
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
+		mu2 <- update(meta1, comb.fixed=FALSE) #tau.common=TRUE, 
+		mu2reg <- metareg(mu2, myframe$cofactor)
+		bubble(mu2regstudylab = independent_variable)
+		mtext(side=1,line=3,cex=0.9,adj=1,paste("p= ",sprintf(mu2reg$pval[2], fmt='%#.3f'), sep=""), font=1)
+		#plot.new()
+		#mtext(side=1,line=3,myframe["year"], font=1)
 		}
-	else
-		{
-		mtext(side=1,line=2,"Cofactor", font=2)
+	else{
+		if (independent_variable=="ce"){myframe$x <- myframe$control_events/myframe$control_total}
+		# From http://cran.r-project.org/web/packages/rmeta/ **rmeta**
+		#myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
+		meta1 <- meta.DSL(myframe[["exp_total"]], myframe[["control_total"]], myframe[["exp_events"]], myframe[["control_events"]],names=Study,conf.level=0.95)
+		studyweights <- 1 / (meta1$tau2 + meta1$selogs^2)
+		#x <- myframe$cofactor
+		#if (independent_variable=="year"){x <- myframe$year}
+		#if (independent_variable=="ce"){x <- myframe$control_events/myframe$control_total}
+		myframe$y <- meta1$logs
+		metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
+		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n")
+		points(myframe$y ~ myframe$x,cex=10*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
+		text(x=myframe$x, y=myframe$y,labels=paste(Study), cex=0.65, pos=4,adj=0,font=1,col='black')
+		abline(h=0, v=0, col = "gray90")
+		abline(lm(myframe$y ~ myframe$x, data = myframe, weights = studyweights))
+		legendtext = "Correlation of cofactor and odds ratio:\n"
+		legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =",round(summary(metaregression)$coef[2,4],3))
+		legend("topright", legend=legendtext,lty=1, lwd = 2, inset=0.05)
+		if ( cofactorlabel != "")
+			{
+			mtext(side=1,line=2,paste("Cofactor: ",cofactorlabel), font=2)
+			}
+		else
+			{
+			mtext(side=1,line=2,"Cofactor", font=2)
+			}
+		mtext(side=2,line=3,"Odds ratio transformed to natural log (Ln)", font=2)
+		mtext(side=2,line=2,"(0 indicates odds ratio = 1)")
+		#mtext(side=3,line=0.5,"(Ln odds ratio below 0 favors treatment)")
+		mtext(side=1,line=3,cex=0.9,adj=0,"Notes:", font=2)
+		mtext(side=1,line=4,cex=0.9,adj=0, "1. For each study, the size of the point is its weight in the meta-regression.", font=1)
 		}
-	mtext(side=2,line=3,"Odds ratio transformed to natural log (Ln)", font=2)
-	mtext(side=2,line=2,"(0 indicates odds ratio = 1)")
-	#mtext(side=3,line=0.5,"(Ln odds ratio below 0 favors treatment)")
-	mtext(side=1,line=3,cex=0.9,adj=0,"Notes:", font=2)
-	mtext(side=1,line=4,cex=0.9,adj=0, "1. For each study, the size of the point is its weight in the meta-regression.", font=1)
 	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
 }
