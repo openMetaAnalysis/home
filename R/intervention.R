@@ -169,7 +169,7 @@ if (type=="metaregression")
 	myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
 	myframe$x <- myframe$cofactor
 	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
-	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total + myframe$control_total)}
+	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)}
 	attach(myframe)
 	if (PosParenth1 > 0){
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
