@@ -169,9 +169,10 @@ if (type=="metaregression")
 	myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
 	myframe$x <- myframe$cofactor
 	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
+	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total + myframe$control_total)}
 	attach(myframe)
 	if (PosParenth1 > 0){
-		if (independent_variable=="ce"){myframe$x <- myframe$control_mean}
+		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
 		mu2 <- update(meta1, comb.fixed=FALSE) #tau.common=TRUE, 
 		mu2reg <- metareg(mu2, myframe$cofactor)
@@ -181,14 +182,14 @@ if (type=="metaregression")
 		#mtext(side=1,line=3,myframe["year"], font=1)
 		}
 	else{
-		if (independent_variable=="ce"){myframe$x <- myframe$control_events/myframe$control_total}
+		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
 		# From http://cran.r-project.org/web/packages/rmeta/ **rmeta**
 		#myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
 		meta1 <- meta.DSL(myframe[["exp_total"]], myframe[["control_total"]], myframe[["exp_events"]], myframe[["control_events"]],names=Study,conf.level=0.95)
 		studyweights <- 1 / (meta1$tau2 + meta1$selogs^2)
 		#x <- myframe$cofactor
 		#if (independent_variable=="year"){x <- myframe$year}
-		#if (independent_variable=="ce"){x <- myframe$control_events/myframe$control_total}
+		#if (independent_variable=="cr"){x <- myframe$control_events/myframe$control_total}
 		myframe$y <- meta1$logs
 		metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
 		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n")

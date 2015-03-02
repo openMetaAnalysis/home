@@ -161,9 +161,13 @@ $( "#dialog" ).dialog();
 		{
 		$("#cofactorlabel").val("Year of publication");
 		}
-    else if($("#independent_variable").val() == "ce")
+    else if($("#independent_variable").val() == "cr")
 		{
-		$("#cofactorlabel").val("Control group event rate");
+		$("#cofactorlabel").val("Control rate");
+		}
+    else if($("#independent_variable").val() == "size")
+		{
+		$("#cofactorlabel").val("Study size");
 		}
     else
 		{
@@ -584,8 +588,9 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 			<select id="independent_variable" style="width:250px;float:right">
               <option value="na" selected>Select independent variable</option>
               <option value="cf">Cofactor</option>
+              <option value="size">Study size</option>
               <option value="year">Year</option>
-              <option value="ce">Event rate in control group</option>
+              <option value="cr">Control rate</option>
             </select>
 			<br>
 			<input type="text" id="cofactorlabel" placeholder="Label for cofactor on x-axis" style="width:250px;float:right" /> 
