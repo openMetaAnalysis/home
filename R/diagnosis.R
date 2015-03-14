@@ -38,7 +38,11 @@ if (sortby=="year")
 	{
 	sortvalue <- myframe$year
 	}
-
+if (sortby=="study")
+	{
+	sortvalue <- myframe$Study
+	}
+	
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"

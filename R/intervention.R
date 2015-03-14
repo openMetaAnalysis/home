@@ -52,6 +52,10 @@ if (sortby=="year")
 	{
 	sortvalue <- myframe$year
 	}
+if (sortby=="study")
+	{
+	sortvalue <- myframe$Study
+	}
 for(i in 1:length(myframe$Study))
 {
 if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
