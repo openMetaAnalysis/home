@@ -202,7 +202,7 @@ if (type=="metaregression")
 		abline(h=0, v=0, col = "gray90")
 		abline(lm(myframe$y ~ myframe$x, data = myframe, weights = studyweights))
 		legendtext = "Correlation of cofactor and odds ratio:\n"
-		legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =",round(summary(metaregression)$coef[2,4],3))
+		legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =", sprintf(summary(metaregression)$coef[2,4], fmt='%#.3f'))
 		legend("topright", legend=legendtext,lty=1, lwd = 2, inset=0.05)
 		if ( cofactorlabel != "")
 			{
