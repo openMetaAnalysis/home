@@ -48,6 +48,13 @@ if (sortby=="cofactor")
 	{
 	sortvalue <- myframe$cofactor
 	}
+if (sortby=="baseline")
+	{
+	if (PosParenth1 > 0)
+		{sortvalue <- myframe$control_mean}
+	else
+		{sortvalue <- myframe$control_events/myframe$control_total}
+	}
 if (sortby=="year")
 	{
 	sortvalue <- myframe$year
