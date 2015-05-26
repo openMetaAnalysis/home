@@ -184,13 +184,29 @@ if (type=="metaregression")
 	attach(myframe)
 	if (PosParenth1 > 0){
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
-		mu2 <- update(meta1, comb.fixed=FALSE) #tau.common=TRUE, 
-		mu2reg <- metareg(mu2, myframe$cofactor)
-		bubble(mu2regstudylab = independent_variable)
-		mtext(side=1,line=3,cex=0.9,adj=1,paste("p= ",sprintf(mu2reg$pval[2], fmt='%#.3f'), sep=""), font=1)
+		dat <- escalc(measure="MD", m1i=exp_mean, sd1i=exp_sd, n1i=exp_total, m2i=control_mean, sd2i=control_sd, n2i=control_total, data=myframe)
 		#plot.new()
 		#mtext(side=1,line=3,myframe["year"], font=1)
+		res <- rma(yi, vi, slab=paste(dat$Study, dat$year, sep=", "), data=dat,
+           measure="MD",knha=TRUE, method="DL")
+		res <- rma.uni(yi, vi, mods = ~ myframe$x,  method="DL", knha=TRUE, data=dat, intercept = TRUE)
+		### calculate point sizes by rescaling the standard errors
+		preds <- predict(res, newmods=c(min(myframe$x):max(myframe$x)))
+		wi    <- 1/sqrt(dat$vi)
+		size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
+		plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
+			 xlab="", ylab="Difference", main=paste("Meta-regression of ", topic), 
+			 las=1, bty="l")
+		if ( cofactorlabel != "")
+			{
+			mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
+			}
+		lines(c(min(myframe$x):max(myframe$x)), preds$pred)
+		lines(c(min(myframe$x):max(myframe$x)), preds$ci.lb, lty="dashed", col="blue")
+		lines(c(min(myframe$x):max(myframe$x)), preds$ci.ub, lty="dashed", col="blue")
+		text(par("usr")[2],par("usr")[4]-1.25*strheight("A"),cex=1.2,adj=c(1,0),paste("p (correlation) = ",sprintf(res$pval[2], fmt='%#.3f'), sep=""), font=1)
+		text(par("usr")[2],par("usr")[4]-2.25*strheight("A")-0.5*strheight("A"),cex=1.2,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
+		abline(h=0, lty="dotted")
 		}
 	else{
 		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
@@ -203,9 +219,9 @@ if (type=="metaregression")
 		#if (independent_variable=="cr"){x <- myframe$control_events/myframe$control_total}
 		myframe$y <- meta1$logs
 		metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
-		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n")
-		points(myframe$y ~ myframe$x,cex=10*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
-		text(x=myframe$x, y=myframe$y,labels=paste(Study), cex=0.65, pos=4,adj=0,font=1,col='black')
+		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n", cex=1.5, cex.main = 2)
+		points(myframe$y ~ myframe$x,cex=20*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
+		text(x=myframe$x, y=myframe$y,labels=paste(Study), cex=1, pos=4,adj=0,font=1,col='black')
 		abline(h=0, v=0, col = "gray90")
 		abline(lm(myframe$y ~ myframe$x, data = myframe, weights = studyweights))
 		legendtext = "Correlation of cofactor and odds ratio:\n"
@@ -213,17 +229,17 @@ if (type=="metaregression")
 		legend("topright", legend=legendtext,lty=1, lwd = 2, inset=0.05)
 		if ( cofactorlabel != "")
 			{
-			mtext(side=1,line=2,paste("Cofactor: ",cofactorlabel), font=2)
+			mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
 			}
 		else
 			{
-			mtext(side=1,line=2,"Cofactor", font=2)
+			mtext(side=1,line=2.25,"Cofactor", font=2, cex=1.5)
 			}
-		mtext(side=2,line=3,"Odds ratio transformed to natural log (Ln)", font=2)
+		mtext(side=2,line=3,"Odds ratio transformed to natural log (Ln)", cex=1.5, font=2)
 		mtext(side=2,line=2,"(0 indicates odds ratio = 1)")
 		#mtext(side=3,line=0.5,"(Ln odds ratio below 0 favors treatment)")
-		mtext(side=1,line=3,cex=0.9,adj=0,"Notes:", font=2)
-		mtext(side=1,line=4,cex=0.9,adj=0, "1. For each study, the size of the point is its weight in the meta-regression.", font=1)
+		mtext(side=1,line=3,cex=1,adj=0,"Notes:", font=2)
+		mtext(side=1,line=4,cex=1,adj=0, "1. For each study, the size of the point is its weight in the meta-regression.", font=1)
 		}
 	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
