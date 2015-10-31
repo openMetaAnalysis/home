@@ -84,7 +84,7 @@ if (type=="ignore")
 	if (PosParenth1 > 0)
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
-		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
+		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
 			{
@@ -131,7 +131,7 @@ if (type=="subgroup")
 	if (PosParenth1 > 0)
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
-		if (measure == "MD"){xlimits=NULL}else{xlimits=c(-2, 2)}
+		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
 			{
