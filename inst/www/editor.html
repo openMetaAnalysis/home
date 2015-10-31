@@ -91,6 +91,7 @@ $( "#dialog" ).dialog();
 	  topic: $("#topic").val(),
 	  lefthand: $("#lefthand").val(),
 	  righthand: $("#righthand").val(),
+	  label_location: $("#label_location").val(),
 	  theme : $("#theme").val()
     }).always(function(){
       $("#plotbutton").removeAttr("disabled");
@@ -374,7 +375,11 @@ margin-right: auto;
 margin-bottom: 0px;
 margin-left: auto;
 }
-
+fieldset.options{
+	border: 3px solid #6DC6E7;
+	background-color: #FFFFFF;
+	width:575px;height:100px;
+}
 #editor { 
   position: relative;
   width: 950px;
@@ -557,65 +562,46 @@ Jones, 2013, 12345678, 50, 100, 50, 100, low-dose,
 Smith, 2014, 12345678, 50, 100, 50, 100, high-dose,
 Snead, 2015, 12345678, 50, 100, 50, 100, low-dose,
 Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
-<!--Law, 2006, 16641143, 24, 1762, 20, 1955, 0,
-Lips, 1996, 8554248, 135, 1291, 122, 1287, 0,
-Lyons, 2007, 17473911, 202, 1725, 209, 1715, 0,
-Trivedi, 2003, 12609940, 43, 1345, 62, 1341, 0,
-Chapuy, 1994, 8173430, 255, 1176, 308, 1127, 0,
-Chapuy, 2002, 11991447, 97, 393, 55, 190, 0,
-Dawson-Hughes, 1997, 9278463, 11, 187, 26, 202, 0,
-Grant, 2005, 15885294, 349, 2649, 341, 2643, 0,
-Harwood, 2000, 14695863, 8, 114, 5, 37, 0,
-Jackson, 2006, 16481635, 2102, 18176, 2158, 18106, 0,
-Meyer, 2002, 11918228, 69, 569, 76, 575, 0,
-Pfeifer, 2000, 10841179, 3, 70, 6, 67, 0,
-Pfeifer, 2009, 18629569, 9, 121, 16, 121, 0,
-Salovaara, 2010, 20200964, 78, 1586, 94, 1609, 0,
-Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 	
-            <br />
-
+			<div id="analysis_type" style="width:600px;">
             <div style="float:left">
 			<select id="type" style="float:left">
-              <option value="ignore" selected>Ignore cofactor/subgroup</option>
-              <option value="subgroup">Subgroup analysis</option>
-              <option value="metaregression">Meta-regression analysis</option>
+              <option value="ignore" selected>Meta-analysis without subgroup</option>
+              <option value="subgroup">Meta-analysis with subgroups</option>
+              <option value="metaregression">Meta-regression</option>
             </select>
 			</div>
 
-			<select id="measure" style="width:250px;float:right">
+            <div style="float:right">
+			<select id="measure" style="width:200px;float:right">
               <option value="OR" selected>Odds ratio</option>
               <option value="RR">Relative risk</option>
               <option value="MD">Mean difference</option>
               <option value="SMD">Standardized mean difference</option>
               <option value="ROM">Ratio of means</option>
-            </select><br>
-			<div id="metaanalysis_form" style="width:250px;float:right">
-			<input type="checkbox" id="hartung" checked /><label for="hartung"><a href="#" class="hastip">Knapp-Hartung adjustment</a><div class="tooltiptext">This should be clicked per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals.</div></label>
+            </select>
+			</div>
+			<div style="clear:both"></div>
 			</div>
 
-			<div id="metaregression_form" style="display:none;width:250px;float:right">
-			<select id="independent_variable" style="width:250px;float:right">
-              <option value="na" selected>Select independent variable</option>
-              <option value="cf">Cofactor</option>
-              <option value="size">Study size</option>
-              <option value="year">Year</option>
-              <option value="cr">Control rate</option>
-            </select>
-			<br>
-			<input type="text" id="cofactorlabel" placeholder="Label for cofactor on x-axis" style="width:250px;float:right" /> 
-            </div>
-			
-			<div id="labels" style="clear:both">
+			<!-- Start of meta-analysis form -->
+			<div id="metaanalysis_form" style="width:600px;clear:both">
+			<fieldset class="options">
+            <legend style="font-weight:bold">Meta-analysis settings</legend>
+			<div id="metaanalysis_form_left" style="width:250px;float:left">
 			<label style="float:left">Sort order:</label><br>
-			<select id="sortby" style="width:250px;float:left">
+			<select id="sortby" style="width:200px;float:left">
               <option value="cofactor">Cofactor (ascending)</option>
               <option value="baseline">Baseline value in control group</option>
               <option value="study">Study name</option>
               <option value="weight">Weight (descending)</option>
               <option value="year" selected>Year (ascending)</option>
             </select>
-			<br>
+			</div>
+			<div id="metaanalysis_form_right" style="width:250px;float:right">
+			<input type="checkbox" id="hartung" checked style="float:right"/><label for="hartung" style="float:right"><a href="#" class="hastip">Knapp-Hartung adjustment</a><div class="tooltiptext">This should be clicked per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals.</div></label>
+			</div>
+			<div id="labels" style="clear:both">
 			<label>Left label:</label>
 			<select id="lefthand">
 			  <option value="favors experimental" selected>favors experimental</option>
@@ -627,7 +613,38 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 			  <option value="favors control" selected>favors control</option>
 			</select>
 			</div> 
-			<div style="clear:both"> 
+			</fieldset>
+			</div>
+
+			<!-- Start of meta-regression form -->
+			<div id="metaregression_form" style="display:none;width:600px;clear:both">
+			<fieldset class="options">
+            <legend style="font-weight:bold">Meta-regression settings</legend>
+			<div id="metaanalysis_form_left" style="width:250px;float:left">
+			<select id="label_location" style="width:200px;float:left">
+              <option value="" selected>No labels for points</option>
+              <option value="1">Below points</option>
+              <option value="2">Left of points</option>
+              <option value="3">Above points</option>
+              <option value="4">Right of points</option>
+            </select>
+            </div>
+			<div id="metaanalysis_form_right" style="width:250px;float:right">
+			<select id="independent_variable" style="width:250px;float:right">
+              <option value="na" selected>Select independent variable</option>
+              <option value="cf">Cofactor</option>
+              <option value="size">Study size</option>
+              <option value="year">Year</option>
+              <option value="cr">Control rate</option>
+            </select>
+			<br>
+			<input type="text" id="cofactorlabel" placeholder="Label for cofactor on x-axis" style="width:250px;float:right" /> 
+            </div>
+			</fieldset>
+			</div>
+			
+			<div style="clear:both">&nbsp;</div>
+			<div>
             <label>Topic (for title - optional):</label> 
             <input type="text" id="topic" placeholder="Topic" style="float:right;width:375px"/> 
             <select id="theme" style="display:none">
@@ -689,7 +706,7 @@ Sanders, 2010, 20460620, 171, 1131, 135, 1125, 0,-->
 			<i class="teach">What is the relationship between the change in vitamin D level and the risk of fracture?</i>
 			</div>
 		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">Hypertonic Saline for reducing length of stay in bronchiolitis</a>.</div>
-			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_3c"/><label for="ex_3c">Meta-regression of change in Vitamin D level</label> 
+			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_3c"/><label for="ex_3c">Meta-regression of length of stay</label> 
 			<i class="teach">What is the relationship between the length of stay in the control group and the benefit of hypertonic saline?</i>
 			</div>
 	  </fieldset>

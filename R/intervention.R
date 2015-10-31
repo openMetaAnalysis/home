@@ -4,7 +4,7 @@
 # http://cran.r-project.org/web/packages/rmeta/
 # Discussion of continuity correction:
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
-intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, theme) {
+intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
@@ -183,30 +183,40 @@ if (type=="metaregression")
 	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)}
 	attach(myframe)
 	if (PosParenth1 > 0){
+		#stop(paste(topic,myframe["Study"], sep=", "))
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
+		# Removing studies with missing data
+		myframe[order(myframe$x, na.last = NA),]
+		myframe <- na.omit(myframe)
 		dat <- escalc(measure="MD", m1i=exp_mean, sd1i=exp_sd, n1i=exp_total, m2i=control_mean, sd2i=control_sd, n2i=control_total, data=myframe)
-		#plot.new()
-		#mtext(side=1,line=3,myframe["year"], font=1)
-		res <- rma(yi, vi, slab=paste(dat$Study, dat$year, sep=", "), data=dat,
-           measure="MD",knha=TRUE, method="DL")
+		#res <- rma(yi, vi, slab=paste(dat$Study, dat$year, sep=", "), data=dat, measure="MD",knha=TRUE, method="DL")
 		res <- rma.uni(yi, vi, mods = ~ myframe$x,  method="DL", knha=TRUE, data=dat, intercept = TRUE)
-		### calculate point sizes by rescaling the standard errors
-		preds <- predict(res, newmods=c(min(myframe$x):max(myframe$x)))
+		# Make confidence limits
+		cofactor.range = seq(min(myframe$x), max(myframe$x), (max(myframe$x) - min(myframe$x))/100)
+		preds <- predict(res, newmods=cofactor.range)
+		preds <- data.frame(cofactor.range,preds$pred,preds$ci.lb,preds$ci.ub)
+		# Calculate point sizes by rescaling the standard errors
 		wi    <- 1/sqrt(dat$vi)
 		size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
 		plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
-			 xlab="", ylab="Difference", main=paste("Meta-regression of ", topic), 
-			 las=1, bty="l")
+			xlab="", ylab="Difference", main=paste("Meta-regression of ", topic),
+			ylim=c(min(dat$yi),max(dat$yi)+0.15*(max(dat$yi)-min(dat$yi))),
+			las=1, bty="l")
 		if ( cofactorlabel != "")
 			{
 			mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
 			}
-		lines(c(min(myframe$x):max(myframe$x)), preds$pred)
-		lines(c(min(myframe$x):max(myframe$x)), preds$ci.lb, lty="dashed", col="blue")
-		lines(c(min(myframe$x):max(myframe$x)), preds$ci.ub, lty="dashed", col="blue")
+		lines(preds$cofactor.range, preds$preds.pred)
+		lines(preds$cofactor.range, preds$preds.ci.lb, lty="dashed", col="blue")
+		lines(preds$cofactor.range, preds$preds.ci.ub, lty="dashed", col="blue")
 		text(par("usr")[2],par("usr")[4]-1.25*strheight("A"),cex=1.2,adj=c(1,0),paste("p (correlation) = ",sprintf(res$pval[2], fmt='%#.3f'), sep=""), font=1)
 		text(par("usr")[2],par("usr")[4]-2.25*strheight("A")-0.5*strheight("A"),cex=1.2,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
 		abline(h=0, lty="dotted")
+		if (label_location > 0)
+			{
+			text(dat$x, dat$yi, paste(dat$Study,", ",dat$year, sep=""), cex=.9, pos = label_location, offset = 1, col=dat$color)
+			}
+		legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
 		}
 	else{
 		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
