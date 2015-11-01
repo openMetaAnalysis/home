@@ -257,14 +257,14 @@ $( "#dialog" ).dialog();
 		}
 	if($(this).val()=="ex_3c") {
 		$("#type").val("metaregression");
-		$("#measure").val("MD");
-		$("#topic").val("Hypertonic Saline for Reducing Length of Stay for Bronchiolitis");
+		$("#measure").val("RR");
+		$("#topic").val("Early Goal-directed Therapy for Reducing Mortality in Septic Shock");
 		$("#metaregression_form").css("display","block");
 		$("#metaanalysis_form").css("display","none");
 		$("#independent_variable").val("cf");
-		$("#cofactorlabel").val("Length of stay in the control group (days)");
+		$("#cofactorlabel").val("Lactate acid level at baseline");
 		$("#sortby").val("cofactor");
-		editor.setValue("Mandeberg, 2002, 12576370, 3(1.2), 27, 4(1.9), 25, Length of stay more than 3 days,\nTal, 2006, 16599051, 2.6(1.4), 21, 3.5(1.7), 20, Length of stay more than 3 days,\nKuzik, 2007, 17719935, 2.6(1.9), 47, 3.5(2.9), 49, Length of stay more than 3 days,\nLuo, 2010, 19674354, 6(1.2), 50, 7.4(1.5), 43, Length of stay more than 3 days,\nLuo, 2011, 20636429, 4.8(1.2), 57, 6.4(1.4), 55, Length of stay more than 3 days,\nMiraglia Del Giudice, 2012, 22697080, 4.9(1.3), 52, 5.6(1.6), 54, Length of stay more than 3 days,\nWu, 2014, 24862623, 3.16(2.11), 197, 3.92(5.24), 211, Length of stay more than 3 days,\nJacobs, 2014, 24344111, 4.1(0.9), 52, 3.9(4.0), 49, Length of stay more than 3 days,\nSABRE, 2014, 25389139, 4.2(3.2), 142, 4.2(3.5), 149, Length of stay more than 3 days,\nSharma, 2014, 23502662, 2.64(0.89), 125, 2.66(0.92), 123, Length of stay less than 3 days,\nTeunissen, 2014, 24969648, 2.9(1.76), 84, 2.2(1.61), 80, Length of stay less than 3 days,\nOjha, 2014, 25574983, 1.87(0.96), 36, 1.82(1.18), 36, Length of stay less than 3 days,\nSilver, 2014, NCT01488448, 2.0(1.48), 93, 2.0(1.33), 97, Length of stay less than 3 days,\nEspelt, 2012, NCT01238848,  5.8(2.7), 37, 5.47(2.1), 45, Length of stay more than 3 days,\nTinsa, 2014, 25574983, 3.5(1.97),37,4.48(3.81),26, Length of stay more than 3 days,\n\n",1);
+		editor.setValue("Rivers,            2001,11794169,  38, 130,  59, 133, 7.4,\nEGDT Collaborative,2010,20594464,  55, 157,  74, 146, NA,\nChen,              2007,18159013,  20,  58,  34,  65, NA,\nProCESS,           2014,24635773,  92, 439,  86, 456, 4.9,\nARISE,             2014,25272316, 115, 793, 125, 798, 6.6,\nProMISe,           2015,25776532, 184, 630, 181, 630, 6.9,\n\n",1);
 		}
   });
 
@@ -705,9 +705,10 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 			<div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Meta-regression of change in Vitamin D level</label> 
 			<i class="teach">What is the relationship between the change in vitamin D level and the risk of fracture?</i>
 			</div>
-		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">Hypertonic Saline for reducing length of stay in bronchiolitis</a>.</div>
-			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_3c"/><label for="ex_3c">Meta-regression of length of stay</label> 
-			<i class="teach">What is the relationship between the length of stay in the control group and the benefit of hypertonic saline?</i>
+			<div>&nbsp;</div>
+		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">Early goal-directed therapy for reducing mortality from septic shock</a>.</div>
+			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_3c"/><label for="ex_3c">Meta-regression of reduction in mortality by baseline lactate level</label> 
+			<i class="teach">What is the relationship between reduction in mortality and the baseline serum lactate? How about with the morality in the control group?</i>
 			</div>
 	  </fieldset>
 </form>

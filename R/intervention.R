@@ -200,6 +200,7 @@ if (type=="metaregression")
 		size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
 		plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
 			xlab="", ylab="Difference", main=paste("Meta-regression of ", topic),
+			xlim=c(min(dat$x)-0.1*(max(dat$x)-min(dat$x)),max(dat$x)+0.1*(max(dat$x)-min(dat$x))),
 			ylim=c(min(dat$yi),max(dat$yi)+0.15*(max(dat$yi)-min(dat$yi))),
 			las=1, bty="l")
 		if ( cofactorlabel != "")
