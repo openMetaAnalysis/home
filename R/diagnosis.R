@@ -89,7 +89,7 @@ for(i in 1: length(myframe$Study))
 		svgtext = paste(svgtext,"<line x1=\"" , cl.lower ,"\" y1=\"" , 10 + i*20 ,"\" x2=\"" , ci.upper ,"\" y2=\"" , 10 + i*20 ,"\" style=\"stroke:rgba(0,0,0,1);stroke-width:2\" />", sep="")
 	}
 	#Bottom of plots
-	svgtext = paste(svgtext, "<!-- Bottom of plot--><!-- Axes --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\"><line x1=\"300\" y1=\"",25 + i*20,"\" x2=\"400\" y2=\"", 25 + i*20 ,"\" />", sep="")
+	svgtext = paste(svgtext, "<!-- Bottom of plot--><!-- Axes --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\"><line x1=\"325\" y1=\"",25 + i*20,"\" x2=\"425\" y2=\"", 25 + i*20 ,"\" />", sep="")
 	svgtext = paste(svgtext, "<line x1=\"550\" y1=\"",25 + i*20,"\" x2=\"650\" y2=\"", 25 + i*20 ,"\" /></g>", sep="")
 	svgtext = paste(svgtext, "<!-- Ticks --><g stroke=\"rgba(0,0,0,0.2)\" stroke-width=\"1\" fill=\"rgba(0,0,0,0.2)\"><g transform=\"translate(400, 245) rotate(180)\"><path d=\"M 0,0 L 0,5 M 50,0 L 50,5 M 100,0 L 100,5\" /></g><g transform=\"translate(650, 245) rotate(180)\"><path d=\"M 0,0 L 0,5 M 50,0 L 50,5 M 100,0 L 100,5\" /></g></g>", sep="")
 if (type=="ignore")
@@ -101,7 +101,7 @@ if (type=="ignore")
 	meta2 <- perfect.trees(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe)
 	#vertical lines for sn and sp
 		#sensitivity
-		svgtext = paste(svgtext, "<!-- Vertical summary lines --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 300 + 100 * meta2$coef[[2]][1], "\" y1=\"25\" x2=\"", 300 + 100 * meta2$coef[[2]][1], "\" y2=\"", 25 + i*20 ,"\" />", sep="")
+		svgtext = paste(svgtext, "<!-- Vertical summary lines --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 325 + 100 * meta2$coef[[2]][1], "\" y1=\"25\" x2=\"", 325 + 100 * meta2$coef[[2]][1], "\" y2=\"", 25 + i*20 ,"\" />", sep="")
 		#specificity
 		svgtext = paste(svgtext, "<line x1=\"", 550 + 100 * meta2$coef[[3]][1], "\" y1=\"25\" x2=\"", 550 + 100 * meta2$coef[[3]][1], "\" y2=\"", 25 + i*20 ,"\"/></g>", sep="")
 	#Summary text
@@ -111,7 +111,7 @@ if (type=="ignore")
 		ci.u = round(100*inv.logit(meta2$coef[2,2] + 1.96*meta2$coef[2,3]),0)
 		svgtext = paste(svgtext,"<text x=\"225\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
-		svgtext = paste(svgtext,"<text x=\"", 300 + -10 + 100 * meta2$coef[[2]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0),"</text>",sep="")
+		svgtext = paste(svgtext,"<text x=\"", 325 + -10 + 100 * meta2$coef[[2]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0),"</text>",sep="")
 		#Spec
 		ci.l = round(100*inv.logit(meta2$coef[3,2] - 1.96*meta2$coef[3,3]),0)
 		ci.u = round(100*inv.logit(meta2$coef[3,2] + 1.96*meta2$coef[3,3]),0)
