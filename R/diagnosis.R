@@ -120,7 +120,7 @@ if (type=="ignore")
 		svgtext = paste(svgtext,"<text x=\"", 550 + -10 + 100 * meta2$coef[[3]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[3]][1]*100,0),"</text>",sep="")
 		LRpos = meta2$coef[[2]][1]  / (1 - meta2$coef[[3]][1])
 		LRneg = (1 - meta2$coef[[2]][1]) / meta2$coef[[3]][1]
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 60 + i*20 ,"\">Likelihood ratios: positive ",round(LRpos,1),"; negative ",round(LRneg,1),"</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 60 + i*20 ,"\">Likelihood ratios: positive ",round(LRpos,1),"; 1- negative ",round(LRneg,1),"</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 75 + i*20 ,"\">(hierarchical bivariate model)</text>",sep="")
 	#AUC
 		auc <- AUC(phm(myframe))
