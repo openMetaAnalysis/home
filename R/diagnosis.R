@@ -50,7 +50,7 @@ pubbiastext = "Test for funnel plot asymmetry"
 analyticmethod = "Hierarchical model (bivariate)"
 msg = ""
 
-meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe)
+meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe, correction = 0.5, correction.control = "all",)
 prevalence=array(0,length(myframe$names))
 studysize=array(0,length(myframe$names))
 withoutcome=array(0,length(myframe$names))
@@ -59,7 +59,7 @@ withoutcome=array(0,length(myframe$names))
 height = 230 + length(myframe$Study) * 20
 svgtext = paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg x=\"0\" y=\"0\" width=\"700px\" height=\"", height, "px\" viewBox=\"0 0 700 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">",sep="")
 #Column names
-svgtext = paste(svgtext, "<!-- Header of plot--><text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"250\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text><!-- Start of studies-->",sep="")
+svgtext = paste(svgtext, "<!-- Header of plot--><text x=\"10\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"275\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"500\" y=\"15\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text><!-- Start of studies-->",sep="")
 for(i in 1: length(myframe$Study))
 	{
 	#Citation
@@ -68,14 +68,14 @@ for(i in 1: length(myframe$Study))
 	prevalence[i] = round(100*(TP[i] + FN[i])/studysize[i],0)
 	svgtext = paste(svgtext, "<a xlink:href=\"http://pubmed.gov/",myframe$pmid[i],"\" xlink:title=\"Study size is ",studysize[i],". Prevalence of the outcome is ",prevalence[i],"%. Click citation to open abstract at PubMed in a new window.\" target=\"_blank\"><text x=\"10\" y=\"" , 15 + i*20 ,"\" fill=\"rgba(0,0,255,1)\">",myframe$Study[i],", ", myframe$year[i],"</text></a>",sep="")
 	#Sensitivity
-	x = 300 + 100 * meta1$sens[[1]][i]
+	x = 325 + 100 * meta1$sens[[1]][i]
 		#text
-		svgtext = paste(svgtext,"<text x=\"200\" y=\"" , 15 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$sens[[1]][i]*100,0)," (", round(meta1$sens$sens.ci[i,1]*100,0) ," - ", round( meta1$sens$sens.ci[i,2]*100,0), ")</text>",sep="")
+		svgtext = paste(svgtext,"<text x=\"225\" y=\"" , 15 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",round(meta1$sens[[1]][i]*100,0)," (", round(meta1$sens$sens.ci[i,1]*100,0) ," - ", round( meta1$sens$sens.ci[i,2]*100,0), ")</text>",sep="")
 		#point estimate
 		svgtext = paste(svgtext,"<circle cx=\"", x, "\" cy=\"" , 10 + i*20 ,"\" r=\"3\" stroke-width=\"0\" style=\"fill:black;\"/>",sep="")
 		#Confidence intervals
-		cl.lower = 300 + 100 * meta1$sens$sens.ci[i,1]
-		ci.upper = 300 + 100 * meta1$sens$sens.ci[i,2]
+		cl.lower = 325 + 100 * meta1$sens$sens.ci[i,1]
+		ci.upper = 325 + 100 * meta1$sens$sens.ci[i,2]
 		svgtext = paste(svgtext,"<line x1=\"" , cl.lower ,"\" y1=\"" , 10 + i*20 ,"\" x2=\"" , ci.upper ,"\" y2=\"" , 10 + i*20 ,"\" style=\"stroke:rgba(0,0,0,1);stroke-width:2\" />", sep="")
 	#Specificity
 	x = 550 + 100 * meta1$spec[[1]][i]
@@ -109,7 +109,7 @@ if (type=="ignore")
 		#Sens
 		ci.l = round(100*inv.logit(meta2$coef[2,2] - 1.96*meta2$coef[2,3]),0)
 		ci.u = round(100*inv.logit(meta2$coef[2,2] + 1.96*meta2$coef[2,3]),0)
-		svgtext = paste(svgtext,"<text x=\"200\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
+		svgtext = paste(svgtext,"<text x=\"225\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
 		svgtext = paste(svgtext,"<text x=\"", 300 + -10 + 100 * meta2$coef[[2]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0),"</text>",sep="")
 		#Spec
