@@ -120,7 +120,7 @@ if (type=="ignore")
 		svgtext = paste(svgtext,"<text x=\"", 550 + -10 + 100 * meta2$coef[[3]][1], "\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[3]][1]*100,0),"</text>",sep="")
 		LRpos = meta2$coef[[2]][1]  / (1 - meta2$coef[[3]][1])
 		LRneg = (1 - meta2$coef[[2]][1]) / meta2$coef[[3]][1]
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 60 + i*20 ,"\">Likelihood ratios: positive ",round(LRpos,1),"; 1- negative ",round(LRneg,1),"</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 60 + i*20 ,"\">Likelihood ratios: positive ",round(LRpos,1),"; negative ",round(LRneg,1),"</text>",sep="")
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 75 + i*20 ,"\">(hierarchical bivariate model)</text>",sep="")
 	#AUC
 		auc <- AUC(phm(myframe))
@@ -136,7 +136,7 @@ if (type=="ignore")
 		PostTestOdds = PreTestOdds * LRneg
 		npv = sprintf("%.1f",(PostTestOdds/(1+PostTestOdds)*100))
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 135 + i*20 ,"\">At the prevalences studied (pooled ", pooledprevalence, "%, median ", median(prevalence), ", range ", round(min(prevalence),0)," - ", round(max(prevalence),0),", odds ",round(PreTestOdds,2),"):</text>",sep="")
-		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 150 + i*20 ,"\">Positive ", ppv, "%; negative ", npv, "%</text>",sep="")
+		svgtext = paste(svgtext, "<text x=\"20\" y=\"" , 150 + i*20 ,"\">Positive ", ppv, "%; 1- negative ", npv, "%</text>",sep="")
 		svgtext = paste(svgtext, "<a xlink:href=\"http://sumsearch.org/calc/calc.aspx?calc_dx_SnSp.aspx?prevalence=", pooledprevalence, "&amp;sensitivity=", round(meta2$coefficients[[2]][1]*100,0), "&amp;specificity=", round(meta2$coefficients[[3]][1]*100,0), "\" xlink:title=\"Adjust prevalence and recalculate predictive values\" target=\"_blank\"><text x=\"20\" y=\"" , 165 + i*20 ,"\" fill=\"rgba(0,0,255,1)\" style=\"font-weight:normal;text-decoration:underline;\">Click here to recalculate predictive values at other prevalences</text></a>",sep="")
 	#Heterogeneity exploration
 		#svgtext = paste(svgtext, "<!-- Heterogeneity exploration --><text x=\"10\" y=\"" , 185 + i*20 ,"\" style=\"font-weight:bold\">Heterogeneity exploration:</text>",sep="")
