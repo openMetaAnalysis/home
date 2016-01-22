@@ -497,12 +497,46 @@ PIOPED II, 2006, 16738268, 150, 25, 31, 567, 'CTPA',</div>
 		  </fieldset>
 </form>
 	</div>
-	
+		<div style="clear:both">&nbsp;</div>
+	      <div class="span12">
+        <h3>About</h3>
+        <h4>Technical details</h4>
+        <p>This is an OpenCPU application.</p>
+		<p>Please help improve this application <br/>by editing the source code.</p>
+        <table class="table table-striped">
+          <tr><th>Resource</th> <th>link</th></tr>
+          <tr><td>Package Info</td> <td><a href=".." target="blank">link</a></td></tr>       
+          <tr><td>Function Source</td><td><a href="../R/diagnosis/print" target="blank">link</a></td><td></tr>
+          <tr><td>Source Code</td><td><a href="https://github.com/openMetaAnalysis/home" target="blank">link</a></td><td></tr>
+          <tr><td>Help Page (html)</td><td><a href="../man/open-meta-analysis/text" target="blank">link</a></td><td></tr>
+        </table>
+               
+      </div>
 	<div style="clear:both">&nbsp;</div>
 	</div>
 
     <p id="output"></p>
+<script>
+//For gh-pages
+//Page history and edit
+var pagename = location.pathname.split('/').slice(-1);
+if (pagename.length < 1){pagename = "index.html"}
+document.write("<div style='text-align:center'><a href='https://github.com/openMetaAnalysis/home/blob/master/inst/www/" + pagename + "'>Edit this page</a> - <a href='https://github.com/openMetaAnalysis/home/commits/master/inst/www/" + pagename + "'>Page history</a></div>")
+https://github.com/qitools/charts/blob/master/inst/www/index.html
 
+</script>
 </div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-56740469-1");
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
 </body>
 </html>

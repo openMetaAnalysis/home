@@ -719,8 +719,31 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 	<div >Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then alter dimensions in the url of the window of the image.</div>
 	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;display:block" name="target" width="700px" height="600px" src="output.html">
 	</iframe>
-	
+	      <div class="span12">
+        <h3>About</h3>
+        <h4>Technical details</h4>
+        <p>This is an OpenCPU application.</p>
+		<p>Please help improve this application <br/>by editing the source code.</p>
+        <table class="table table-striped">
+          <tr><th>Resource</th> <th>link</th></tr>
+          <tr><td>Package Info</td> <td><a href=".." target="blank">link</a></td></tr>       
+          <tr><td>Function Source</td><td><a href="../R/intervention/print" target="blank">link</a></td><td></tr>
+          <tr><td>Source Code</td><td><a href="https://github.com/openMetaAnalysis/home" target="blank">link</a></td><td></tr>
+          <tr><td>Help Page (html)</td><td><a href="../man/open-meta-analysis/text" target="blank">link</a></td><td></tr>
+        </table>
+               
+      </div>
+<script>
+//For gh-pages
+//Page history and edit
+var pagename = location.pathname.split('/').slice(-1);
+if (pagename.length < 1){pagename = "index.html"}
+document.write("<div style='text-align:center'><a href='https://github.com/openMetaAnalysis/home/blob/master/inst/www/" + pagename + "'>Edit this page</a> - <a href='https://github.com/openMetaAnalysis/home/commits/master/inst/www/" + pagename + "'>Page history</a></div>")
+</script>
 </div>
-	
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>	
 </body>
 </html>
