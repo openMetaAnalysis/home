@@ -14,9 +14,14 @@
 <link rel="stylesheet" type="text/css" href="qtip/jquery.qtip.min.css" />
 
 <!-- ocpu library -->
-<script src="opencpu/opencpu.js"> </script>
+<script src="opencpu/opencpu-0.4.js"> </script>
 
 <!-- some optional styling stuff -->
+<!-- 
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+-->
+<link href="jqueryui/css/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet" media="screen"> 
+
 <script src="bootstrap/js/bootstrap.js"> </script>
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
 
@@ -29,11 +34,12 @@
 <!-- Ajax.org Cloud9 Editor from http://ace.c9.io/#nav=api&api=editor -->
 <script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- http://www.w3schools.com/jsref/jsref_obj_regexp.asp -->
-
 <script> 
 $(document).ready(function(){
 
+  //optional, requires jquery-ui.
+  $("#plotdiv").resizable()
+  
 $(function() {
 $( "#dialog" ).dialog();
 });
@@ -61,9 +67,6 @@ $( "#dialog" ).dialog();
 	  $('#files').bind('change', handleFileSelect);
 	}
 
-  //optional, requires jquery-ui.
-  $("#plotdiv").resizable()
-
   //For Ajax.org Cloud9 Editor
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/github");
@@ -80,7 +83,8 @@ $( "#dialog" ).dialog();
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#plotdiv').r_fun_plot("intervention", {
+	//var req = $('#target').contents().find('#plotdiv').rplot("intervention", {
+	var req = $('#plotdiv').rplot("intervention", {
 	  type: $("#type").val(),
 	  sortby: $("#sortby").val(),
 	  measure: $("#measure").val(),
@@ -717,8 +721,9 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 	<div style="clear:both">&nbsp;</div>
 	</div>
 	<div >Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then alter dimensions in the url of the window of the image.</div>
-	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;display:block" name="target" width="700px" height="600px" src="output.html">
-	</iframe>
+      <div class="span9">
+        <div id="plotdiv"></div>
+      </div>
 	      <div class="span12">
         <h3>About</h3>
         <h4>Technical details</h4>
@@ -733,6 +738,7 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
         </table>
                
       </div>
+</div> <!-- end of container -->
 <script>
 //For gh-pages
 //Page history and edit
