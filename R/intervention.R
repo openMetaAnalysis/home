@@ -5,19 +5,43 @@
 # Discussion of continuity correction:
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
 intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
+
+first.row <- substr(content, 1, regexpr("\n",content))
+year<-substr(first.row, regexpr(",",first.row)+1,nchar(first.row))
+year<-substr(year, 1,regexpr(",",year)-1)
+first.row.header <- FALSE
+if (as.numeric ('9') > -1){first.row.header <- TRUE}
+num.columns <- str_count(first.row, ",")
+num.cofactors <- num.columns - 7
+
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
-temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
+#temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
 #temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
 #temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
+temp <- gsub("\r", ' ', fixed = TRUE, temp)
+temp <- gsub("\n", ' ', fixed = TRUE, temp)
 temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
+
 temp <- paste('"',temp,'"',sep = '')
-temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=8, byrow=TRUE, dimnames = list(NULL, c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total","cofactor")))')
+temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=',num.columns,', byrow=TRUE)')
 x<-eval(parse(file = "", n = NULL, text = temp))
+column.names <- c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total")
+for(i in 1: num.cofactors)
+	{
+	column.names<- append(column.names,paste('cofactor',i,sep=""))
+	}
+dimnames(x) <- list(NULL, column.names)
 myframe <- data.frame (x)
 remove(x)
+#stop(independent_variable)
+if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
+if (type == 'subgroup2' || independent_variable == 'cf2'){myframe$cofactor <- myframe$cofactor2}
+if (type == 'subgroup3' || independent_variable == 'cf3'){myframe$cofactor <- myframe$cofactor3}
+if (type == 'subgroup4' || independent_variable == 'cf4'){myframe$cofactor <- myframe$cofactor4}
+if (type == 'subgroup5' || independent_variable == 'cf5'){myframe$cofactor <- myframe$cofactor5}
 myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
@@ -123,14 +147,14 @@ if (type=="ignore")
 	#main=textGrob(topic, gp=gpar(cex=3), just="top")
 	grid.text(pubbiastext, 0.1, 0.02, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
-if (type=="subgroup")
+if (grepl("subgroup",type))
 	{
 	# from http://cran.r-project.org/web/packages/meta/
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=myframe$cofactor, print.byvar = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
@@ -146,7 +170,7 @@ if (type=="subgroup")
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=cofactor, print.byvar = FALSE)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=myframe$cofactor, print.byvar = FALSE)
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
@@ -177,8 +201,7 @@ if (type=="subgroup")
 	}
 if (type=="metaregression")
 	{
-	myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
-	myframe$x <- myframe$cofactor
+	if (grepl("cofactor",type)){myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))}
 	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
 	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)}
 	attach(myframe)
