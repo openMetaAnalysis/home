@@ -68,9 +68,25 @@ if (sortby=="weight")
 	{
 	sortvalue <- NULL
 	}
-if (sortby=="cofactor")
+if (sortby=="cofactor1")
 	{
-	sortvalue <- myframe$cofactor
+	sortvalue <- myframe$cofactor1
+	}
+if (sortby=="cofactor2")
+	{
+	sortvalue <- myframe$cofactor2
+	}
+if (sortby=="cofactor3")
+	{
+	sortvalue <- myframe$cofactor3
+	}
+if (sortby=="cofactor4")
+	{
+	sortvalue <- myframe$cofactor4
+	}
+if (sortby=="cofactor5")
+	{
+	sortvalue <- myframe$cofactor5
 	}
 if (sortby=="baseline")
 	{
