@@ -22,6 +22,8 @@ myframe$TP<-as.numeric(as.character(str_trim(myframe$TP)))
 myframe$FP<-as.numeric(as.character(str_trim(myframe$FP)))
 myframe$FN<-as.numeric(as.character(str_trim(myframe$FN)))
 myframe$TN<-as.numeric(as.character(str_trim(myframe$TN)))
+myframe$sensitivity<-myframe$TP/(myframe$TP+myframe$FN)
+myframe$specificity<-myframe$TN/(myframe$FP+myframe$TN)
 msg = ""
 if (sortby=="weight")
 	{
@@ -39,7 +41,16 @@ if (sortby=="study")
 	{
 	sortvalue <- myframe$Study
 	}
-	
+if (sortby=="sensitivity")
+	{
+	sortvalue <- myframe$sensitivity 
+	}	
+if (sortby=="specificity")
+	{
+	sortvalue <- myframe$specificity 
+	}	
+myframe <- myframe[order(sortvalue),]
+
 attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
