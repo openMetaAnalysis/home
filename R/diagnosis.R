@@ -79,9 +79,9 @@ meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe, correction = 0.
 #Start of SVG
 height = 295 + length(myframe$Study) * 20
 svgtext = paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg x=\"0\" y=\"0\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">",sep="")
-svgtext = paste(svgtext, "<text x=\"50%\" y=\"20\" text-anchor=\"middle\" style=\"font-weight:bold;font-size: 1.17em\">", topic, "</text>" ,sep="")
+svgtext = paste(svgtext, "<text x=\"10%\" y=\"20\" text-anchor=\"middle\" style=\"font-weight:bold;font-size: 1.17em\">", topic, "</text>" ,sep="")
 #Column names
-svgtext = paste(svgtext, "<!-- Header of plot--><text x=\"10\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"200\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Prev. (%)</text><text x=\"325\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"550\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text><text x=\"700\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">DOR</text><!-- Start of studies-->",sep="")
+svgtext = paste(svgtext, "<!-- Header of plot--><text x=\"10\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"200\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Prev. (%)</text><text x=\"325\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"550\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text><text x=\"700\" y=\"45\" fill=\"black\" style=\"font-weight:bold\"><!--DOR--></text><!-- Start of studies-->",sep="")
 for(i in 1: length(myframe$Study))
 	{
 	#Citation
@@ -112,7 +112,7 @@ for(i in 1: length(myframe$Study))
 		ci.upper = 600 + 100 * meta1$spec$spec.ci[i,2]
 		svgtext = paste(svgtext,"<line x1=\"" , cl.lower ,"\" y1=\"" , 40 + i*20 ,"\" x2=\"" , ci.upper ,"\" y2=\"" , 40 + i*20 ,"\" style=\"stroke:rgba(0,0,0,1);stroke-width:2\" />", sep="")
 	#Diagnostic odds ratio (DOR)
-		svgtext = paste(svgtext,"<text x=\"710\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",prettyNum(round(myframe$dor[i],1), big.mark = ",",width=4),"</text>",sep="")
+		#svgtext = paste(svgtext,"<text x=\"710\" y=\"" , 40 + i*20 ,"\" fill=\"black\" style=\"font-weight:normal\">",prettyNum(round(myframe$dor[i],1), big.mark = ",",width=6),"</text>",sep="")
 	}
 	#Bottom of plots
 	svgtext = paste(svgtext, "<!-- Bottom of plot--><!-- Axes --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\">", sep="")
@@ -125,33 +125,55 @@ for(i in 1: length(myframe$Study))
 if (type=="ignore")
 	{
 	#The meta-analysis
+	meta2 <- fit.bivar(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe) #,mods=Test)
+	meta2 <- summary(meta2$bi.simple)
+	sensitivity = c(meta2$coefficients[1,1], meta2$coefficients[1,1]-qnorm(0.975)*meta2$coefficients[1,2], meta2$coefficients[1,1]+qnorm(0.975)*meta2$coefficients[1,2] )
+	sensitivity = plogis(sensitivity)
+	sensitivity = round(100*sensitivity,1)
+	specificity = c(meta2$coefficients[2,1], meta2$coefficients[2,1]-qnorm(0.975)*meta2$coefficients[2,2], meta2$coefficients[2,1]+qnorm(0.975)*meta2$coefficients[2,2] )
+	specificity = plogis(specificity)
+	specificity = round(100*specificity,1)
 	meta2 <- perfect.trees(TP=TP,FN=FN,TN=TN,FP=FP,study=Study,data=myframe)
+
 	#vertical lines for sn and sp
+		svgtext = paste(svgtext, "<!-- Vertical summary lines -->", sep="")
 		#sensitivity
-		svgtext = paste(svgtext, "<!-- Vertical summary lines --><g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 375 + 100 * meta2$coef[[2]][1], "\" y1=\"55\" x2=\"", 375 + 100 * meta2$coef[[2]][1], "\" y2=\"", 55 + i*20 ,"\" />", sep="")
+		svgtext = paste(svgtext, "<g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 375 + sensitivity[1], "\" y1=\"55\" x2=\"", 375 + sensitivity[1], "\" y2=\"", 55 + i*20 ,"\" />", sep="")
+		#remmed 1/26/2017 as uses perfect.trees from metatron
+		#svgtext = paste(svgtext, "<g style=\"stroke:rgba(0,0,0,0.2);stroke-width:2\" ><line x1=\"", 375 + 100 * meta2$coef[[2]][1], "\" y1=\"55\" x2=\"", 375 + 100 * meta2$coef[[2]][1], "\" y2=\"", 55 + i*20 ,"\" />", sep="")
 		#specificity
-		svgtext = paste(svgtext, "<line x1=\"", 600 + 100 * meta2$coef[[3]][1], "\" y1=\"55\" x2=\"", 600 + 100 * meta2$coef[[3]][1], "\" y2=\"", 55 + i*20 ,"\"/></g>", sep="")
+		svgtext = paste(svgtext, "<line x1=\"", 600 + specificity[1], "\" y1=\"55\" x2=\"", 600 + specificity[1], "\" y2=\"", 55 + i*20 ,"\"/></g>", sep="")
+		#remmed 1/26/2017 as uses perfect.trees from metatron
+		#svgtext = paste(svgtext, "<line x1=\"", 600 + 100 * meta2$coef[[3]][1], "\" y1=\"55\" x2=\"", 600 + 100 * meta2$coef[[3]][1], "\" y2=\"", 55 + i*20 ,"\"/></g>", sep="")
 	#Summary text
 		svgtext = paste(svgtext, "<!-- Summary text --><g fill=\"black\" style=\"color:black;opacity:1\"><text x=\"10\" y=\"" , 70 + i*20 ,"\" style=\"font-weight:bold\">Summary</text>",sep="")
 		#Prev
 		pooledprevalence = (sum(TP)+sum(FN))/sum(studysize)
 		svgtext = paste(svgtext,"<text x=\"230\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(pooledprevalence*100,0),"</text>",sep="")
-		#Sens
-		ci.l = round(100*inv.logit(meta2$coef[2,2] - 1.96*meta2$coef[2,3]),0)
-		ci.u = round(100*inv.logit(meta2$coef[2,2] + 1.96*meta2$coef[2,3]),0)
-		svgtext = paste(svgtext,"<text x=\"275\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
+		#Sensitivity
+		#ci.l = round(100*inv.logit(meta2$coef[2,2] - 1.96*meta2$coef[2,3]),0)
+		#ci.u = round(100*inv.logit(meta2$coef[2,2] + 1.96*meta2$coef[2,3]),0)
+		svgtext = paste(svgtext,"<text x=\"275\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(sensitivity[1],0)," (", round(sensitivity[2],0) ," - ", round(sensitivity[3],0), ")</text>",sep="")
+		#remmed 1/26/2017 as uses perfect.trees from metatron
+		#svgtext = paste(svgtext,"<text x=\"275\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0)," (", ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
-		svgtext = paste(svgtext,"<text x=\"", 375 + -10 + 100 * meta2$coef[[2]][1], "\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0),"</text>",sep="")
-		#Spec
-		ci.l = round(100*inv.logit(meta2$coef[3,2] - 1.96*meta2$coef[3,3]),0)
-		ci.u = round(100*inv.logit(meta2$coef[3,2] + 1.96*meta2$coef[3,3]),0)
-		svgtext = paste(svgtext,"<text x=\"500\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">", round(meta2$coef[[3]][1]*100,0), " (",ci.l ," - ", ci.u, ")</text>",sep="")
+		svgtext = paste(svgtext,"<text x=\"", 375 + -10 + round(sensitivity[1],0), "\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(sensitivity[1],0),"</text>",sep="")
+		#remmed 1/26/2017 as uses perfect.trees from metatron
+		#svgtext = paste(svgtext,"<text x=\"", 375 + -10 + 100 * meta2$coef[[2]][1], "\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[2]][1]*100,0),"</text>",sep="")
+		#Specificity
+		#ci.l = round(100*inv.logit(meta2$coef[3,2] - 1.96*meta2$coef[3,3]),0)
+		#ci.u = round(100*inv.logit(meta2$coef[3,2] + 1.96*meta2$coef[3,3]),0)
+		svgtext = paste(svgtext,"<text x=\"500\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">", round(specificity[1],0), " (",round(specificity[2],0) ," - ", round(specificity[3],0), ")</text>",sep="")
+		#remmed 1/26/2017 as uses perfect.trees from metatron
+		#svgtext = paste(svgtext,"<text x=\"500\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">", round(meta2$coef[[3]][1]*100,0), " (",ci.l ," - ", ci.u, ")</text>",sep="")
 		#For base of vert line
-		svgtext = paste(svgtext,"<text x=\"", 600 + -10 + 100 * meta2$coef[[3]][1], "\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[3]][1]*100,0),"</text>",sep="")
+		svgtext = paste(svgtext,"<text x=\"", 600 + -10 + round(specificity[1],0), "\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(specificity[1],0),"</text>",sep="")
+		#remmed 1/26/2017 as uses perfect.trees from metatron
+		#svgtext = paste(svgtext,"<text x=\"", 600 + -10 + 100 * meta2$coef[[3]][1], "\" y=\"" , 70 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">",round(meta2$coef[[3]][1]*100,0),"</text>",sep="")
 		LRpos = meta2$coef[[2]][1]  / (1 - meta2$coef[[3]][1])
 		LRneg = (1 - meta2$coef[[2]][1]) / meta2$coef[[3]][1]
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 90 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">Likelihood ratios: positive ",round(LRpos,1),"; negative ",round(LRneg,1),"</text>",sep="")
-		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 105 + i*20 ,"\">(hierarchical bivariate model)</text>",sep="")
+		#svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 90 + i*20 ,"\" fill=\"black\" style=\"font-weight:bold\">Likelihood ratios: positive ",round(LRpos,1),"; negative ",round(LRneg,1),"</text>",sep="")
+		#svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 105 + i*20 ,"\">(hierarchical bivariate model)</text>",sep="")
 	#AUC
 	auc <- AUC(phm(myframe))
 		svgtext = paste(svgtext, "<text x=\"10\" y=\"" , 125 + i*20 ,"\" style=\"font-weight:bold\">Area under the ROC curve: ", round(auc$AUC[[1]][1],3), "</text>",sep="")
