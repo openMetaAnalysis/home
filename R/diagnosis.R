@@ -79,7 +79,7 @@ meta1 <- madad(TP=TP,FN=FN,TN=TN,FP=FP,names=Study,data=myframe, correction = 0.
 #Start of SVG
 height = 295 + length(myframe$Study) * 20
 svgtext = paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg x=\"0\" y=\"0\" width=\"800px\" height=\"", height, "px\" viewBox=\"0 0 800 ", height, "\" style=\"font-family:Arial, Helvetica, sans-serif\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">",sep="")
-svgtext = paste(svgtext, "<text x=\"45\" y=\"20\" text-anchor=\"middle\" style=\"font-weight:bold;font-size: 1.17em\">", topic, "</text>" ,sep="")
+svgtext = paste(svgtext, "<text x=\"10\" y=\"20\" style=\"font-weight:bold;font-size: 1.17em\">", topic, "</text>" ,sep="")
 #Column names
 svgtext = paste(svgtext, "<!-- Header of plot--><text x=\"10\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Study</text><text x=\"200\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Prev. (%)</text><text x=\"325\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Sensitivity (%)</text><text x=\"550\" y=\"45\" fill=\"black\" style=\"font-weight:bold\">Specificity (%)</text><text x=\"700\" y=\"45\" fill=\"black\" style=\"font-weight:bold\"><!--DOR--></text><!-- Start of studies-->",sep="")
 for(i in 1: length(myframe$Study))
