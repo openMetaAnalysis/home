@@ -6,6 +6,7 @@
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
 intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
 
+if (length(sortby) == 0 || sortby == "sortby"){sortby = "none"}
 first.row <- substr(content, 1, regexpr("\n",content))
 year<-substr(first.row, regexpr(",",first.row)+1,nchar(first.row))
 year<-substr(year, 1,regexpr(",",year)-1)
@@ -217,9 +218,10 @@ if (grepl("subgroup",type))
 	}
 if (type=="metaregression")
 	{
-	if (grepl("cofactor",type)){myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))}
+	myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
 	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
 	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)}
+  #stop(paste("stop with: ",myframe$x, sep=""))
 	attach(myframe)
 	if (PosParenth1 > 0){
 		#stop(paste(topic,myframe["Study"], sep=", "))
@@ -271,7 +273,11 @@ if (type=="metaregression")
 		metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
 		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n", cex=1.5, cex.main = 2)
 		points(myframe$y ~ myframe$x,cex=20*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
-		text(x=myframe$x, y=myframe$y,labels=paste(Study), cex=1, pos=4,adj=0,font=1,col='black')
+		if (label_location > 0)
+			{
+			text(myframe$x, myframe$y, paste(Study), cex=.9, pos = label_location, offset = 1, col='black')
+			}
+		#text(x=myframe$x, y=myframe$y,labels=paste(Study), cex=1, pos=4,adj=0,font=1,col='black')
 		abline(h=0, v=0, col = "gray90")
 		abline(lm(myframe$y ~ myframe$x, data = myframe, weights = studyweights))
 		legendtext = "Correlation of cofactor and odds ratio:\n"
