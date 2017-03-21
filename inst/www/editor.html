@@ -26,7 +26,9 @@
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
 
 <!-- jquery-csv from http://code.google.com/p/jquery-csv/ -->
-<script src="https://jquery-csv.googlecode.com/git/src/jquery.csv.js"></script>
+<!-- <script src="https://jquery-csv.googlecode.com/git/src/jquery.csv.js"></script> -->
+<script src="jquery-csv/jquery.csv.js"></script>
+https://raw.githubusercontent.com/evanplaice/jquery-csv/master/src/jquery.csv.js
 
 <!-- http://jqueryui.com/dialog/ -->
 <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -549,10 +551,10 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
         <form id="paramform" target="target" style="width:600px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:800px;" id="fieldset">
             <legend style="font-weight:bold">Enter inputs</legend>
-            <div>To perform a <a href="https://en.wikipedia.org/wiki/Meta-analysis">meta-analysis</a> of interventions (11/30/2014 converted to Hartung and Knapp estimators for broader confidence intervals. See PMID <a href="Http://pubmed.gov/24727843">24727843</a>):</div>
+            <div>To perform a <a href="https://en.wikipedia.org/wiki/Meta-analysis">meta-analysis</a> of interventions:</div>
 			<ul>
 			<li>Revise or replace the example data below as needed or</li>
-			<li>Upload a csv file formatted like this <a href="example.csv">example</a>.<br/>
+			<li>Upload a csv file formatted like these examples with <a href="example-d.csv">dichotomous</a> or <a href="example-c.csv">continous</a> outcomes.<br/>
 			<input type=file id=files name=files style="width:200px"/>
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>

@@ -8,10 +8,10 @@ intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand
 
 if (length(sortby) == 0 || sortby == "sortby"){sortby = "none"}
 first.row <- substr(content, 1, regexpr("\n",content))
-year<-substr(first.row, regexpr(",",first.row)+1,nchar(first.row))
-year<-substr(year, 1,regexpr(",",year)-1)
-first.row.header <- FALSE
-if (as.numeric ('9') > -1){first.row.header <- TRUE}
+#year<-substr(first.row, regexpr(",",first.row)+1,nchar(first.row))
+#year<-substr(year, 1,regexpr(",",year)-1)
+#first.row.header <- FALSE
+#if (mytable[1,2]){first.row.header <- TRUE}
 num.columns <- str_count(first.row, ",")
 num.cofactors <- num.columns - 7
 
@@ -29,6 +29,10 @@ temp <- gsub(',', '","', fixed = TRUE, temp)
 temp <- paste('"',temp,'"',sep = '')
 temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=',num.columns,', byrow=TRUE)')
 x<-eval(parse(file = "", n = NULL, text = temp))
+# Delete first row if contains column labels
+first.row.header <- FALSE
+if (is.na(as.numeric(x[1,2])) == TRUE){first.row.header <- TRUE}
+if (first.row.header == TRUE){x <- x[-c(1),]}
 column.names <- c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total")
 for(i in 1: num.cofactors)
 	{
