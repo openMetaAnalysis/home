@@ -52,6 +52,7 @@ myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
 myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
 PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
+#stop(paste("stop with: ",myframe$exp_events, sep=""))
 if (PosParenth1 > 0)
 	{
 	PosParenth2 <-regexpr(")", myframe$exp_events, fixed=TRUE)
@@ -225,7 +226,7 @@ if (type=="metaregression")
 	myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
 	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
 	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)}
-  #stop(paste("stop with: ",myframe$x, sep=""))
+    #stop(paste("stop with: ",PosParenth1, sep=""))
 	attach(myframe)
 	if (PosParenth1 > 0){
 		#stop(paste(topic,myframe["Study"], sep=", "))
@@ -275,7 +276,8 @@ if (type=="metaregression")
 		#if (independent_variable=="cr"){x <- myframe$control_events/myframe$control_total}
 		myframe$y <- meta1$logs
 		metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
-		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",ylim=c(-1,1),xaxs="r",type="n", cex=1.5, cex.main = 2)
+		#ylim=c(-2,2)
+		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",xaxs="r",type="n", cex=1.5, cex.main = 2)
 		points(myframe$y ~ myframe$x,cex=20*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
 		if (label_location > 0)
 			{
