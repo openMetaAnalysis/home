@@ -234,75 +234,51 @@ if (type=="metaregression")
 		# Removing studies with missing data
 		myframe[order(myframe$x, na.last = NA),]
 		myframe <- na.omit(myframe)
+		# Meta-analysis
 		dat <- escalc(measure="MD", m1i=exp_mean, sd1i=exp_sd, n1i=exp_total, m2i=control_mean, sd2i=control_sd, n2i=control_total, data=myframe)
-		#res <- rma(yi, vi, slab=paste(dat$Study, dat$year, sep=", "), data=dat, measure="MD",knha=TRUE, method="DL")
 		res <- rma.uni(yi, vi, mods = ~ myframe$x,  method="DL", knha=TRUE, data=dat, intercept = TRUE)
-		# Make confidence limits
-		cofactor.range = seq(min(myframe$x), max(myframe$x), (max(myframe$x) - min(myframe$x))/100)
-		preds <- predict(res, newmods=cofactor.range)
-		preds <- data.frame(cofactor.range,preds$pred,preds$ci.lb,preds$ci.ub)
-		# Calculate point sizes by rescaling the standard errors
-		wi    <- 1/sqrt(dat$vi)
-		size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
-		plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
-			xlab="", ylab="Difference", main=paste("Meta-regression of ", topic),
-			xlim=c(min(dat$x)-0.1*(max(dat$x)-min(dat$x)),max(dat$x)+0.1*(max(dat$x)-min(dat$x))),
-			ylim=c(min(dat$yi),max(dat$yi)+0.15*(max(dat$yi)-min(dat$yi))),
-			las=1, bty="l")
-		if ( cofactorlabel != "")
-			{
-			mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
-			}
-		lines(preds$cofactor.range, preds$preds.pred)
-		lines(preds$cofactor.range, preds$preds.ci.lb, lty="dashed", col="blue")
-		lines(preds$cofactor.range, preds$preds.ci.ub, lty="dashed", col="blue")
-		text(par("usr")[2],par("usr")[4]-1.25*strheight("A"),cex=1.2,adj=c(1,0),paste("p (correlation) = ",sprintf(res$pval[2], fmt='%#.3f'), sep=""), font=1)
-		text(par("usr")[2],par("usr")[4]-2.25*strheight("A")-0.5*strheight("A"),cex=1.2,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
-		abline(h=0, lty="dotted")
-		if (label_location > 0)
-			{
-			text(dat$x, dat$yi, paste(dat$Study,", ",dat$year, sep=""), cex=.9, pos = label_location, offset = 1, col=dat$color)
-			}
-		legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
+		ylabel = "Mean difference"
 		}
 	else{
 		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
-		# From http://cran.r-project.org/web/packages/rmeta/ **rmeta**
-		#myframe$cofactor<-as.numeric(as.character(str_trim(myframe$cofactor)))
-		meta1 <- meta.DSL(myframe[["exp_total"]], myframe[["control_total"]], myframe[["exp_events"]], myframe[["control_events"]],names=Study,conf.level=0.95)
-		studyweights <- 1 / (meta1$tau2 + meta1$selogs^2)
-		#x <- myframe$cofactor
-		#if (independent_variable=="year"){x <- myframe$year}
-		#if (independent_variable=="cr"){x <- myframe$control_events/myframe$control_total}
-		myframe$y <- meta1$logs
-		metaregression <- lm(y ~ x , data = myframe , weights = studyweights)
-		#ylim=c(-2,2)
-		plot(myframe$y ~ myframe$x, data = myframe, main=paste("Meta-regression of ", topic), xlab="", ylab="",xaxs="r",type="n", cex=1.5, cex.main = 2)
-		points(myframe$y ~ myframe$x,cex=20*studyweights/sum(studyweights),pch=21,bg='blue',col='blue')
-		if (label_location > 0)
-			{
-			text(myframe$x, myframe$y, paste(Study), cex=.9, pos = label_location, offset = 1, col='black')
-			}
-		#text(x=myframe$x, y=myframe$y,labels=paste(Study), cex=1, pos=4,adj=0,font=1,col='black')
-		abline(h=0, v=0, col = "gray90")
-		abline(lm(myframe$y ~ myframe$x, data = myframe, weights = studyweights))
-		legendtext = "Correlation of cofactor and odds ratio:\n"
-		legendtext = paste(legendtext,"All studies (" ,length(myframe$Study),"):",round(summary(metaregression)$coef[2,1],3),", p =", sprintf(summary(metaregression)$coef[2,4], fmt='%#.3f'))
-		legend("topright", legend=legendtext,lty=1, lwd = 2, inset=0.05)
-		if ( cofactorlabel != "")
-			{
-			mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
-			}
-		else
-			{
-			mtext(side=1,line=2.25,"Cofactor", font=2, cex=1.5)
-			}
-		mtext(side=2,line=3,"Odds ratio transformed to natural log (Ln)", cex=1.5, font=2)
-		mtext(side=2,line=2,"(0 indicates odds ratio = 1)")
-		#mtext(side=3,line=0.5,"(Ln odds ratio below 0 favors treatment)")
-		mtext(side=1,line=3,cex=1,adj=0,"Notes:", font=2)
-		mtext(side=1,line=4,cex=1,adj=0, "1. For each study, the size of the point is its weight in the meta-regression.", font=1)
+		# Removing studies with missing data
+		myframe[order(myframe$x, na.last = NA),]
+		myframe <- na.omit(myframe)
+		# Meta-analysis
+		dat <- escalc(measure="OR", ai=exp_events, bi=exp_total-exp_events, ci=control_events, di=control_total-control_events, data=myframe)
+		res <- rma(yi, vi, mods = ~ myframe$x, data=dat)
+		ylabel = "Odds ratio transformed to natural log (ln)"
 		}
+	# Make confidence limits
+	cofactor.range = seq(min(myframe$x), max(myframe$x), (max(myframe$x) - min(myframe$x))/100)
+	preds <- predict(res, newmods=cofactor.range)
+	preds <- data.frame(cofactor.range,preds$pred,preds$ci.lb,preds$ci.ub)
+	# Calculate point sizes by rescaling the standard errors
+	wi    <- 1/sqrt(dat$vi)
+	size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
+	plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
+		xlab="", ylab=ylabel, main=paste("Meta-regression of ", topic),
+		xlim=c(min(dat$x)-0.1*(max(dat$x)-min(dat$x)),max(dat$x)+0.1*(max(dat$x)-min(dat$x))),
+		ylim=c(min(dat$yi),max(dat$yi)+0.15*(max(dat$yi)-min(dat$yi))),
+		las=1, bty="l")
+	if ( cofactorlabel != "")
+		{
+		mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
+		}
+	lines(preds$cofactor.range, preds$preds.pred)
+	lines(preds$cofactor.range, preds$preds.ci.lb, lty="dashed", col="blue")
+	lines(preds$cofactor.range, preds$preds.ci.ub, lty="dashed", col="blue")
+	#text(par("usr")[2],par("usr")[4]-1.25*strheight("A"),cex=1.2,adj=c(1,0),paste("p (correlation) = ",sprintf(res$pval[2], fmt='%#.3f'), sep=""), font=1)
+	#text(par("usr")[2],par("usr")[4]-2.25*strheight("A")-0.5*strheight("A"),cex=1.2,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
+	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")                     ,cex=1,adj=c(1,0),paste("R2 = ",round(res$R2),"% (QM = ",sprintf(res$QM, fmt='%#.1f'),", p = ",sprintf(res$pval[2], fmt='%#.3f'), ")", sep=""), font=1)
+	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")-1.4*strheight("A")  ,cex=1,adj=c(1,0),paste("Regression coefficient = ",sprintf(res$b[2], fmt='%#.1f'), sep=""), font=1)
+	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")-2.8*strheight("A")  ,cex=1,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
+	abline(h=0, lty="dotted")
+	if (label_location > 0)
+		{
+		text(dat$x, dat$yi, paste(dat$Study,", ",dat$year, sep=""), cex=.9, pos = label_location, offset = 1, col=dat$color)
+		}
+	legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
 	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
 }
