@@ -223,9 +223,24 @@ if (grepl("subgroup",type))
 	}
 if (type=="metaregression")
 	{
-	myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
-	if (independent_variable=="year"){myframe$x <- as.numeric(myframe$year)}
-	if (independent_variable=="size"){myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)}
+	if (independent_variable=="year"){
+		myframe$x <- as.numeric(myframe$year)
+		}
+		else{
+			if (independent_variable=="size"){
+				myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
+				}else{
+				if (independent_variable=="size"){
+					myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
+					}else{
+						if (independent_variable=="cr"){
+							#Nothing now, assign after '(' checked for
+						}else{
+							myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
+							}
+						}
+					}
+				}
     #stop(paste("stop with: ",PosParenth1, sep=""))
 	attach(myframe)
 	if (PosParenth1 > 0){
