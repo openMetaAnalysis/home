@@ -50,6 +50,7 @@ if (type == 'subgroup2' || independent_variable == 'cf2'){myframe$cofactor <- my
 if (type == 'subgroup3' || independent_variable == 'cf3'){myframe$cofactor <- myframe$cofactor3}
 if (type == 'subgroup4' || independent_variable == 'cf4'){myframe$cofactor <- myframe$cofactor4}
 if (type == 'subgroup5' || independent_variable == 'cf5'){myframe$cofactor <- myframe$cofactor5}
+#stop (myframe$cofactor)
 myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
