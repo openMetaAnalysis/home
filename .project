@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>home/name>
-	<comment></comment>
+	<name>home</name>
+	<comment>R code for openMetaAnalysis</comment>
 	<projects>
 	</projects>
 	<buildSpec>
