@@ -51,11 +51,12 @@ $( "#dialog" ).dialog();
 		if (hash.indexOf('instruct')>0 || hash.indexOf('teach')>0)
 			{
 			$("#column_names").css("display","inline")
-			$(".fieldset").css("height","800px")
+			//$(".fieldset").css("height","850px")
 			$("#topic").val("Example data set")
 			$("#measure").val("RR");
 			//$(".hastip").css("display","inline")
 			$(".teach").css("display","block")
+			alert('teach')
 			}
 		}
 	else
@@ -129,7 +130,7 @@ $( "#dialog" ).dialog();
     e.preventDefault();
     if ($("#column_names").css("display") == "none"){
 		$("#column_names").css("display","inline")
-		$("#fieldset").css("height","800px")
+		$("#fieldset").css("height",5800px")
 		$("#topic").val("Example data set")
 		$("#measure").val("RR");
 		}
@@ -203,7 +204,7 @@ $( "#dialog" ).dialog();
 		$("#measure").val("RR");
 		$("#sortby").val("year");
 		$("#topic").val("'Soma' for reducing social discord (from Brave New World by Aldous Huxley)");
-		editor.setValue("Downs, 2012, 12345678, 50, 100, 50, 100, high-dose,\nJones, 2013, 12345678, 50, 100, 50, 100, low-dose,\nSmith, 2014, 12345678, 50, 100, 50, 100, high-dose,\nSnead, 2015, 12345678, 50, 100, 50, 100, low-dose,\nParks, 2016, 12345678, 50, 100, 50, 100, high-dose,",1);
+		editor.setValue("Wells, 2012, 12345678, 50, 100, 50, 100, high-dose,\nFord,  2013, 12345678, 50, 100, 50, 100, low-dose,\nFreud, 2014, 12345678, 50, 100, 50, 100, high-dose,\nPavlov, 2015, 12345678, 50, 100, 50, 100, low-dose,\nMalthus,2016, 12345678, 50, 100, 50, 100, high-dose,",1);
 		}
 	if($(this).val()=="ex_1a") {
 		$("#type").val("ignore");
@@ -617,7 +618,7 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
             </select>
 			</div>
 			<div id="metaanalysis_form_right" style="width:250px;float:right">
-			<input type="checkbox" id="hartung" checked style="float:right"/><label for="hartung" style="float:right"><a href="#" class="hastip">Knapp-Hartung adjustment</a><div class="tooltiptext">This should be clicked per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals.</div></label>
+			<input type="checkbox" id="hartung" checked style="float:right"/><label for="hartung" style="float:right"><a href="#" class="hastip">Knapp-Hartung adjustment</a><div class="tooltiptext">This should be clicked per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals when less than 5 studies available.</div></label>
 			</div>
 			<div id="labels" style="clear:both">
 			<label>Left label:</label>
@@ -683,7 +684,7 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:350px;height:800px;">
 		  <legend style="font-weight:bold">Example analyses</legend>
 		  <div >Fictitious example based on <a href="http://en.wikipedia.org/wiki/Brave_New_World">Brave New World</a></div>
-			<div><input type="radio" name="example" class="example" value="ex_1" id="ex_1" /><label for="ex_1">Simple dataset</label>
+			<div><input type="radio" name="example" class="example" value="ex_1" id="ex_1" /><label for="ex_1">Soma dataset</label>
 				<i>
 				<div class="teach">Before making the plot</div>
 				<ul class="teach">
@@ -691,7 +692,7 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 				</ul>
 				<div class="teach">Now, look at the plot</div>
 				<ul class="teach">
-				<li>What does I-squared indicate?</li>
+				<li>What does I<sup2</sup> indicate? (<a href="http://handbook-5-1.cochrane.org/chapter_9/9_5_2_identifying_and_measuring_heterogeneity.htm">help</a>)</li>
 				</ul>
 				</i>
 			</div>
@@ -704,7 +705,9 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 
 			<h3 style="margin-bottom:0px">Meta-analysis of continuous outcomes</h3>
 		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">hypertonic saline to reduce length of stay in hospitalized children with bronchiolitis</a></div>
-			<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a" /><label for="ex_2a">Include all studies; no subgroups</label></div>
+			<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a" /><label for="ex_2a">Include all studies; no subgroups</label>
+			<i class="teach">When pooled, is there a significant difference? What does i-squared suggest?</i>
+			</div>
 			<div ><a href="#" class="hastip">About standardized mean differences</a>
 				<div class="tooltiptext">
 				The standardized mean difference (SMD) is:<br/>
@@ -716,7 +719,7 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 					<li>> 0.8 a large effect</li> 
 				</ul>
 				<div >The 'standardization' allows pooling of different types of outcomes.</div>
-				<div >From: Cochrane Handbook. 12.6  <a href="http://handbook.cochrane.org/chapter_12/12_6_2_re_expressing_smds_using_rules_of_thumb_for_effect_sizes.htm">Interpreting results from continuous outcomes (including standardized mean differences)</a></div>
+				<div >From: Cochrane Handbook. 12.6  <a href="http://handbook-5-1.cochrane.org/chapter_12/12_6_2_re_expressing_smds_using_rules_of_thumb_for_effect_sizes.htm">Interpreting results from continuous outcomes (including standardized mean differences)</a></div>
 				</div>
 			</div>
 			<h3 style="margin-bottom:0px">Meta-regression</h3>
