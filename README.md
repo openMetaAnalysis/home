@@ -1,4 +1,4 @@
-openMetaAnalysis  
+openMetaAnalysis
 ==================
 
 You may view and interact with and example meta-analysis at [this link] (https://public.opencpu.org/ocpu/github/openMetaAnalysis/home/www) at [OpenCPU] (https://public.opencpu.org)
