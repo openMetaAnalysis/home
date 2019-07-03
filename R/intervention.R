@@ -50,6 +50,11 @@ if (type == 'subgroup2' || independent_variable == 'cf2'){myframe$cofactor <- my
 if (type == 'subgroup3' || independent_variable == 'cf3'){myframe$cofactor <- myframe$cofactor3}
 if (type == 'subgroup4' || independent_variable == 'cf4'){myframe$cofactor <- myframe$cofactor4}
 if (type == 'subgroup5' || independent_variable == 'cf5'){myframe$cofactor <- myframe$cofactor5}
+if (type == 'subgroup6' || independent_variable == 'cf6'){myframe$cofactor <- myframe$cofactor6}
+if (type == 'subgroup7' || independent_variable == 'cf7'){myframe$cofactor <- myframe$cofactor7}
+if (type == 'subgroup8' || independent_variable == 'cf8'){myframe$cofactor <- myframe$cofactor8}
+if (type == 'subgroup9' || independent_variable == 'cf9'){myframe$cofactor <- myframe$cofactor9}
+if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- myframe$cofactor10}
 
 myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
@@ -97,6 +102,26 @@ if (sortby=="cofactor4")
 if (sortby=="cofactor5")
 	{
 	sortvalue <- myframe$cofactor5
+	}
+if (sortby=="cofactor6")
+	{
+	sortvalue <- myframe$cofactor6
+	}
+if (sortby=="cofactor7")
+	{
+	sortvalue <- myframe$cofactor7
+	}
+if (sortby=="cofactor8")
+	{
+	sortvalue <- myframe$cofactor8
+	}
+if (sortby=="cofactor9")
+	{
+	sortvalue <- myframe$cofactor9
+	}
+if (sortby=="cofactor10")
+	{
+	sortvalue <- myframe$cofactor10
 	}
 if (sortby=="baseline")
 	{
