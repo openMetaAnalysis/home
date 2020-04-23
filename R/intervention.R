@@ -176,11 +176,11 @@ if (type=="ignore")
 		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, method="Inverse", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
-		if (length(myframe$Study)>9)
+		if (length(myframe$Study)>5)
 			{
 			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
 			pubbias = metabias(meta1.as, plotit=FALSE)
-			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
+			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),' (may be fasely significatn if < 10 studies)',sep="");
 			}
 		else
 			{
