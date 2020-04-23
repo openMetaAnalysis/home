@@ -179,7 +179,7 @@ if (type=="ignore")
 		if (length(myframe$Study)>5)
 			{
 			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
-			pubbias = metabias(meta1.as, plotit=FALSE)
+			pubbias = metabias(meta1.as, plotit=FALSE,k.min=6)
 			#pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),' (may be fasely significant if < 10 studies)',sep="");
 			pubbiastext = paste(pubbiastext, " (Rucker): p= ",pubbias$p.value,' (may be fasely significant if < 10 studies)',sep="");
 			}
