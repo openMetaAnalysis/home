@@ -4,7 +4,8 @@
 # http://cran.r-project.org/web/packages/rmeta/
 # Discussion of continuity correction:
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
-intervention <- function(content, measure, hartung, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
+
+intervention <- function(content, measure, analysis, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
 
 if (length(sortby) == 0 || sortby == "sortby"){sortby = "none"}
 first.row <- substr(content, 1, regexpr("\n",content))
@@ -150,8 +151,24 @@ attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 pubbiastext = "Test for funnel plot asymmetry"
+#analyticmethod = "Random effects model"
+#if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
+if (analylsis == 'RE-Knapp-Hartung'){
+hartung = TRUE
+Comb.Fixed = FALSE
+Comb.Random = TRUE
+analyticmethod = "Random effects model (Hartung-Knapp)"
+}elseif (analylsis == 'RE'){
+hartung = FALSE
+Comb.Fixed = FALSE
+Comb.Random = TRUE
 analyticmethod = "Random effects model"
-if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
+}else{ # FE - fixed effects
+hartung = FALSE
+Comb.Fixed = TRUE
+Comb.Random = FALSE
+analyticmethod = "Fixed effects model"
+}
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")
 	{
@@ -192,7 +209,7 @@ if (type=="ignore")
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=FALSE,print.I2.ci=TRUE, print.p=FALSE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=Comb.Fixed, comb.random=Comb.Random, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	#main=textGrob(topic, gp=gpar(cex=3), just="top")
@@ -239,7 +256,7 @@ if (grepl("subgroup",type))
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=FALSE, print.I2.ci=TRUE, print.p=FALSE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.random.w=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=Comb.Fixed, comb.random=Comb.Random, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	#Test for subgroup differences
