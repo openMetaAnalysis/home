@@ -153,21 +153,21 @@ SkyBlue = "#6DC6E7"
 pubbiastext = "Test for funnel plot asymmetry"
 #analyticmethod = "Random effects model"
 #if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
-if (analylsis == 'RE-Knapp-Hartung'){
-hartung = TRUE
-Comb.Fixed = FALSE
-Comb.Random = TRUE
-analyticmethod = "Random effects model (Hartung-Knapp)"
-}elseif (analylsis == 'RE'){
-hartung = FALSE
-Comb.Fixed = FALSE
-Comb.Random = TRUE
-analyticmethod = "Random effects model"
+if (analysis == 'RE-Knapp-Hartung'){
+  hartung = TRUE
+  Comb.Fixed = FALSE
+  Comb.Random = TRUE
+  analyticmethod = "Random effects model (Hartung-Knapp)"
+}else if (analysis == 'RE'){
+  hartung = FALSE
+  Comb.Fixed = FALSE
+  Comb.Random = TRUE
+  analyticmethod = "Random effects model"
 }else{ # FE - fixed effects
-hartung = FALSE
-Comb.Fixed = TRUE
-Comb.Random = FALSE
-analyticmethod = "Fixed effects model"
+  hartung = FALSE
+  Comb.Fixed = TRUE
+  Comb.Random = FALSE
+  analyticmethod = "Fixed effects model"
 }
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
 if (type=="ignore")

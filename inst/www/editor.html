@@ -89,7 +89,7 @@ $( "#dialog" ).dialog();
 	  type: $("#type").val(),
 	  sortby: $("#sortby").val(),
 	  measure: $("#measure").val(),
-	  hartung: $("#hartung").prop( "checked" ),
+	  analysis: $("#analysis").val(),
 	  independent_variable: $("#independent_variable").val(),
 	  cofactorlabel: $("#cofactorlabel").val(),
 	  content: temp,
@@ -627,7 +627,7 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 			<div id="metaanalysis_form" style="width:600px;clear:both">
 			<fieldset class="options">
             <legend style="font-weight:bold">Meta-analysis settings</legend>
-			<div id="metaanalysis_form_left" style="width:250px;float:left">
+			<div id="metaanalysis_form_left" style="width:225px;float:left">
 			<label style="float:left">Sort order:</label><br>
 			<select id="sortby" style="width:200px;float:left">
               <option value="cofactor1">Cofactor 1 (ascending)</option>
@@ -645,16 +645,21 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
               <option value="weight">Weight (descending)</option>
               <option value="year" selected>Year (ascending)</option>
             </select>
-			</div>
-			<div id="metaanalysis_form_right" style="width:250px;float:right">
-			<input type="checkbox" id="hartung" checked style="float:right"/><label for="hartung" style="float:right"><a href="#" class="hastip">Knapp-Hartung adjustment</a><div class="tooltiptext">This should be clicked per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals when less than 5 studies available.</div></label>
-			</div>
-			<div id="labels" style="clear:both">
 			<label>Left label:</label>
 			<select id="lefthand">
 			  <option value="favors experimental" selected>favors experimental</option>
 			  <option value="favors control">favors control</option>
 			</select>&nbsp;&nbsp;
+			</div>
+			<div id="metaanalysis_form_right" style="width:325px;float:right">
+			<!--<input type="checkbox" id="hartung" checked style="float:right"/><label for="hartung" style="float:right">-->
+				<a href="#" class="hastip">Analysis method</a><div class="tooltiptext">Knapp-Hartung adjustment should be clicked unless heterogeneity is insig per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals when less than 5 studies available.</div><!--</label>-->
+				<select id="analysis">
+				  <option value="RE-Knapp-Hartung" selected>Random effects with Knapp-Hartung adjustment</option>
+				  <option value="RE">Random effects</option>
+				  <option value="FE">Fixed effects (ok if heterogeneity is insignificant)</option>
+				</select>
+				<br/>
 			<label>Right label:</label> 			
 			<select id="righthand">
 			  <option value="favors experimental">favors experimental</option>
