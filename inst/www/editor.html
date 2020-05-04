@@ -627,44 +627,42 @@ Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
 			<div id="metaanalysis_form" style="width:600px;clear:both">
 			<fieldset class="options">
             <legend style="font-weight:bold">Meta-analysis settings</legend>
-			<div id="metaanalysis_form_left" style="width:225px;float:left">
-			<label style="float:left">Sort order:</label><br>
-			<select id="sortby" style="width:200px;float:left">
-              <option value="cofactor1">Cofactor 1 (ascending)</option>
-              <option value="cofactor2">Cofactor 2 (ascending)</option>
-              <option value="cofactor3">Cofactor 3 (ascending)</option>
-              <option value="cofactor4">Cofactor 4 (ascending)</option>
-              <option value="cofactor5">Cofactor 5 (ascending)</option>
-              <option value="cofactor6">Cofactor 6 (ascending)</option>
-              <option value="cofactor7">Cofactor 7 (ascending)</option>
-              <option value="cofactor8">Cofactor 8 (ascending)</option>
-              <option value="cofactor9">Cofactor 9 (ascending)</option>
-              <option value="cofactor10">Cofactor 10 (ascending)</option>
-              <option value="baseline">Baseline value in control group</option>
-              <option value="study">Study name</option>
-              <option value="weight">Weight (descending)</option>
-              <option value="year" selected>Year (ascending)</option>
-            </select>
-			<label>Left label:</label>
-			<select id="lefthand">
-			  <option value="favors experimental" selected>favors experimental</option>
-			  <option value="favors control">favors control</option>
-			</select>&nbsp;&nbsp;
+			<div id="metaanalysis_form_left" style="width:250px;float:left">
+				<label>Sort order:</label>
+				<select id="sortby" style="width:200px">
+				  <option value="cofactor1">Cofactor 1 (ascending)</option>
+				  <option value="cofactor2">Cofactor 2 (ascending)</option>
+				  <option value="cofactor3">Cofactor 3 (ascending)</option>
+				  <option value="cofactor4">Cofactor 4 (ascending)</option>
+				  <option value="cofactor5">Cofactor 5 (ascending)</option>
+				  <option value="cofactor6">Cofactor 6 (ascending)</option>
+				  <option value="cofactor7">Cofactor 7 (ascending)</option>
+				  <option value="cofactor8">Cofactor 8 (ascending)</option>
+				  <option value="cofactor9">Cofactor 9 (ascending)</option>
+				  <option value="cofactor10">Cofactor 10 (ascending)</option>
+				  <option value="baseline">Baseline value in control group</option>
+				  <option value="study">Study name</option>
+				  <option value="weight">Weight (descending)</option>
+				  <option value="year" selected>Year (ascending)</option>
+				</select><br/>
+				<div>&nbsp;</div>
+				<label>Left label:</label> 
+				<input type="text" id="lefthand" value="Favors experimental" style="width:150px" /> 
 			</div>
 			<div id="metaanalysis_form_right" style="width:325px;float:right">
-			<!--<input type="checkbox" id="hartung" checked style="float:right"/><label for="hartung" style="float:right">-->
-				<a href="#" class="hastip">Analysis method</a><div class="tooltiptext">Knapp-Hartung adjustment should be clicked unless heterogeneity is insig per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals when less than 5 studies available.</div><!--</label>-->
+				<a href="#" class="hastip">Analysis method</a>:<div class="tooltiptext">Knapp-Hartung adjustment should be clicked unless heterogeneity is insig per PMID: <a href="http://pubmed.gov/24727843">24727843</a>. However, unclick this if yields wacky confidence intervals when less than 5 studies available.</div>
 				<select id="analysis">
 				  <option value="RE-Knapp-Hartung" selected>Random effects with Knapp-Hartung adjustment</option>
 				  <option value="RE">Random effects</option>
 				  <option value="FE">Fixed effects (ok if heterogeneity is insignificant)</option>
 				</select>
-				<br/>
-			<label>Right label:</label> 			
-			<select id="righthand">
+			<div>&nbsp;</div>
+			<label>Right label:</label> 
+			<input type="text" id="righthand" value="Favors control" style="width:150px" /> 
+			<!--<select id="righthand">
 			  <option value="favors experimental">favors experimental</option>
 			  <option value="favors control" selected>favors control</option>
-			</select>
+			</select>-->
 			</div> 
 			</fieldset>
 			</div>
