@@ -29,7 +29,7 @@ temp <- gsub(',', '","', fixed = TRUE, temp)
 
 temp <- paste('"',temp,'"',sep = '')
 temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=',num.columns,', byrow=TRUE)')
-x<-eval(parse(file = "", n = NULL, text = temp))
+x <- eval(parse(file = "", n = NULL, text = temp))
 # Delete first row if contains column labels (detected by as.numeric(year) = false)
 first.row.header <- FALSE
 if (is.na(as.numeric(x[1,2])) == TRUE){first.row.header <- TRUE}
@@ -44,6 +44,7 @@ for(i in 1: num.cofactors)
 	}
 dimnames(x) <- list(NULL, column.names)
 myframe <- data.frame (x)
+myframe <- na.omit(myframe)
 remove(x)
 #stop(independent_variable)
 if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
