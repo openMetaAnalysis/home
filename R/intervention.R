@@ -45,7 +45,7 @@ for(i in 1: num.cofactors)
 dimnames(x) <- list(NULL, column.names)
 myframe <- data.frame (x)
 myframe <- na.omit(myframe)
-myframe <- mydata[complete.cases(myframe), ]
+myframe <- myframe[complete.cases(myframe), ]
 remove(x)
 #stop(independent_variable)
 if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
