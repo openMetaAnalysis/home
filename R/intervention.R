@@ -46,6 +46,7 @@ dimnames(x) <- list(NULL, column.names)
 myframe <- data.frame (x)
 myframe <- na.omit(myframe)
 myframe <- myframe[complete.cases(myframe), ]
+myframe <- myframe[!sum(myframe$exp_total,myframe$control_total) == 0,]
 remove(x)
 #stop(independent_variable)
 if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
