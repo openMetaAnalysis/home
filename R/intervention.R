@@ -44,9 +44,13 @@ for(i in 1: num.cofactors)
 	}
 dimnames(x) <- list(NULL, column.names)
 myframe <- data.frame (x)
+
+# Remove bad rows	
 myframe <- na.omit(myframe)
 myframe <- myframe[complete.cases(myframe), ]
-myframe <- myframe[!sum(as.numeric(myframe$exp_total),as.numeric(myframe$control_total)) == 0,]
+myframe <- myframe[!(as.numeric(myframe$exp_total) == 0 & as.numeric(myframe$control_total) == 0),]
+myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
+
 remove(x)
 #stop(independent_variable)
 if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
