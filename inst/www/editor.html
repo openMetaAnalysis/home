@@ -567,7 +567,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 
 	  <div id="editorcontainer" style="display:block">
       <div style="width:600px;float:left;">
-
+News 08/07/2021: registration data required in a new column 4. Enter NA if either not resistered or you do not intend a subgroup by registration. Note, this only addresses whether registration done and not whether done timely and correctly.
         <form id="paramform" target="target" style="width:600px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:800px;" id="fieldset">
             <legend style="font-weight:bold">Enter inputs</legend>
@@ -579,22 +579,23 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div>Required columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) events of mean (SD) in intervention group, 5) total in intervention group, 6) events or mean (SD) in control group, 7) total in control group. <br/>
+<div>Required columns: 1) study name, 2) year, 3) <a href="http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Unique_Identifier_PM">PMID</a>, 4) trial registration number, 5) events or mean (SD) in intervention group, 6) total in intervention group, 7) events or mean (SD) in control group, 8) total in control group. <br/>
 Optional columns for up to five cofactors<br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
 <div >The initial data shown below is fictitious and is <a href="#" id="instructor">instructional</a>.</div>
 <div id="column_names" style="display:none"><img src="column_names.png" alt="Image of column names"/></div>
-<div id="editor" style="width:600px;">Downs, 2012, 12345678, 50, 100, 50, 100, high-dose,
-Jones, 2013, 12345678, 50, 100, 50, 100, low-dose,
-Smith, 2014, 12345678, 50, 100, 50, 100, high-dose,
-Snead, 2015, 12345678, 50, 100, 50, 100, low-dose,
-Parks, 2016, 12345678, 50, 100, 50, 100, high-dose,</div>
+<div id="editor" style="width:600px;">Downs, 2012, 12345678, NA, 50, 100, 50, 100, high-dose,
+Jones, 2013, 12345678, NA, 50, 100, 50, 100, low-dose,
+Smith, 2014, 12345678, NA, 50, 100, 50, 100, high-dose,
+Snead, 2015, 12345678,  1, 50, 100, 50, 100, low-dose,
+Parks, 2016, 12345678,  2, 100, 50, 100, high-dose,</div>
 	
 			<div id="analysis_type" style="width:600px;">
 			<fieldset style="border: 3px solid #6DC6E7">
             <div style="float:left">
 			<select id="type" style="float:left">
               <option value="ignore" selected>Meta-analysis without subgroup</option>
+              <option value="subgroup.registration">Meta-analysis with subgroup by trial registration</option>
               <option value="subgroup1">Meta-analysis with subgroup using cofactor 1</option>
               <option value="subgroup2">Meta-analysis with subgroup using cofactor 2</option>
               <option value="subgroup3">Meta-analysis with subgroup using cofactor 3</option>

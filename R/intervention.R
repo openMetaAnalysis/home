@@ -14,7 +14,7 @@ first.row <- substr(content, 1, regexpr("\n",content))
 #first.row.header <- FALSE
 #if (mytable[1,2]){first.row.header <- TRUE}
 num.columns <- str_count(first.row, ",")
-num.cofactors <- num.columns - 7
+num.cofactors <- num.columns - 8
 
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
@@ -37,7 +37,7 @@ if (first.row.header == TRUE){x <- x[-c(1),]}
 # Delete terminal rows if contains instructions (detected by as.numeric(year) = false)
 x <- x[!(is.na(as.numeric(x[,2])) == TRUE),]
 
-column.names <- c("Study","year", "pmid", "exp_events", "exp_total","control_events","control_total")
+column.names <- c("Study","year", "pmid", "registration","exp_events", "exp_total","control_events","control_total")
 for(i in 1: num.cofactors)
 	{
 	column.names<- append(column.names,paste('cofactor',i,sep=""))
@@ -47,12 +47,14 @@ myframe <- data.frame (x)
 
 # Remove bad rows	
 myframe <- na.omit(myframe)
-myframe <- myframe[complete.cases(myframe), ]
-myframe <- myframe[!(as.numeric(myframe$exp_total) == 0 & as.numeric(myframe$control_total) == 0),]
-myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
+# COmmented out below 2021-08-07
+# myframe <- myframe[complete.cases(myframe), ]
+# myframe <- myframe[!(as.numeric(myframe$exp_total) == 0 & as.numeric(myframe$control_total) == 0),]
+# myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
 
 remove(x)
 #stop(independent_variable)
+if (type == 'subgroup.registration'){myframe$cofactor <- myframe$registration}
 if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
 if (type == 'subgroup2' || independent_variable == 'cf2'){myframe$cofactor <- myframe$cofactor2}
 if (type == 'subgroup3' || independent_variable == 'cf3'){myframe$cofactor <- myframe$cofactor3}
@@ -68,6 +70,9 @@ myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
 myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
+myframe$registration<-as.character(str_trim(myframe$registration))
+myframe$registration <- ifelse(is.na(myframe$registration), 'No', 'Yes')
+
 PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
 #stop(paste("stop with: ",myframe$exp_events, sep=""))
 if (PosParenth1 > 0)
@@ -150,6 +155,7 @@ for(i in 1:length(myframe$Study))
 {
 if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
 	{
+	# Continuity correction?
 	#myframe$exp_events[i] == 0.5 
 	#myframe$control_events[i] == 0.5
 	}
