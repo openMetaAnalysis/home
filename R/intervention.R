@@ -71,7 +71,7 @@ myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
 myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
 myframe$registration<-as.character(str_trim(myframe$registration))
-myframe$registration <- ifelse(is.na(myframe$registration) || myframe$registration in ('NA','na',''), 'No', 'Yes')
+myframe$registration <- ifelse(is.na(myframe$registration) || myframe$registration %in% ('NA','na',''), 'No', 'Yes')
 
 PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
 #stop(paste("stop with: ",myframe$exp_events, sep=""))
