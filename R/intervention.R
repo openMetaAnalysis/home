@@ -53,6 +53,16 @@ myframe <- na.omit(myframe)
 # myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
 
 remove(x)
+
+myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
+myframe$Study<-as.character(str_trim(myframe$Study))
+myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
+myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
+myframe$registration <-as.character(str_trim(myframe$registration))
+#myframe$registration <- ifelse((is.na(myframe$registration) || myframe$registration %in% c('NA','na','')), 'No', 'Yes')
+myframe$registration <- ifelse((myframe$registration %in% c('NA','na','')), 'No', 'Yes')
+#stop(paste("stop with: ",myframe$registration, sep=", "))
+
 #stop(independent_variable)
 if (type == 'subgroup.registration'){myframe$cofactor <- myframe$registration}
 if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
@@ -65,15 +75,6 @@ if (type == 'subgroup7' || independent_variable == 'cf7'){myframe$cofactor <- my
 if (type == 'subgroup8' || independent_variable == 'cf8'){myframe$cofactor <- myframe$cofactor8}
 if (type == 'subgroup9' || independent_variable == 'cf9'){myframe$cofactor <- myframe$cofactor9}
 if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- myframe$cofactor10}
-
-myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
-myframe$Study<-as.character(str_trim(myframe$Study))
-myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
-myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
-myframe$registration <-as.character(str_trim(myframe$registration))
-#myframe$registration <- ifelse((is.na(myframe$registration) || myframe$registration %in% c('NA','na','')), 'No', 'Yes')
-myframe$registration <- ifelse((myframe$registration %in% c('NA','na','')), 'No', 'Yes')
-#stop(paste("stop with: ",myframe$registration, sep=", "))
 
 PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
 if (PosParenth1 > 0)
