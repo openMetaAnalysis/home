@@ -224,7 +224,7 @@ if (type=="ignore")
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, fixed=false, random=true, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, fixed=FALSE, random=TRUE, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	#main=textGrob(topic, gp=gpar(cex=3), just="top")
@@ -271,7 +271,7 @@ if (grepl("subgroup",type))
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, fixed=false, random=true, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, fixed=FALSE, random=TRUE, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	#Test for subgroup differences
