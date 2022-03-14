@@ -237,7 +237,7 @@ if (grepl("subgroup",type))
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (PosParenth1 > 0)
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=myframe$cofactor, print.byvar = FALSE)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
@@ -253,7 +253,7 @@ if (grepl("subgroup",type))
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=myframe$cofactor, print.byvar = FALSE)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
@@ -271,16 +271,18 @@ if (grepl("subgroup",type))
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, fixed=FALSE, random=TRUE, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, fixed=FALSE, random=TRUE, resid.hetstat = TRUE,
+	       print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	#Test for subgroup differences
 	#Hartung-Knapp gives Q = 0 if a subgroup has single member
-	meta1 <- update(meta1,hakn = FALSE)
-	byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
-	byvartext = sprintf(byvartext, fmt='%#.3f');
-	byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
-	grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	# 03/2022 not needed in meta now as automatic
+	#meta1 <- update(meta1,hakn = FALSE)
+	#byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
+	#byvartext = sprintf(byvartext, fmt='%#.3f');
+	#byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
+	#grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="metaregression")
 	{
