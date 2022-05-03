@@ -1,324 +1,362 @@
-positivedeviance <- function(content, topic, subject_label, subgroup, outcome_label, outcome_type, displaynames, threshold_observations, threshold_value,benchmark_value, benchmark_label, data_type, output_type, x_min, x_max, theme) {
-# Current not used: x_min, x_max,  
-  #if (!topic=="99"){stop("This web app is under constrution") }
-  #stop("Request received") #Works	
-  
-`%notin%` <- Negate(`%in%`)
-	
-  if (is.na(benchmark_value) | benchmark_value == 'NULL') {benchmark_value <- NA}
+#Uses http://cran.r-project.org/web/packages/meta/   
+#Alternatives:f
+# http://cran.r-project.org/web/packages/metafor/ (allows continuity correction)
+# http://cran.r-project.org/web/packages/rmeta/
+# Discussion of continuity correction:
+# http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
 
-  benchmark_value <- as.numeric(benchmark_value)
-  threshold_value <- as.numeric(threshold_value)
-  threshold_observations <- as.numeric(threshold_observations)
-	
-  if (is.data.frame(content)){ 
-    # Script is being run locally on a desktop and not online at openCPU
-    #Column names of local file must be 
-    x <- content
-  }else{
-    # Script is being run online at openCPU and not locally on a desktop
-    # Special handling if needed of content
-    first.row <- substr(content, 1, regexpr("\n",content))
-    num.columns <- str_count(first.row, ",")
+intervention <- function(content, measure, analysis, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
 
-    #stop(paste("num.columns: ",num.columns, sep="")) # Works
-    
-    temp <- content 
-    # Uses package meta http://cran.r-project.org/web/packages/meta/
-    # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
-    #temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
-    #temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
-    #temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
-    temp <- gsub("\r", ' ', fixed = TRUE, temp)
-    temp <- gsub("\n", ' ', fixed = TRUE, temp)
-    temp <- gsub("\t", ' ', fixed = TRUE, temp)
-    temp <- gsub(',', '","', fixed = TRUE, temp)
-    
-    temp <- paste('"',temp,'"',sep = '')
-    temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=',num.columns,', byrow=TRUE)')
-    x<-eval(parse(file = "", n = NULL, text = temp))
-  }
-  
-  stop(paste("x: ",x, sep="")) # Works
-  
-  # Delete first row if contains column labels (detected by as.numeric(year) = false)
-  first.row.header <- FALSE
-  if (is.na(as.numeric(x[1,3])) == TRUE){first.row.header <- TRUE}
-  if (first.row.header == TRUE){x <- x[-c(1),]}
-  # Delete terminal rows if contains instructions (detected by as.numeric(year) = false)
-  x <- x[!(is.na(as.numeric(x[,3])) == TRUE),]
-  
-#### Start here if running locally
+if (length(sortby) == 0 || sortby == "sortby"){sortby = "none"}
+first.row <- substr(content, 1, regexpr("\n",content))
+#year<-substr(first.row, regexpr(",",first.row)+1,nchar(first.row))
+#year<-substr(year, 1,regexpr(",",year)-1)
+#first.row.header <- FALSE
+#if (mytable[1,2]){first.row.header <- TRUE}
+num.columns <- str_count(first.row, ",")
+num.cofactors <- num.columns - 8
 
-if (data_type == "p"){
-	column.names <- c("Subject",'ID',"Group", "Outcomes", "Observations")
+temp <- content
+# Uses package meta http://cran.r-project.org/web/packages/meta/
+# http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
+#temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
+#temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
+#temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
+temp <- gsub("\r", ' ', fixed = TRUE, temp)
+temp <- gsub("\n", ' ', fixed = TRUE, temp)
+temp <- gsub("\t", ' ', fixed = TRUE, temp)
+temp <- gsub(',', '","', fixed = TRUE, temp)
+
+temp <- paste('"',temp,'"',sep = '')
+temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=',num.columns,', byrow=TRUE)')
+x <- eval(parse(file = "", n = NULL, text = temp))
+# Delete first row if contains column labels (detected by as.numeric(year) = false)
+first.row.header <- FALSE
+if (is.na(as.numeric(x[1,2])) == TRUE){first.row.header <- TRUE}
+if (first.row.header == TRUE){x <- x[-c(1),]}
+# Delete terminal rows if contains instructions (detected by as.numeric(year) = false)
+x <- x[!(is.na(as.numeric(x[,2])) == TRUE),]
+
+column.names <- c("Study","year", "pmid", "registration","exp_events", "exp_total","control_events","control_total")
+for(i in 1: num.cofactors)
+	{
+	column.names<- append(column.names,paste('cofactor',i,sep=""))
 	}
-if (data_type == "m"){
-	column.names <- c("Subject",'ID',"Group", "Observations", "mean", "sd")
+dimnames(x) <- list(NULL, column.names)
+myframe <- data.frame (x)
+
+# Remove bad rows	
+myframe <- na.omit(myframe)
+# COmmented out below 2021-08-07
+# myframe <- myframe[complete.cases(myframe), ]
+# myframe <- myframe[!(as.numeric(myframe$exp_total) == 0 & as.numeric(myframe$control_total) == 0),]
+# myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
+
+remove(x)
+
+myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
+myframe$Study<-as.character(str_trim(myframe$Study))
+myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
+myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
+myframe$registration <-as.character(str_trim(myframe$registration))
+#myframe$registration <- ifelse(myframe$registration %in% c('NA','na',''), 'Registration: no/unknown', 'Registration: yes')
+myframe$registration <- ifelse(toupper(myframe$registration) %in% c('NO'), 'Registration: no', ifelse(toupper(myframe$registration) %in% c('NA',''), 'Registration: unknown', 'Registration: yes'))
+#stop(paste("stop with: ",myframe$registration, sep=", "))
+
+#stop(independent_variable)
+if (type == 'subgroup.registration'){myframe$cofactor <- myframe$registration}
+if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
+if (type == 'subgroup2' || independent_variable == 'cf2'){myframe$cofactor <- myframe$cofactor2}
+if (type == 'subgroup3' || independent_variable == 'cf3'){myframe$cofactor <- myframe$cofactor3}
+if (type == 'subgroup4' || independent_variable == 'cf4'){myframe$cofactor <- myframe$cofactor4}
+if (type == 'subgroup5' || independent_variable == 'cf5'){myframe$cofactor <- myframe$cofactor5}
+if (type == 'subgroup6' || independent_variable == 'cf6'){myframe$cofactor <- myframe$cofactor6}
+if (type == 'subgroup7' || independent_variable == 'cf7'){myframe$cofactor <- myframe$cofactor7}
+if (type == 'subgroup8' || independent_variable == 'cf8'){myframe$cofactor <- myframe$cofactor8}
+if (type == 'subgroup9' || independent_variable == 'cf9'){myframe$cofactor <- myframe$cofactor9}
+if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- myframe$cofactor10}
+
+PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
+if (PosParenth1 > 0)
+	{
+	PosParenth2 <-regexpr(")", myframe$exp_events, fixed=TRUE)
+	myframe$exp_mean<-as.numeric(substring(myframe$exp_events, 1, PosParenth1 - 1))
+	myframe$exp_sd<-as.numeric(substring(myframe$exp_events, PosParenth1 + 1, PosParenth2 - 1))
+	PosParenth1 <-regexpr("(", myframe$control_events, fixed=TRUE)
+	PosParenth2 <-regexpr(")", myframe$control_events, fixed=TRUE)
+	myframe$control_mean<-as.numeric(substring(myframe$control_events, 1, PosParenth1 - 1))
+	myframe$control_sd<-as.numeric(substring(myframe$control_events, PosParenth1 + 1, PosParenth2 - 1))
 	}
-  #dimnames(x) <- list(NULL, column.names)
-  colnames(x) <- column.names
-  
-  data <- data.frame (x)
-  #remove(x)
-  
-  #stop(paste("Dataframe rows: ",nrow(data),"\n","data: ","\n",data, sep="")) # Works
-  
-  if (data_type == "m"){
-    data$Mean<-as.numeric(as.numeric(gsub(",", "", as.character(str_trim(data$Mean)))))
-    data$Outcome.value <-data$Mean
-    }
-  if (data_type == "p"){
-	#Calculations
-	data$Outcomes<-as.numeric(as.numeric(gsub(",", "", as.character(str_trim(data$Outcomes)))))
-	data$Observations<-as.numeric(as.numeric(gsub(",", "", as.character(str_trim(data$Observations)))))
-	data$Outcome.value <-data$Outcomes/data$Observations
-	(proportion.population <- sum(data$Outcomes)/sum(data$Observations))
-	variance <- sum(data$Observations)*(proportion.population*(1-proportion.population))
-	(std.dev <- sqrt(variance))
-  }
-  size = nrow(data)
-  size_population = sum(data$Observations)
-  (total <- sum(data$Observations))
-
-  test <- 0.10
-  (probability <- pbinom(test, size = size, prob = proportion.population, lower.tail = TRUE, log = FALSE))#  4.22 interquartile range using openmetaanalysis methods
-  # http://www.stat.yale.edu/Courses/1997-98/101/binom.htm
-  (probability <- pnorm(test, mean = proportion.population, sd = std.dev, log = FALSE))#  4.22 interquartile range using openmetaanalysis methods
-  
-  #stop(paste("std.dev: ",std.dev, sep="")) # Works
-  if (data_type == "p"){
-	  # Meta-analysis
-	  data <- data[order(data$Outcome.value),]
-	  row.names(data)
-	  # Method to GLMM 02/19/2021
-	  if (subgroup =='YES'){
-		meta1 <- metaprop(Outcomes, Observations, studlab = Subject, subgroup = Group, data=data, method = 'GLMM', hakn = TRUE, fixed=FALSE)
-	  }else{
-		meta1 <- metaprop(Outcomes, Observations, studlab = Subject, data=data, method = 'GLMM', hakn = TRUE, fixed=FALSE)
-	  }
+else
+	{
+	myframe$exp_events<-as.numeric(as.character(str_trim(myframe$exp_events)))
+	myframe$control_events<-as.numeric(as.character(str_trim(myframe$control_events)))
 	}
-
-if (data_type == "m"){
-  meta1 <- metamean(Observations,mean,sd,
-                  studlab = Name,
-                  #subgroup = Training.year, 
-                  subgroup = NULL,
-                  title = "Meta-analysis of minutes",
-                  data=example.data, fixed=FALSE, sm = "MLN", hakn=TRUE)
-  meta1$TE
-  (paste(meta1$lower,inv.logit(meta1$TE),meta1$upper))
-  }
-
-  if (data_type == "m"){
-	  # Meta-analysis
-	  data <- data[order(data$Outcome.value),]
-	  row.names(data)
-	  # Method to GLMM 02/19/2021
-	  if (subgroup =='YES'){
-		meta1 <- metaprop(Observations,mean,sd, studlab = Subject, subgroup = Group, data=data, method = 'GLMM', hakn = TRUE, fixed=FALSE)
-	  }else{
-		meta1 <- metaprop(Observations,mean,sd, studlab = Subject, data=data, method = 'GLMM', hakn = TRUE, fixed=FALSE)
-	  }
+myframe$exp_total<-as.numeric(as.character(str_trim(myframe$exp_total)))
+myframe$control_total<-as.numeric(as.character(str_trim(myframe$control_total)))
+if (sortby=="weight")
+	{
+	sortvalue <- NULL
 	}
-  summary(meta1)
-  (TE = round(meta1$TE.random,2))
-  (TE_text = paste("Rate: ",TE," (",round(meta1$lower.random,2)," - ",round(meta1$upper.random,2),")",sep=""))
-  I2 = round(meta1$I2*100,1)
-  I2.L = round(meta1$lower.I2*100,1)
-  I2.U = round(meta1$upper.I2*100,1)
-  #text(par("usr")[2],(par("usr")[4]-1.4*strheight("A"))                     ,cex=1.2,adj=c(1,0),TE_text, font=1, col="black")
-  #text(par("usr")[2],(par("usr")[4]-3.0*strheight("A"))                     ,cex=1.2,adj=c(1,0),paste("I2 = ",I2,"% (",I2.L," to ",I2.U,")", sep=""), font=1, col="black")
-	
-  # Plot
-  if (output_type == "d")
-	  {
-	  # Which size to use?
-	  size <- nrow(data)
-	  #size <- size_population
-	  n <- seq(0, size, by = 1)
-	  #x <- seq(0, 1, by = 0.01) # No work
-	  #stop(paste("x: ",x, sep="")) # Works
-	  if (data_type == "m"){
-		densities<-dnorm(n, mean = proportion.population, sd = std.dev, log = FALSE) # *adjust
-	  }
-	  if (data_type == "p"){
-		densities<-dbinom(n, size = size, prob = proportion.population , log = FALSE) # *adjust
-	  }
-	  #stop(paste("densities: ",densities, sep="")) # Works
-	  adjust = 100/size
-	  adjust.axis = 100
-	  if (data_type == "m"){
-		adjust.axis<-1
-	  }
-	  plot (n*adjust, densities/adjust, type = "n", xlab="", ylab = "Probablity of result",
-			main = paste("Distribution of ",outcome_label," by ", subject_label,sep=""),xlim=c(0,100), ylim=c(0,0.5))
-	  mtext(paste("Results: proportion with ",outcome_label,sep=""), side=1, line = 3)
-	  #####
-	  x <- seq(0, size, by = 1)
-	  densities <-dbinom(x, size = size, prob = proportion.population , log = FALSE) # *adjust
-	  s <- spline(x*adjust, densities, xout=seq(0,100,by=1))
-	  lines(s, col = "black")
-
-	  #benchmark
-	  # '1+' in line below is key 02/24/2019
-	  segments(benchmark_value*adjust.axis,0,benchmark_value*adjust.axis,s$y[1+benchmark_value*adjust.axis], col="green")
-	  axis(1,at=benchmark_value*adjust.axis,labels="B", col.ticks="green", col.axis="green", col="green", font=2, lwd=2, padj=1.2, las = 1)
-	  
-	  #Indicate local rate
-	  axis(1,at=proportion.population*adjust.axis,labels="M", col.ticks="blue", col.axis="blue", col="blue", lwd=2, padj=1.2, las = 1)
-	  #text(proportion.population*size*adjust,0,paste("Mean rate: ",round(100*proportion.population,0),"%",sep=""),col="blue")
-	  
-	  #Ratings that qualify (> threshold_observations observations)
-	  data.threshold <-data[which(data$Observations >= threshold_observations),]
-	  (nrow(data.threshold))
-	  
-	  #Plot point(s) that qualify
-	  # '1+' in line below is key 02/24/2019
-	  points(data.threshold$Outcome.value*adjust.axis,s$y[1+data.threshold$Outcome.value*adjust.axis], col="black", pch=19, cex = 1)
-	  temp.list  <- unique(data.threshold$Outcome.value, incomparables = FALSE)
-
-	  duplicates <- 0
-	  for(i in 1:length(temp.list))
-	  {
-		temp.data <- data.threshold[which(data.threshold$Outcome.value == temp.list[i]),] 
-		temp.value <- nrow(temp.data)
-		if (temp.value > 1)
-		  {# '1+' in line below is key 02/24/2019
-		  duplicates <- 1.5
-		  text(temp.list[i]*adjust.axis,s$y[1+temp.data$Outcome.value*adjust.axis],temp.value, pos=3, col="black", font=1)
-		}
-	  }
-	  
-	  #Plot deviants in green
-	  if (!outcome_type == "NA"){
-		deviants <- data.threshold[which(data.threshold$Observations >= threshold_observations & data.threshold$Outcome.value < threshold_value),]
-		if (outcome_type =="g"){deviants <- data.threshold[which(data.threshold$Observations >= threshold_observations & data.threshold$Outcome.value > threshold_value),]}
-		(nrow(deviants))
-		#points(deviants$outcome*100,s$y[deviants$outcome*1000], col="red", pch=19, cex=1 + 0.5*(temp.value - 1))
-		(temp.list  <- unique(deviants$Outcome.value, incomparables = FALSE))
-		#temp.value <- min(deviants$outcome)
-		for(i in 1:length(temp.list))
-		{
-		  temp.data <- deviants[which(deviants$Outcome.value == temp.list[i]),] 
-		  temp.value <- nrow(temp.data)
-		  point.size <- 1 + 0.25*(temp.value - 1)
-		  point.size <- 1
-		  # '1+' in line below is key 02/24/2019
-		  points(temp.data$Outcome.value*adjust.axis,s$y[1+temp.data$Outcome.value*adjust.axis], col="green", pch=19, cex=point.size)
-		  if (temp.value > 1)
-			{# '1+' in line below is key 02/24/2019
-			text(temp.list[i]*adjust.axis,s$y[1+temp.data$Outcome.value*adjust.axis],temp.value, pos=3, col="green", font=2)
-			}
-		  #temp.data <- deviants[which(deviants$outcome != temp.value),] 
-		}
-		
-		(temp.list  <- unique(deviants$Subject, incomparables = FALSE))
-		(deviant.Outcomes <- sum(deviants$Outcomes))
-		(deviant.Observations <- sum(deviants$Observations))
-		(deviant.rate <- deviant.Outcomes/deviant.Observations)
-	  }	
-	  
-	  #Details
-	  textout0 <- paste("Summary:",sep="")
-	  textout1 <- paste("Number of ",subject_label," assessed: ",size," (observations: ",total,")",sep="")
-	  textout2 <- paste("Heterogeneity (I2): ",I2,"%",sep="")
-	  textout3 <- paste("       ... among ",subject_label," with ", threshold_observations," or more observations: ",round(100*min(data.threshold$Outcome.value),0),"% to ",round(100*max(data.threshold$Outcome.value),0),"%",sep="")
-	  if (!outcome_type == "NA"){
-		textout4 <- paste("       ... among positive deviants: ",round(100*min(deviants$Outcome.value),0),"% to ",round(100*max(deviants$Outcome.value),0),"%",sep="")
-		textout5 <- paste("Among local positive deviants:",sep="")
-		textout6 <- paste("  ",round(100*deviant.rate,0),"% (",deviant.Outcomes," of ",deviant.Observations," observations) have ",outcome_label,sep="")
-		if (data_type == "m"){
-		  textout6 <- paste("  ",4.75," is mean rating",sep="")
-		  }
-	  }
-	  textout10 <- paste("Legend:",sep="")
-	  textout11 <- paste("Points indicate ", subject_label, " with  ",threshold_observations," or more observations",sep="")
-	  textout12 <- paste("Numbers indicate number of ",subject_label," with that result (if > 1)",sep="")
-	  textout13 <- paste("M: mean is " ,round(proportion.population*100,0),"%",sep="")
-	  if (data_type == "m"){
-		textout13 <- paste("M: mean is " ,4.0,sep="")
-		}
-	  textout14 <- paste("B: ",benchmark_label,": " ,benchmark_value*100,"%",sep="")
-	  if (data_type == "m"){
-		textout14 <- paste("B: ",benchmark_label,": " ,benchmark_value,sep="")
-	  }
-	  # Now write the texts
-	  # Left-hand side of plot
-	  #if (proportion.population > 0){ #So always use this arrangement
-	  xpos <- par("usr")[1] + 2.0*strwidth("A")
-	  text(xpos,par("usr")[4]-2.0*strheight("A"),textout0,adj=c(0,0), cex=1.0, font = 2)
-	  #text(xpos,par("usr")[4]-3.5*strheight("A"),textout1,adj=c(0,0), cex=0.8)
-	  text(xpos,par("usr")[4]-3.5*strheight("A"),textout2,adj=c(0,0), cex=0.8)
-	  #text(xpos,par("usr")[4]-6.5*strheight("A"),textout3,adj=c(0,0), cex=0.8)
-	  #text(xpos,par("usr")[4]-8.0*strheight("A"),textout4,adj=c(0,0), cex=0.8)
-	  if (!outcome_type == "NA"){
-		text(xpos,par("usr")[4]-5*strheight("A"),textout5,col="black", font=1, adj=c(0,0), cex=0.8)
-		text(xpos,par("usr")[4]-6.5*strheight("A"),textout6,col="black", font=1, adj=c(0,0), cex=0.8)
-	  }
-	  # Right-hand side of plot
-	  xpos <- par("usr")[2] - 2.0*strwidth("A")
-	  text(xpos,par("usr")[4]-2.0*strheight("A"),textout10,adj=c(1,0), cex=1.0, font = 2)
-	  text(xpos,par("usr")[4]-3.5*strheight("A"),textout11,adj=c(1,0), cex=0.8)
-	  if (duplicates == 1.5)  {text(xpos,par("usr")[4]-5.0*strheight("A"),textout12,adj=c(1,0), cex=0.8)}
-	  text(xpos,par("usr")[4]-(5.0+duplicates)*strheight("A"),textout13,adj=c(1,0), cex=0.8, col="blue")
-	  if (benchmark_value != 0)  {text(par("usr")[2] - 2.0*strwidth("A"),par("usr")[4]-(6.5+duplicates)*strheight("A"),textout14,adj=c(1,0), font=2, cex=0.8, col="green")}
-	  
-	  #text(par("usr")[2]/3,par("usr")[3]+(par("usr")[4]-par("usr")[3])/2, "This example is three doctors, each with 1000 patients, \nwho have outcomes rates of 10%, 15%, 20%.\nWhat population percentile is the doctor with 10%?")
-		}
-  if (output_type == "f"){ # Forest plots-------------------------------------------------------------
-##* Identify deviants------------------
-left.deviants <- NULL
-right.deviants <- NULL
-for(i in 1:length(meta1$TE)){
-  # Simple adding of asterisk to deviants
-  # !!! may need inv.logit(meta1$TE.random) for proportions
-  if (meta1$upper[i]<(meta1$TE.random)){
-    left.deviants <- rbind(left.deviants,meta1$TE[i])}
-  if (meta1$lower[i]>=(meta1$TE.random)){
-    right.deviants <- rbind(right.deviants,meta1$TE[i])}
-  }
-(left.deviants)
-(right.deviants)
-
-##** Display attribution/names------------------
-for(i in 1:length(meta1$TE)){
-  # Replacing names as needed
-  if (displaynames == 'none'){meta1$studlab[i] <- meta1$data$ID[i]}
-  if (displaynames == 'selected'){
-    if (outcome_type == 'b' & meta1$TE[i] %notin% left.deviants){meta1$studlab[i] <- meta1$data$ID[i]}
-    if (outcome_type == 'g' & meta1$TE[i] %notin% right.deviants){meta1$studlab[i] <- meta1$data$ID[i]}
-    }
-  }
-meta1$studlab
-
-##** Asterisk to deviants------------------
-for(i in 1:length(meta1$TE)){
-  # Simple adding of asterisk to deviants
-  if (meta1$upper[i]<(meta1$TE.random)){
-    meta1$studlab[i] <- paste(meta1$studlab[i],"*",sep="");
-    left.deviants <- rbind(left.deviants,meta1$data[i,'mean'])}
-if (meta1$lower[i]>=(meta1$TE.random)){
-  meta1$studlab[i] <- paste(meta1$studlab[i],"*",sep="");
-  right.deviants <- rbind(right.deviants,meta1$data[i,'mean'])}
-
+if (sortby=="cofactor1")
+	{
+	sortvalue <- myframe$cofactor1
+	}
+if (sortby=="cofactor2")
+	{
+	sortvalue <- myframe$cofactor2
+	}
+if (sortby=="cofactor3")
+	{
+	sortvalue <- myframe$cofactor3
+	}
+if (sortby=="cofactor4")
+	{
+	sortvalue <- myframe$cofactor4
+	}
+if (sortby=="cofactor5")
+	{
+	sortvalue <- myframe$cofactor5
+	}
+if (sortby=="cofactor6")
+	{
+	sortvalue <- myframe$cofactor6
+	}
+if (sortby=="cofactor7")
+	{
+	sortvalue <- myframe$cofactor7
+	}
+if (sortby=="cofactor8")
+	{
+	sortvalue <- myframe$cofactor8
+	}
+if (sortby=="cofactor9")
+	{
+	sortvalue <- myframe$cofactor9
+	}
+if (sortby=="cofactor10")
+	{
+	sortvalue <- myframe$cofactor10
+	}
+if (sortby=="baseline")
+	{
+	if (PosParenth1 > 0)
+		{sortvalue <- myframe$control_mean}
+	else
+		{sortvalue <- myframe$control_events/myframe$control_total}
+	}
+if (sortby=="year")
+	{
+	sortvalue <- myframe$year
+	}
+if (sortby=="study")
+	{
+	sortvalue <- myframe$Study
+	}
+for(i in 1:length(myframe$Study))
+{
+if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
+	{
+	# Continuity correction?
+	#myframe$exp_events[i] == 0.5 
+	#myframe$control_events[i] == 0.5
+	}
 }
-meta1$studlab
-
-##* Forest plot ----------------------------------------------------
-		  forest(meta1, 
-			 leftcols=c("studlab","event","n"),
-			 leftlabs=c(subject_label,outcome_label,"Observations"), 
-			 ref = benchmark_value,
-			 print.I2.ci = TRUE, print.tau2=FALSE, print.Q=FALSE,print.pval.Q=FALSE,studlab= meta1$studlab ,xlim=c(0,1))
-		# Title
-		grid.text(topic, 0.5, 0.95, gp=gpar(cex=1.4))
-		#Footer
-		if (!is.na(benchmark_value)){
-			grid.text('Notes:', 0.08, 0.08, hjust=0, gp=gpar(cex=1, font=2))
-			Footer <- NULL
-			Footer <- paste(Footer,"Goal is ", benchmark_label, ": ", benchmark_value, " (solid vertical line)")
-			grid.text(Footer, 0.08, 0.06, hjust=0, gp=gpar(cex=1, font=1))
+attach(myframe)
+KUBlue = "#0022B4"
+SkyBlue = "#6DC6E7"
+pubbiastext = "Test for funnel plot asymmetry"
+#analyticmethod = "Random effects model"
+#if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
+if (analysis == 'RE-Knapp-Hartung'){
+  hartung = TRUE
+  Comb.Fixed = FALSE
+  Comb.Random = TRUE
+  analyticmethod = "Random effects model (Hartung-Knapp)"
+}else if (analysis == 'RE'){
+  hartung = FALSE
+  Comb.Fixed = FALSE
+  Comb.Random = TRUE
+  analyticmethod = "Random effects model"
+}else{ # FE - fixed effects
+  hartung = FALSE
+  Comb.Fixed = TRUE
+  Comb.Random = FALSE
+  analyticmethod = "Fixed effects model"
+}
+#par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
+if (type=="ignore")
+	{
+	# from http://cran.r-project.org/web/packages/meta/
+	if (PosParenth1 > 0)
+		{
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
+		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
+		#Publication bias
+		if (length(myframe$Study)>9)
+			{
+			pubbias = metabias(meta1, method.bias="linreg", plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Egger): p= ",round(pubbias$p.value,3),sep="");
 			}
-  		}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
+		}
+	else
+		{
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, method="Inverse", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
+		xlimits=c(0.1, 10)
+		#Publication bias / small study effect
+		if (length(myframe$Study)>5)
+			{
+			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+			pubbias = metabias(meta1.as, plotit=FALSE,k.min=6)
+			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),' (may be falsely significant if < 10 studies)',sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
+		}
+	if (sortby=="weight")
+		{
+		sortvalue <- 1/meta1$w.random
+		}
+	#stop(paste(topic,lefthand, righthand, sep=", "))
+	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, fixed=FALSE, random=TRUE, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
+	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
+	#main=textGrob(topic, gp=gpar(cex=3), just="top")
+	grid.text(pubbiastext, 0.1, 0.02, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	}
+if (grepl("subgroup",type))
+	{
+	# from http://cran.r-project.org/web/packages/meta/
+	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
+	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
+	if (PosParenth1 > 0)
+		{
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
+		#Publication bias
+		if (length(myframe$Study)>9)
+			{
+			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure)
+			pubbias = metabias(meta1.egger, method.bias="linreg", plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Egger): p= ",round(pubbias$p.value,3),sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
+		}
+	else
+		{
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		xlimits=c(0.1, 10)
+		#Publication bias / small study effect
+		if (length(myframe$Study)>9)
+			{
+			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+			pubbias = metabias(meta1.as, plotit=FALSE)
+			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
+			}
+		else
+			{
+			pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+			}
+		}
+	if (sortby=="weight")
+		{
+		sortvalue <- 1/meta1$w.random
+		}
+	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, fixed=FALSE, random=TRUE, resid.hetstat = TRUE,
+	       print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
+	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	#Test for subgroup differences
+	#Hartung-Knapp gives Q = 0 if a subgroup has single member
+	# 03/2022 not needed in meta now as automatic
+	#meta1 <- update(meta1,hakn = FALSE)
+	#byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
+	#byvartext = sprintf(byvartext, fmt='%#.3f');
+	#byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
+	#grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	}
+if (type=="metaregression")
+	{
+	if (independent_variable=="year"){
+		myframe$x <- as.numeric(myframe$year)
+		}
+		else{
+			if (independent_variable=="size"){
+				myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
+				}else{
+				if (independent_variable=="size"){
+					myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
+					}else{
+						if (independent_variable=="cr"){
+							#Nothing now, assign after '(' checked for
+						}else{
+							myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
+							}
+						}
+					}
+				}
+    #stop(paste("stop with: ",PosParenth1, sep=""))
+	attach(myframe)
+	if (PosParenth1 > 0){
+		#stop(paste(topic,myframe["Study"], sep=", "))
+		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
+		# Removing studies with missing data
+		myframe[order(myframe$x, na.last = NA),]
+		myframe <- na.omit(myframe)
+		# Meta-analysis
+		dat <- escalc(measure="MD", m1i=exp_mean, sd1i=exp_sd, n1i=exp_total, m2i=control_mean, sd2i=control_sd, n2i=control_total, data=myframe)
+		res <- rma.uni(yi, vi, mods = ~ myframe$x,  method="DL", knha=TRUE, data=dat, intercept = TRUE)
+		ylabel = "Mean difference"
+		}
+	else{
+		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
+		# Removing studies with missing data
+		myframe[order(myframe$x, na.last = NA),]
+		myframe <- na.omit(myframe)
+		# Meta-analysis
+		dat <- escalc(measure="OR", ai=exp_events, bi=exp_total-exp_events, ci=control_events, di=control_total-control_events, data=myframe)
+		res <- rma(yi, vi, mods = ~ myframe$x, data=dat)
+		ylabel = "Odds ratio transformed to natural log (ln)"
+		}
+	# Make confidence limits
+	cofactor.range = seq(min(myframe$x), max(myframe$x), (max(myframe$x) - min(myframe$x))/100)
+	preds <- predict(res, newmods=cofactor.range)
+	preds <- data.frame(cofactor.range,preds$pred,preds$ci.lb,preds$ci.ub)
+	# Calculate point sizes by rescaling the standard errors
+	wi    <- 1/sqrt(dat$vi)
+	size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
+	plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
+		xlab="", ylab=ylabel, main=paste("Meta-regression of ", topic),
+		xlim=c(min(dat$x)-0.1*(max(dat$x)-min(dat$x)),max(dat$x)+0.1*(max(dat$x)-min(dat$x))),
+		ylim=c(min(dat$yi),max(dat$yi)+0.15*(max(dat$yi)-min(dat$yi))),
+		las=1, bty="l")
+	if ( cofactorlabel != "")
+		{
+		mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
+		}
+	lines(preds$cofactor.range, preds$preds.pred)
+	lines(preds$cofactor.range, preds$preds.ci.lb, lty="dashed", col="blue")
+	lines(preds$cofactor.range, preds$preds.ci.ub, lty="dashed", col="blue")
+	#text(par("usr")[2],par("usr")[4]-1.25*strheight("A"),cex=1.2,adj=c(1,0),paste("p (correlation) = ",sprintf(res$pval[2], fmt='%#.3f'), sep=""), font=1)
+	#text(par("usr")[2],par("usr")[4]-2.25*strheight("A")-0.5*strheight("A"),cex=1.2,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
+	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")                     ,cex=1,adj=c(1,0),paste("R2 = ",round(res$R2),"% (QM = ",sprintf(res$QM, fmt='%#.1f'),", p = ",sprintf(res$pval[2], fmt='%#.3f'), ")", sep=""), font=1)
+	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")-1.4*strheight("A")  ,cex=1,adj=c(1,0),paste("Regression coefficient = ",sprintf(res$b[2], fmt='%#.1f'), sep=""), font=1)
+	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")-2.8*strheight("A")  ,cex=1,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
+	abline(h=0, lty="dotted")
+	if (label_location > 0)
+		{
+		text(dat$x, dat$yi, paste(dat$Study,", ",dat$year, sep=""), cex=.9, pos = label_location, offset = 1, col=dat$color)
+		}
+	legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
+	}
+#if(theme=="KU"){display_logo(x=1.2,y=0.05)}
 }
