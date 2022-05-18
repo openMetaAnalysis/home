@@ -61,7 +61,7 @@ myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
 myframe$registration <-as.character(str_trim(myframe$registration))
 #myframe$registration <- ifelse(myframe$registration %in% c('NA','na',''), 'Registration: no/unknown', 'Registration: yes')
 myframe$registration <- ifelse(toupper(myframe$registration) %in% c('NO'), 'Registration: no', ifelse(toupper(myframe$registration) %in% c('NA',''), 'Registration: unknown', 'Registration: yes'))
-stop(paste("stop line 64 with: ",myframe$registration, sep=", "))
+#stop(paste("stop line 64 with: ",myframe$registration, sep=", "))
 
 #stop(independent_variable)
 if (type == 'subgroup.registration'){myframe$cofactor <- myframe$registration}
@@ -76,7 +76,7 @@ if (type == 'subgroup8' || independent_variable == 'cf8'){myframe$cofactor <- my
 if (type == 'subgroup9' || independent_variable == 'cf9'){myframe$cofactor <- myframe$cofactor9}
 if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- myframe$cofactor10}
 
-PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
+PosParenth1 <- regexpr("(", myframe$exp_events[1], fixed=TRUE)
 if (PosParenth1 > 0)
 	{
 	PosParenth2 <-regexpr(")", myframe$exp_events, fixed=TRUE)
