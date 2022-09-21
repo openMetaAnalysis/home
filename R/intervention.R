@@ -189,7 +189,7 @@ if (analysis == 'RE-Knapp-Hartung'){
 if (type=="ignore") # Meta-analysis without subgroup
 	{
 	# from http://cran.r-project.org/web/packages/meta/
-	if (PosParenth1 > 0)
+	if (measure %in% c('RR','MD','SMD')) #means
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
 		stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
@@ -237,7 +237,7 @@ if (grepl("subgroup",type))
 	# from http://cran.r-project.org/web/packages/meta/
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
-	if (PosParenth1 > 0)
+	if (measure %in% c('RR','MD','SMD')) #means
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
@@ -308,7 +308,8 @@ if (type=="metaregression")
 				}
     #stop(paste("stop with: ",PosParenth1, sep=""))
 	attach(myframe)
-	if (PosParenth1 > 0){
+	if (measure %in% c('RR','MD','SMD'))  #means
+		{
 		#stop(paste(topic,myframe["Study"], sep=", "))
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
 		# Removing studies with missing data
