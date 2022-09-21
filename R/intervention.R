@@ -38,7 +38,7 @@ if (first.row.header == TRUE){x <- x[-c(1),]}
 x <- x[!(is.na(as.numeric(x[,2])) == TRUE),]
 
 column.names <- c("Study","year", "pmid", "registration","exp_events", "exp_total","control_events","control_total")
-for(i in 8: num.cofactors)
+for(i in 1: num.cofactors)
 	{
 	column.names<- append(column.names,paste('cofactor',i,sep=""))
 	}
@@ -47,7 +47,7 @@ myframe <- data.frame (x)
 
 # Remove bad rows	
 myframe <- na.omit(myframe)
-# COmmented out below 2021-08-07
+# Commented out below 2021-08-07
 # myframe <- myframe[complete.cases(myframe), ]
 # myframe <- myframe[!(as.numeric(myframe$exp_total) == 0 & as.numeric(myframe$control_total) == 0),]
 # myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
