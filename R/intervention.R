@@ -79,13 +79,14 @@ if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- 
 PosParenth1 <- regexpr("(", myframe$exp_events[1], fixed=TRUE)
 if (PosParenth1 > 0)
 	{
-	PosParenth2 <-regexpr(")", myframe$exp_events, fixed=TRUE)
-	myframe$exp_mean<-as.numeric(substring(myframe$exp_events, 1, PosParenth1 - 1))
-	myframe$exp_sd<-as.numeric(substring(myframe$exp_events, PosParenth1 + 1, PosParenth2 - 1))
-	PosParenth1 <-regexpr("(", myframe$control_events, fixed=TRUE)
-	PosParenth2 <-regexpr(")", myframe$control_events, fixed=TRUE)
-	myframe$control_mean<-as.numeric(substring(myframe$control_events, 1, PosParenth1 - 1))
-	myframe$control_sd<-as.numeric(substring(myframe$control_events, PosParenth1 + 1, PosParenth2 - 1))
+	PosParenth1          <- regexpr("(", myframe$exp_events, fixed=TRUE)
+	PosParenth2          <- regexpr(")", myframe$exp_events, fixed=TRUE)
+	myframe$exp_mean     <- as.numeric(substring(myframe$exp_events, 1, PosParenth1 - 1))
+	myframe$exp_sd       <- as.numeric(substring(myframe$exp_events, PosParenth1 + 1, PosParenth2 - 1))
+	PosParenth1          <- regexpr("(", myframe$control_events, fixed=TRUE)
+	PosParenth2          <- regexpr(")", myframe$control_events, fixed=TRUE)
+	myframe$control_mean <- as.numeric(substring(myframe$control_events, 1, PosParenth1 - 1))
+	myframe$control_sd   <- as.numeric(substring(myframe$control_events, PosParenth1 + 1, PosParenth2 - 1))
 	}
 else
 	{
