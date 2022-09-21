@@ -257,7 +257,6 @@ if (grepl("subgroup",type))
 	else
 		{
 		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
-		stop(paste("stop line 260 with: ", meta1, sep=", "))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
@@ -275,6 +274,7 @@ if (grepl("subgroup",type))
 		{
 		sortvalue <- 1/meta1$w.random
 		}
+	stop(paste("stop line 277 with: ", meta1, sep=", "))
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, commmon=FALSE, random=TRUE, resid.hetstat = TRUE,
 	       print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
