@@ -38,7 +38,7 @@ if (first.row.header == TRUE){x <- x[-c(1),]}
 x <- x[!(is.na(as.numeric(x[,2])) == TRUE),]
 
 column.names <- c("Study","year", "pmid", "registration","exp_events", "exp_total","control_events","control_total")
-for(i in num.columns: num.cofactors)
+for(i in 8: num.cofactors)
 	{
 	column.names<- append(column.names,paste('cofactor',i,sep=""))
 	}
