@@ -185,7 +185,8 @@ if (analysis == 'RE-Knapp-Hartung'){
   analyticmethod = "Fixed effects model"
 }
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
-if (type=="ignore")
+stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
+if (type=="ignore") # Meta-analysis without subgroup
 	{
 	# from http://cran.r-project.org/web/packages/meta/
 	if (PosParenth1 > 0)
