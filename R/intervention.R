@@ -274,7 +274,7 @@ if (grepl("subgroup",type))
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	stop(paste("stop line 277 with: ", lefthand, ', ', righthand, ', ', analyticmethod, ', ', sep=", "))
+	stop(paste("stop line 277 with: ", sortvalue, lefthand, righthand, analyticmethod, sep=", "))
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", commmon=FALSE, random=TRUE, resid.hetstat = TRUE,
 	       print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	stop(paste("stop line 280 with: ", meta1, sep=", "))
