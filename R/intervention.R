@@ -257,6 +257,7 @@ if (grepl("subgroup",type))
 	else
 		{
 		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		stop(paste("stop line 260 with: ", meta1, sep=", "))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
