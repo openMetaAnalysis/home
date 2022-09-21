@@ -185,12 +185,13 @@ if (analysis == 'RE-Knapp-Hartung'){
   analyticmethod = "Fixed effects model"
 }
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
-stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
+#stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
 if (type=="ignore") # Meta-analysis without subgroup
 	{
 	# from http://cran.r-project.org/web/packages/meta/
 	if (PosParenth1 > 0)
 		{
+		stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
