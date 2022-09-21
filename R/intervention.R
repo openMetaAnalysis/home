@@ -38,7 +38,7 @@ if (first.row.header == TRUE){x <- x[-c(1),]}
 x <- x[!(is.na(as.numeric(x[,2])) == TRUE),]
 
 column.names <- c("Study","year", "pmid", "registration","exp_events", "exp_total","control_events","control_total")
-for(i in 1: num.cofactors)
+for(i in num.columns: num.cofactors)
 	{
 	column.names<- append(column.names,paste('cofactor',i,sep=""))
 	}
@@ -189,7 +189,7 @@ if (analysis == 'RE-Knapp-Hartung'){
 if (type=="ignore") # Meta-analysis without subgroup
 	{
 	# from http://cran.r-project.org/web/packages/meta/
-	if (measure %in% c('RR','MD','SMD')) #means
+	if (measure %in% c('ROM','MD','SMD')) #means
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
 		#stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
@@ -237,7 +237,7 @@ if (grepl("subgroup",type))
 	# from http://cran.r-project.org/web/packages/meta/
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
-	if (measure %in% c('RR','MD','SMD')) #means
+	if (measure %in% c('ROM','MD','SMD')) #means
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
