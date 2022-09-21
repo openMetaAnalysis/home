@@ -191,8 +191,8 @@ if (type=="ignore") # Meta-analysis without subgroup
 	# from http://cran.r-project.org/web/packages/meta/
 	if (PosParenth1 > 0)
 		{
-		stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
+		stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
