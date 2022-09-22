@@ -379,8 +379,9 @@ if (type=="funnel")
 	funnel(meta1, common = TRUE)
 	if (length(meta1$studlab)>5)
 		{
-		meta1.as <- update(meta1, sm = "ASD") # This is optional
-		pubbias = metabias(meta1.as, plotit=FALSE)
+		meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+		#meta1.as <- update(meta1, sm = "ASD", method="I") 
+		pubbias = metabias(meta1.as, plotit=FALSE,k.min=6)
 		pubbiastext = paste(pubbiastext, ":\np (Rucker) = ",round(pubbias$p.value,3),' (may be falsely significant if < 10 studies)',sep="");
 		}
 	else
