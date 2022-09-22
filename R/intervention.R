@@ -388,7 +388,7 @@ if (type=="funnel")
 		pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
 		}
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold")) # Displays behind
-	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	grid.text(pubbiastext, 0.125, 0.75, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
 }
