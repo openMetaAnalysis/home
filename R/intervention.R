@@ -366,5 +366,21 @@ if (type=="metaregression")
 		}
 	legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
 	}
+if (type=="funnel")
+	{
+	funnel(meta1, common = TRUE)
+	if (length(meta1$studlab)>9)
+		{
+		meta1.as <- update(meta1, sm = "ASD") # This is optional
+		pubbias = metabias(meta1.as, plotit=FALSE)
+		pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
+		}
+	else
+		{
+		pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+		}
+	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold")) # Displays behind
+	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
 }
