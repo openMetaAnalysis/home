@@ -377,15 +377,15 @@ if (type=="funnel")
 		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		}
 	funnel(meta1, common = TRUE)
-	if (length(meta1$studlab)>9)
+	if (length(meta1$studlab)>5)
 		{
 		meta1.as <- update(meta1, sm = "ASD") # This is optional
 		pubbias = metabias(meta1.as, plotit=FALSE)
-		pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
+		pubbiastext = paste(pubbiastext, ":\np (Rucker) = ",round(pubbias$p.value,3),' (may be falsely significant if < 10 studies)',sep="");
 		}
 	else
 		{
-		pubbiastext = paste(pubbiastext,": too few studies to test",sep="")
+		pubbiastext = paste(pubbiastext,":\ntoo few studies to test",sep="")
 		}
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold")) # Displays behind
 	grid.text(pubbiastext, 0.125, 0.8, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
