@@ -368,6 +368,14 @@ if (type=="metaregression")
 	}
 if (type=="funnel")
 	{
+	if (measure %in% c('ROM','MD','SMD')) #means
+		{
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		}
+		else # binary
+		{
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		}
 	funnel(meta1, common = TRUE)
 	if (length(meta1$studlab)>9)
 		{
