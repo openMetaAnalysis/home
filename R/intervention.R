@@ -313,7 +313,7 @@ if (type=="metaregression")
 				}
     #stop(paste("stop with: ",PosParenth1, sep=""))
 	attach(myframe)
-	if (measure %in% c('RR','MD','SMD'))  #means
+	if (measure %in% c('MD','SMD'))  #means
 		{
 		#stop(paste(topic,myframe["Study"], sep=", "))
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
