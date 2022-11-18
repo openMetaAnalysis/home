@@ -392,4 +392,4 @@ if (type=="funnel")
 	grid.text(pubbiastext, 0.125, 0.8, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
-}
+}  
