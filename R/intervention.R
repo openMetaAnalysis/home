@@ -281,6 +281,7 @@ if (grepl("subgroup",type))
 	#stop(paste("stop line 277 with: ", sortvalue, lefthand, righthand, analyticmethod, sep=", "))
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", 
 			fixed = FALSE, common = FALSE, random = TRUE, 
+			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
 			#resid.hetstat = TRUE, 
 			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
