@@ -1,4 +1,4 @@
-#Uses http://cran.r-project.org/web/packages/meta/   
+#Uses http://cran.r-project.org/web/packages/meta/     
 #Alternatives:f
 # http://cran.r-project.org/web/packages/metafor/ (allows continuity correction)
 # http://cran.r-project.org/web/packages/rmeta/
