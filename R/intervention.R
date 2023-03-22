@@ -171,18 +171,18 @@ pubbiastext = "Test for funnel plot asymmetry"
 #if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
 if (analysis == 'RE-Knapp-Hartung'){
   hartung = TRUE
-  Comb.Fixed = FALSE
-  Comb.Random = TRUE
+  Fixed = FALSE
+  Random = TRUE
   analyticmethod = "Random effects model (Hartung-Knapp)"
 }else if (analysis == 'RE'){
   hartung = FALSE
-  Comb.Fixed = FALSE
-  Comb.Random = TRUE
+  Fixed = FALSE
+  Random = TRUE
   analyticmethod = "Random effects model"
 }else{ # FE - fixed effects
   hartung = FALSE
-  Comb.Fixed = TRUE
-  Comb.Random = FALSE
+  Fixed = TRUE
+  Random = FALSE
   analyticmethod = "Fixed effects model"
 }
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
