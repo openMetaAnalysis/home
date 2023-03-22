@@ -228,9 +228,9 @@ if (type=="ignore") # Meta-analysis without subgroup
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
 	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, 
-			fixed=FALSE, common=FALSE, random=TRUE, 
+			fixed = FALSE, common = FALSE, random = TRUE, 
 			#resid.hetstat = TRUE, 
-			print.I2.ci=TRUE, print.tau2=FALSE, print.p=TRUE, 
+			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
@@ -282,7 +282,7 @@ if (grepl("subgroup",type))
 	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", 
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			#resid.hetstat = TRUE, 
-			print.I2.ci=TRUE, print.tau2=FALSE, print.p=TRUE, 
+			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
