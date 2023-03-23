@@ -216,13 +216,23 @@ $( "#dialog" ).dialog();
 		editor.setValue("Wells, 2012, 12345678, NA, 50, 100, 50, 100, high-dose,\nFord,  2013, 12345678, NA, 26, 100, 50, 100, low-dose,\nFreud, 2014, 12345678, NA, 50, 100, 50, 100, high-dose,\nPavlov, 2015, 12345678, NA, 24, 100, 50, 100, low-dose,\nMalthus,2016, 12345678, NA, 50, 100, 50, 100, high-dose,",1);
 		}
 	if($(this).val()=="ex_0b") {
-		$("#type").val("subgroup.registration");
+		$("#type").val("ignore");
 		$("#metaregression_form").css("display","none");
 		$("#metaanalysis_form").css("display","block");
 		$("#cofactorlabel").css("display","none");
 		$("#measure").val("SMD");
 		$("#sortby").val("year");
 		$("#topic").val("Chronic back pain treatment from tramadol (from PMID: 29204613)");
+		editor.setValue("Schnitzer,2000,10743823, NA, 3.5(2.79),127, 5.1(2.98),127,Trial not prospectively registered,4,\nRuoff  (Protocol CAPSS-112 Study Group),2003,12809961, NA, 4.44(1.45),161,5.23(1.49),157,Trial not prospectively registered,13,\nPeloso,2004,15570651,NA,4.74(1.495),167,6.29(1.553),169,Trial not prospectively registered,12,\nVorsanger,2008,18557165,NA,3.05(2.3),127,4.03(2.52),126,Trial not prospectively registered,12,\nUberall (SUPREME), 2012,22970658,Yes,3.9(2),107, 4.1(4.1),110,Trial registered,4,\nLee (Ultracet ER Study Group),2013,24183364,Yes,-1.012(0.819),83,-0.792(0.966),87,Trial registered,4,\nSchiphorst,2014,24526247,Yes,5.1(2.81),24,4.5(2.96),25,Trial registered,2,",1);
+		}
+	if($(this).val()=="ex_0c") {
+		$("#type").val("subgroup.registration");
+		$("#metaregression_form").css("display","none");
+		$("#metaanalysis_form").css("display","block");
+		$("#cofactorlabel").css("display","none");
+		$("#measure").val("SMD");
+		$("#sortby").val("year");
+		$("#topic").val("Chronic back pain treatment from tramadol,by trial registration (from PMID: 29204613)");
 		editor.setValue("Schnitzer,2000,10743823, NA, 3.5(2.79),127, 5.1(2.98),127,Trial not prospectively registered,4,\nRuoff  (Protocol CAPSS-112 Study Group),2003,12809961, NA, 4.44(1.45),161,5.23(1.49),157,Trial not prospectively registered,13,\nPeloso,2004,15570651,NA,4.74(1.495),167,6.29(1.553),169,Trial not prospectively registered,12,\nVorsanger,2008,18557165,NA,3.05(2.3),127,4.03(2.52),126,Trial not prospectively registered,12,\nUberall (SUPREME), 2012,22970658,Yes,3.9(2),107, 4.1(4.1),110,Trial registered,4,\nLee (Ultracet ER Study Group),2013,24183364,Yes,-1.012(0.819),83,-0.792(0.966),87,Trial registered,4,\nSchiphorst,2014,24526247,Yes,5.1(2.81),24,4.5(2.96),25,Trial registered,2,",1);
 		}
 	  if($(this).val()=="ex_1a") {
@@ -750,6 +760,7 @@ Parks, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
 			<h3 style="margin-bottom:0px">Teaching example 2: back pain treatment with tramadol</h3>
 			<div >From PMID <a href="http://pubmed.gov/29204613">29204613</a>. Note that the trial by Lee was prospectively registered, the primary outcome in the publication was <i>not</i> prospectively registered.</div>
 			<div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b" /><label for="ex_0">Tramadol dataset</label>
+			<div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c" /><label for="ex_0">Tramadol dataset, subgrouped</label>
 			</div>
 		  
 		  <h3 style="margin-bottom:0px">Meta-analysis of binary outcomes</h3>
@@ -779,6 +790,7 @@ Parks, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
 				</div>
 			</div>
 			<h3 style="margin-bottom:0px">Meta-regression</h3>
+		  <!--
 		  <div >Example: <a href="https://github.com/openMetaAnalysis/Vitamin-D-for-fracture-prevention/blob/master/README.md">vitamin D for the prevention of osteoporotic fractures</a>.</div>
 			<div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Meta-regression of final Vitamin D level.</label>
 			<i class="teach">What is the relationship between the final vitamin D level and the risk of fracture?</i>
@@ -787,6 +799,7 @@ Parks, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
 			<i class="teach">What is the relationship between the change in vitamin D level and the risk of fracture?</i>
 			</div>
 			<div>&nbsp;</div>
+			-->
 		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">Early goal-directed therapy for reducing mortality from septic shock</a>.</div>
 			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_3c"/><label for="ex_3c">Meta-regression of reduction in mortality by baseline lactate level</label> 
 			<i class="teach">What is the relationship between reduction in mortality and the baseline serum lactate? How about with the morality in the control group?</i>
