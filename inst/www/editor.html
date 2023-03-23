@@ -290,7 +290,18 @@ $( "#dialog" ).dialog();
 		$("#sortby").val("cofactor");
 		editor.setValue("Law, 2006, 16641143, NA,24, 1762, 20, 1955, 18,\nLips, 1996, 8554248, NA,135, 1291, 122, 1287, 27,\nLyons, 2007, 17473911, NA,202, 1725, 209, 1715, 26,\nTrivedi, 2003, 12609940, NA,43, 1345, 62, 1341, 20.9,\nChapuy, 1994, 8173430, NA,255, 1176, 308, 1127, 66,\nChapuy, 2002, 11991447, NA,97, 393, 55, 190, 56.2,\nDawson-Hughes, 1997, 9278463, NA,11, 187, 26, 202, 35.2,\nGrant, 2005, 15885294, NA,349, 2649, 341, 2643, 24,\nHarwood, 2000, 14695863, NA,8, 114, 5, 37, 20.5,\nJackson, 2006, 16481635, NA,2102, 18176, 2158, 18106, 13.4,\nMeyer, 2002, 11918228, NA,69, 569, 76, 575, 17,\nPfeifer, 2000, 10841179, NA,3, 70, 6, 67, 40.4,\nPfeifer, 2009, 18629569, 9, 121, 16, 121, 29.1,\nSalovaara, 2010, 20200964, NA,78, 1586, 94, 1609, 24.6,\nSanders, 2010, 20460620, NA,171, 1131, 135, 1125, 8,\n",1);
 		}
-	if($(this).val()=="ex_3c") {
+	if($(this).val()=="ex_5a") {
+		$("#type").val("ignore");
+		$("#measure").val("RR");
+		$("#topic").val("Early Goal-directed Therapy for Reducing Mortality in Septic Shock");
+		$("#metaregression_form").css("display","block");
+		$("#metaanalysis_form").css("display","none");
+		$("#independent_variable").val("cf1");
+		$("#cofactorlabel").css("display","none");
+		$("#sortby").val("year");
+		editor.setValue("Rivers,            2001,11794169,NA,  38, 130,  59, 133, 7.4,\nEGDT Collaborative,2010,20594464,  NA,55, 157,  74, 146, NA,\nChen,              2007,18159013,  NA,20,  58,  34,  65, NA,\nProCESS,           2014,24635773, NA, 92, 439,  86, 456, 4.9,\nARISE,             2014,25272316, NA,115, 793, 125, 798, 6.6,\nProMISe,           2015,25776532, NA,184, 630, 181, 630, 6.9,\n\n",1);
+		}
+	if($(this).val()=="ex_5b") {
 		$("#type").val("metaregression");
 		$("#measure").val("RR");
 		$("#topic").val("Early Goal-directed Therapy for Reducing Mortality in Septic Shock");
@@ -298,6 +309,17 @@ $( "#dialog" ).dialog();
 		$("#metaanalysis_form").css("display","none");
 		$("#independent_variable").val("cf1");
 		$("#cofactorlabel").val("Lactate acid level at baseline");
+		$("#sortby").val("cofactor");
+		editor.setValue("Rivers,            2001,11794169,NA,  38, 130,  59, 133, 7.4,\nEGDT Collaborative,2010,20594464,  NA,55, 157,  74, 146, NA,\nChen,              2007,18159013,  NA,20,  58,  34,  65, NA,\nProCESS,           2014,24635773, NA, 92, 439,  86, 456, 4.9,\nARISE,             2014,25272316, NA,115, 793, 125, 798, 6.6,\nProMISe,           2015,25776532, NA,184, 630, 181, 630, 6.9,\n\n",1);
+		}
+	if($(this).val()=="ex_5c") {
+		$("#type").val("metaregression");
+		$("#measure").val("RR");
+		$("#topic").val("Early Goal-directed Therapy for Reducing Mortality in Septic Shock");
+		$("#metaregression_form").css("display","block");
+		$("#metaanalysis_form").css("display","none");
+		$("#independent_variable").val("cr");
+		$("#cofactorlabel").val("Control event rate");
 		$("#sortby").val("cofactor");
 		editor.setValue("Rivers,            2001,11794169,NA,  38, 130,  59, 133, 7.4,\nEGDT Collaborative,2010,20594464,  NA,55, 157,  74, 146, NA,\nChen,              2007,18159013,  NA,20,  58,  34,  65, NA,\nProCESS,           2014,24635773, NA, 92, 439,  86, 456, 4.9,\nARISE,             2014,25272316, NA,115, 793, 125, 798, 6.6,\nProMISe,           2015,25776532, NA,184, 630, 181, 630, 6.9,\n\n",1);
 		}
@@ -800,8 +822,10 @@ Parks, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
 			</div>
 			<div>&nbsp;</div>
 			-->
-		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">Early goal-directed therapy for reducing mortality from septic shock</a>.</div>
-			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_3c"/><label for="ex_3c">Meta-regression of reduction in mortality by baseline lactate level</label> 
+		  <div >Example: <a href="https://openmetaanalysis.github.io/sepsis/">Early goal-directed therapy for reducing mortality from septic shock</a>.</div>
+			<div><input type="radio" name="example" class="example" value="ex_3c" id="ex_5a"/><label for="ex_3c">Meta-analysis of reduction in mortality</label> 
+			<div><input type="radio" name="example" class="example" value="ex_3d" id="ex_5b"/><label for="ex_3c">Meta-regression of reduction in mortality by baseline lactate level</label> 
+			<div><input type="radio" name="example" class="example" value="ex_3e" id="ex_5c"/><label for="ex_3c">Meta-regression of reduction in mortality by control event rate</label> 
 			<i class="teach">What is the relationship between reduction in mortality and the baseline serum lactate? How about with the morality in the control group?</i>
 			</div>
 	  </fieldset>
