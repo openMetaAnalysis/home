@@ -171,6 +171,10 @@ $( "#dialog" ).dialog();
 		{
 		$("#cofactorlabel").val("Control rate");
 		}
+    else if($("#independent_variable").val() == "tr")
+		{
+		$("#cofactorlabel").val("Treatment rate");
+		}
     else if($("#independent_variable").val() == "size")
 		{
 		$("#cofactorlabel").val("Study size");
@@ -719,6 +723,7 @@ Parks, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
               <option value="size">Study size</option>
               <option value="year">Year</option>
               <option value="cr">Control rate</option>
+              <option value="tr">Treatment rate</option>
               <option value="cf1">Cofactor 1</option>
               <option value="cf2">Cofactor 2</option>
               <option value="cf3">Cofactor 3</option>
