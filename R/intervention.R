@@ -309,7 +309,7 @@ if (type=="metaregression")
 				if (independent_variable=="size"){
 					myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
 					}else{
-						if (independent_variable=="cr"){
+						if (independent_variable=="cr" | independent_variable=="tr"){
 							#Nothing now, assign after '(' checked for
 						}else{
 							myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
@@ -323,6 +323,7 @@ if (type=="metaregression")
 		{
 		#stop(paste(topic,myframe["Study"], sep=", "))
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
+		if (independent_variable=="tr"){myframe$x <- myframe$exp_total/myframe$control_total}
 		# Removing studies with missing data
 		myframe[order(myframe$x, na.last = NA),]
 		myframe <- na.omit(myframe)
@@ -333,6 +334,7 @@ if (type=="metaregression")
 		}
 	else{
 		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
+		if (independent_variable=="tr"){myframe$x <- myframe$exp_total/myframe$control_total}
 		# Removing studies with missing data
 		myframe[order(myframe$x, na.last = NA),]
 		myframe <- na.omit(myframe)
