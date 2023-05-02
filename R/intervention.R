@@ -283,7 +283,8 @@ if (grepl("subgroup",type))
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
 			resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
-			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
+			#print.I2.ci=TRUE, 
+	       		print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
