@@ -282,7 +282,7 @@ if (grepl("subgroup",type))
 	forest(meta1, sortvalue = sortvalue, col.diamond="blue", col.diamond.lines="blue", 
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
-			resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
+			#resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
 			#print.I2.ci=TRUE, 
 	       		print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
