@@ -17,5 +17,9 @@ Collaborative and continuous meta-analysis, supported by open-source, cloud deve
 [Vitamin D for fracture prevention](https://github.com/openMetaAnalysis/Vitamin-D-for-fracture-prevention/blob/master/README.md).  We invite authors interested in vitamin D to revise and update this example of an open meta-analysis.
 
 Do you want to improve OpenMetaAnalysis?
+
+### Update
+
+[Metatron](https://github.com/cran/Metatron) removed as no longer at CRAN}
 --------------------------------------------
 You may edit any of the [repository files for openMetaAnalysis](https://github.com/openMetaAnalysis/binary).

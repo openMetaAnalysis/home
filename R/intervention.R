@@ -237,19 +237,23 @@ if (type=="ignore") # Meta-analysis without subgroup
 	#main=textGrob(topic, gp=gpar(cex=3), just="top")
 	grid.text(pubbiastext, 0.1, 0.02, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
-if (grepl("subgroup",type))
+if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 	{
 	# from http://cran.r-project.org/web/packages/meta/
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (measure %in% c('ROM','MD','SMD')) #means
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, print.tau2=FALSE, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, 
+		                  tau.common = TRUE, # added 2023-05-04 per Guido
+		                  data=myframe, sm = measure, print.tau2=FALSE, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
 			{
-			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, print.tau2=FALSE, sm = measure)
+			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, 
+			                        tau.common = TRUE, # added 2023-05-04 per Guido
+			                        data=myframe, print.tau2=FALSE, sm = measure)
 			pubbias = metabias(meta1.egger, method.bias="linreg", plotit=FALSE)
 			pubbiastext = paste(pubbiastext, " (Egger): p= ",round(pubbias$p.value,3),sep="");
 			}
@@ -260,12 +264,16 @@ if (grepl("subgroup",type))
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, 
+		                 tau.common = TRUE, # added 2023-05-04 per Guido
+		                 data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
 			{
-			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, 
+			                    tau.common = TRUE, # added 2023-05-04 per Guido
+			                    data=myframe, sm="ASD", method="I")
 			pubbias = metabias(meta1.as, plotit=FALSE)
 			pubbiastext = paste(pubbiastext, " (Rucker): p= ",round(pubbias$p.value,3),sep="");
 			}
@@ -282,9 +290,9 @@ if (grepl("subgroup",type))
 	forest(meta1, sortvalue = sortvalue, col.diamond="blue", col.diamond.lines="blue", 
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
-			#resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
+			resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
 			#print.I2.ci=TRUE, 
-	       		print.tau2=FALSE, print.p=FALSE, 
+	    print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
