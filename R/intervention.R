@@ -1,4 +1,4 @@
-#Uses http://cran.r-project.org/web/packages/meta/   
+#Uses http://cran.r-project.org/web/packages/meta/     
 #Alternatives:f
 # http://cran.r-project.org/web/packages/metafor/ (allows continuity correction)
 # http://cran.r-project.org/web/packages/rmeta/
@@ -47,7 +47,7 @@ myframe <- data.frame (x)
 
 # Remove bad rows	
 myframe <- na.omit(myframe)
-# COmmented out below 2021-08-07
+# Commented out below 2021-08-07
 # myframe <- myframe[complete.cases(myframe), ]
 # myframe <- myframe[!(as.numeric(myframe$exp_total) == 0 & as.numeric(myframe$control_total) == 0),]
 # myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
@@ -61,7 +61,7 @@ myframe$pmid<-as.numeric(as.character(str_trim(myframe$pmid)))
 myframe$registration <-as.character(str_trim(myframe$registration))
 #myframe$registration <- ifelse(myframe$registration %in% c('NA','na',''), 'Registration: no/unknown', 'Registration: yes')
 myframe$registration <- ifelse(toupper(myframe$registration) %in% c('NO'), 'Registration: no', ifelse(toupper(myframe$registration) %in% c('NA',''), 'Registration: unknown', 'Registration: yes'))
-#stop(paste("stop with: ",myframe$registration, sep=", "))
+#stop(paste("stop line 64 with: ",myframe$registration, sep=", "))
 
 #stop(independent_variable)
 if (type == 'subgroup.registration'){myframe$cofactor <- myframe$registration}
@@ -76,16 +76,17 @@ if (type == 'subgroup8' || independent_variable == 'cf8'){myframe$cofactor <- my
 if (type == 'subgroup9' || independent_variable == 'cf9'){myframe$cofactor <- myframe$cofactor9}
 if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- myframe$cofactor10}
 
-PosParenth1 <- regexpr("(", myframe$exp_events, fixed=TRUE)
+PosParenth1 <- regexpr("(", myframe$exp_events[1], fixed=TRUE)
 if (PosParenth1 > 0)
 	{
-	PosParenth2 <-regexpr(")", myframe$exp_events, fixed=TRUE)
-	myframe$exp_mean<-as.numeric(substring(myframe$exp_events, 1, PosParenth1 - 1))
-	myframe$exp_sd<-as.numeric(substring(myframe$exp_events, PosParenth1 + 1, PosParenth2 - 1))
-	PosParenth1 <-regexpr("(", myframe$control_events, fixed=TRUE)
-	PosParenth2 <-regexpr(")", myframe$control_events, fixed=TRUE)
-	myframe$control_mean<-as.numeric(substring(myframe$control_events, 1, PosParenth1 - 1))
-	myframe$control_sd<-as.numeric(substring(myframe$control_events, PosParenth1 + 1, PosParenth2 - 1))
+	PosParenth1          <- regexpr("(", myframe$exp_events, fixed=TRUE)
+	PosParenth2          <- regexpr(")", myframe$exp_events, fixed=TRUE)
+	myframe$exp_mean     <- as.numeric(substring(myframe$exp_events, 1, PosParenth1 - 1))
+	myframe$exp_sd       <- as.numeric(substring(myframe$exp_events, PosParenth1 + 1, PosParenth2 - 1))
+	PosParenth1          <- regexpr("(", myframe$control_events, fixed=TRUE)
+	PosParenth2          <- regexpr(")", myframe$control_events, fixed=TRUE)
+	myframe$control_mean <- as.numeric(substring(myframe$control_events, 1, PosParenth1 - 1))
+	myframe$control_sd   <- as.numeric(substring(myframe$control_events, PosParenth1 + 1, PosParenth2 - 1))
 	}
 else
 	{
@@ -170,27 +171,29 @@ pubbiastext = "Test for funnel plot asymmetry"
 #if (hartung){analyticmethod = paste(analyticmethod," (Hartung-Knapp)")}
 if (analysis == 'RE-Knapp-Hartung'){
   hartung = TRUE
-  Comb.Fixed = FALSE
-  Comb.Random = TRUE
+  fixed = FALSE
+  Random = TRUE
   analyticmethod = "Random effects model (Hartung-Knapp)"
 }else if (analysis == 'RE'){
   hartung = FALSE
-  Comb.Fixed = FALSE
-  Comb.Random = TRUE
+  fixed = FALSE
+  Random = TRUE
   analyticmethod = "Random effects model"
 }else{ # FE - fixed effects
   hartung = FALSE
-  Comb.Fixed = TRUE
-  Comb.Random = FALSE
+  fixed = TRUE
+  Random = FALSE
   analyticmethod = "Fixed effects model"
 }
 #par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue, col=KUBlue,new = TRUE) #bg=SkyBlue)
-if (type=="ignore")
+#stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
+if (type=="ignore") # Meta-analysis without subgroup
 	{
 	# from http://cran.r-project.org/web/packages/meta/
-	if (PosParenth1 > 0)
+	if (measure %in% c('ROM','MD','SMD')) #means
 		{
 		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
+		#stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
@@ -205,7 +208,7 @@ if (type=="ignore")
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, method="Inverse", level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, method="Inverse", level = 0.95, incr = "TA",  print.tau2=FALSE, digits=2,digits.se=2, allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>5)
@@ -224,7 +227,11 @@ if (type=="ignore")
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	forest(meta1, sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, comb.fixed=Comb.Fixed, comb.random=Comb.Random, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	forest(meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, 
+			fixed = FALSE, common = FALSE, random = TRUE, 
+			#resid.hetstat = TRUE, 
+			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
+			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	#main=textGrob(topic, gp=gpar(cex=3), just="top")
@@ -235,14 +242,14 @@ if (grepl("subgroup",type))
 	# from http://cran.r-project.org/web/packages/meta/
 	myframe$cofactor<-gsub("\'", '', fixed = TRUE, myframe$cofactor)
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
-	if (PosParenth1 > 0)
+	if (measure %in% c('ROM','MD','SMD')) #means
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=myframe$cofactor, print.byvar = FALSE)
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, print.tau2=FALSE, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
 			{
-			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure)
+			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, print.tau2=FALSE, sm = measure)
 			pubbias = metabias(meta1.egger, method.bias="linreg", plotit=FALSE)
 			pubbiastext = paste(pubbiastext, " (Egger): p= ",round(pubbias$p.value,3),sep="");
 			}
@@ -253,7 +260,7 @@ if (grepl("subgroup",type))
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, byvar=myframe$cofactor, print.byvar = FALSE)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
@@ -271,16 +278,25 @@ if (grepl("subgroup",type))
 		{
 		sortvalue <- 1/meta1$w.random
 		}
-	forest(meta1, sortvalue, col.diamond="blue", col.diamond.lines="blue", title = topic, main = topic, comb.fixed=Comb.Fixed, comb.random=Comb.Random, print.I2.ci=TRUE, print.p=TRUE, print.tau2=FALSE, label.left=lefthand, label.right=righthand,text.random=analyticmethod,text.fixed=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	#stop(paste("stop line 277 with: ", sortvalue, lefthand, righthand, analyticmethod, sep=", "))
+	forest(meta1, sortvalue = sortvalue, col.diamond="blue", col.diamond.lines="blue", 
+			fixed = FALSE, common = FALSE, random = TRUE, 
+			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
+			#resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
+			#print.I2.ci=TRUE, 
+	       		print.tau2=FALSE, print.p=FALSE, 
+			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
+	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(pubbiastext, 0.1, 0.04, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	#Test for subgroup differences
 	#Hartung-Knapp gives Q = 0 if a subgroup has single member
-	meta1 <- update(meta1,hakn = FALSE)
-	byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
-	byvartext = sprintf(byvartext, fmt='%#.3f');
-	byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
-	grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	# 03/2022 not needed in meta now as automatic
+	#meta1 <- update(meta1,hakn = FALSE)
+	#byvartext = 1 - pchisq(meta1$Q.b.random, df = meta1$df.Q.b);
+	#byvartext = sprintf(byvartext, fmt='%#.3f');
+	#byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
+	#grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 if (type=="metaregression")
 	{
@@ -294,7 +310,7 @@ if (type=="metaregression")
 				if (independent_variable=="size"){
 					myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
 					}else{
-						if (independent_variable=="cr"){
+						if (independent_variable=="cr" | independent_variable=="tr"){
 							#Nothing now, assign after '(' checked for
 						}else{
 							myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
@@ -304,9 +320,11 @@ if (type=="metaregression")
 				}
     #stop(paste("stop with: ",PosParenth1, sep=""))
 	attach(myframe)
-	if (PosParenth1 > 0){
+	if (measure %in% c('MD','SMD'))  #means
+		{
 		#stop(paste(topic,myframe["Study"], sep=", "))
 		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
+		if (independent_variable=="tr"){myframe$x <- myframe$exp_total/myframe$control_total}
 		# Removing studies with missing data
 		myframe[order(myframe$x, na.last = NA),]
 		myframe <- na.omit(myframe)
@@ -317,6 +335,7 @@ if (type=="metaregression")
 		}
 	else{
 		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
+		if (independent_variable=="tr"){myframe$x <- myframe$exp_total/myframe$control_total}
 		# Removing studies with missing data
 		myframe[order(myframe$x, na.last = NA),]
 		myframe <- na.omit(myframe)
@@ -356,5 +375,30 @@ if (type=="metaregression")
 		}
 	legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
 	}
+if (type=="funnel")
+	{
+	if (measure %in% c('ROM','MD','SMD')) #means
+		{
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		}
+		else # binary
+		{
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		}
+	funnel(meta1, common = TRUE)
+	if (length(meta1$studlab)>5)
+		{
+		meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+		#meta1.as <- update(meta1, sm = "ASD", method="I") 
+		pubbias = metabias(meta1.as, plotit=FALSE,k.min=6)
+		pubbiastext = paste(pubbiastext, ":\np (Rucker) = ",round(pubbias$p.value,3),' (may be falsely significant if < 10 studies)',sep="");
+		}
+	else
+		{
+		pubbiastext = paste(pubbiastext,":\ntoo few studies to test",sep="")
+		}
+	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold")) # Displays behind
+	grid.text(pubbiastext, 0.125, 0.8, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
+	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
-}
+}  
