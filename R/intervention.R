@@ -192,7 +192,7 @@ if (type=="ignore") # Meta-analysis without subgroup
 	# from http://cran.r-project.org/web/packages/meta/
 	if (measure %in% c('ROM','MD','SMD')) #means
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, data=myframe, sm = measure, hakn = hartung, tau.common = TRUE, studlab=paste(Study,", ", year, sep=""))
 		#stop(paste("stop line 188 with: ",myframe$exp_sd, PosParenth1, sep=", "))
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
@@ -208,7 +208,7 @@ if (type=="ignore") # Meta-analysis without subgroup
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, method="Inverse", level = 0.95, incr = "TA",  print.tau2=FALSE, digits=2,digits.se=2, allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, tau.common = TRUE, method="Inverse", level = 0.95, incr = "TA",  tau.common = TRUE, digits=2,digits.se=2, allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>5)
@@ -227,9 +227,9 @@ if (type=="ignore") # Meta-analysis without subgroup
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	forest(meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, 
+	(meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, 
 			fixed = FALSE, common = FALSE, random = TRUE, 
-			#resid.hetstat = TRUE, 
+			resid.hetstat = TRUE, 
 			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
@@ -291,8 +291,7 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
 			resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
-			#print.I2.ci=TRUE, 
-	    print.tau2=FALSE, print.p=FALSE, 
+			print.I2.ci = TRUE, print.tau2=FALSE, print.Q=FALSE, print.p=FALSE, # restored 06/25/2023
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
@@ -391,12 +390,12 @@ if (type=="funnel")
 		}
 		else # binary
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total, data=myframe, sm = measure, method="Inverse", tau.common = TRUE, hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		}
 	funnel(meta1, common = TRUE)
 	if (length(meta1$studlab)>5)
 		{
-		meta1.as <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm="ASD", method="I")
+		meta1.as <- metabin(exp_events, exp_total, control_events, control_total, tau.common = TRUE, data=myframe, sm="ASD", method="I")
 		#meta1.as <- update(meta1, sm = "ASD", method="I") 
 		pubbias = metabias(meta1.as, plotit=FALSE,k.min=6)
 		pubbiastext = paste(pubbiastext, ":\np (Rucker) = ",round(pubbias$p.value,3),' (may be falsely significant if < 10 studies)',sep="");
