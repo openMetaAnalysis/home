@@ -12,17 +12,18 @@ Depends:
 	mpt,
 	Matrix
 Imports:
-    boot,
+	boot,
 	ggplot2,
-    httr,
-    RJSONIO,
-    stringr,
-    reshape2,
-    grid,
+	httr,
+	RJSONIO,
+	stringr,
+	reshape2,
+	grid,
 	rmeta,
-    meta,
+	meta,
 	mada,
+	Metatron,
 	metafor
 Collate:
 	'diagnosis.R'
-    'intervention.R'
+	'intervention.R'
