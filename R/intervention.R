@@ -291,6 +291,7 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
 			resid.hetstat = TRUE, # restored 05/02/2023 2023-05-02
+	       		resid.hetlab = "Resid heterogeneity"
 			print.I2.ci = TRUE, print.tau2=FALSE, print.Q=FALSE, print.p=FALSE, # restored 06/25/2023
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
