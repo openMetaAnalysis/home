@@ -22,7 +22,6 @@ Imports:
 	rmeta,
 	meta,
 	mada,
-	Metatron,
 	metafor
 Collate:
 	'diagnosis.R'
