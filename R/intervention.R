@@ -227,7 +227,7 @@ if (type=="ignore") # Meta-analysis without subgroup
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	meta::forest (meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, 
+	meta::forest (meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="red", col.diamond.lines="red", title = topic, 
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			resid.hetstat = TRUE, addrows = 2,
 			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
@@ -287,11 +287,11 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste("stop line 277 with: ", sortvalue, lefthand, righthand, analyticmethod, sep=", "))
-	forest(meta1, sortvalue = sortvalue, col.diamond="blue", col.diamond.lines="blue", 
+	forest(meta1, sortvalue = sortvalue, col.diamond="red", col.diamond.lines="red", 
 			fixed = FALSE, common = FALSE, random = TRUE, 
 			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
 			resid.hetstat = TRUE, addrows = 2,# restored 05/02/2023 2023-05-02
-	       		resid.hetlab = "Resid heterogeneity",
+	       		#resid.hetlab = "Resid heterogeneity",
 			print.I2.ci = TRUE, print.tau2=FALSE, print.Q=FALSE, print.p=FALSE, # restored 06/25/2023
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
