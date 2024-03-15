@@ -208,7 +208,7 @@ if (type=="ignore") # Meta-analysis without subgroup
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, tau.common = TRUE, method="Inverse", level = 0.95, incr = "TA",  tau.common = TRUE, digits=2,digits.se=2, allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
+		meta1 <- metabin(exp_events, exp_total, control_events, control_total, data=myframe, sm = measure, hakn = hartung, tau.common = TRUE, method="Inverse", level = 0.95, incr = "TA",  digits=2,digits.se=2, allstudies = TRUE, studlab=paste(Study,", ", year, sep=""))
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>5)
