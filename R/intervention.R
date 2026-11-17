@@ -6,7 +6,6 @@
 # http://handbook.cochrane.org/chapter_16/16_9_2_studies_with_zero_cell_counts.htm
 
 intervention <- function(content, measure, analysis, year, pmid, sortby, lefthand, righthand, type, independent_variable, cofactorlabel, topic, label_location, theme) {
-
 if (length(sortby) == 0 || sortby == "sortby"){sortby = "none"}
 first.row <- substr(content, 1, regexpr("\n",content))
 #year<-substr(first.row, regexpr(",",first.row)+1,nchar(first.row))
@@ -15,7 +14,6 @@ first.row <- substr(content, 1, regexpr("\n",content))
 #if (mytable[1,2]){first.row.header <- TRUE}
 num.columns <- str_count(first.row, ",")
 num.cofactors <- num.columns - 8
-
 temp <- content
 # Uses package meta http://cran.r-project.org/web/packages/meta/
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
@@ -26,7 +24,6 @@ temp <- gsub("\r", ' ', fixed = TRUE, temp)
 temp <- gsub("\n", ' ', fixed = TRUE, temp)
 temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
-
 temp <- paste('"',temp,'"',sep = '')
 temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=',num.columns,', byrow=TRUE)')
 x <- eval(parse(file = "", n = NULL, text = temp))
@@ -36,7 +33,6 @@ if (is.na(as.numeric(x[1,2])) == TRUE){first.row.header <- TRUE}
 if (first.row.header == TRUE){x <- x[-c(1),]}
 # Delete terminal rows if contains instructions (detected by as.numeric(year) = false)
 x <- x[!(is.na(as.numeric(x[,2])) == TRUE),]
-
 column.names <- c("Study","year", "pmid", "registration","exp_events", "exp_total","control_events","control_total")
 for(i in 1: num.cofactors)
 	{
@@ -44,8 +40,7 @@ for(i in 1: num.cofactors)
 	}
 dimnames(x) <- list(NULL, column.names)
 myframe <- data.frame (x)
-
-# Remove bad rows	
+# Remove bad rows
 myframe <- na.omit(myframe)
 # Commented out below 2021-08-07
 # myframe <- myframe[complete.cases(myframe), ]
@@ -53,7 +48,6 @@ myframe <- na.omit(myframe)
 # myframe <- myframe[!(is.na(myframe$exp_total) | is.na(myframe$control_total)),]
 
 remove(x)
-
 myframe$Study<-gsub("\'", '', fixed = TRUE, myframe$Study)
 myframe$Study<-as.character(str_trim(myframe$Study))
 myframe$year<-as.numeric(as.character(str_trim(myframe$year)))
@@ -62,20 +56,17 @@ myframe$registration <-as.character(str_trim(myframe$registration))
 #myframe$registration <- ifelse(myframe$registration %in% c('NA','na',''), 'Registration: no/unknown', 'Registration: yes')
 myframe$registration <- ifelse(toupper(myframe$registration) %in% c('NO'), 'Registration: no', ifelse(toupper(myframe$registration) %in% c('NA',''), 'Registration: unknown', 'Registration: yes'))
 #stop(paste("stop line 64 with: ",myframe$registration, sep=", "))
-
 #stop(independent_variable)
-if (type == 'subgroup.registration'){myframe$cofactor <- myframe$registration}
-if (type == 'subgroup1' || independent_variable == 'cf1'){myframe$cofactor <- myframe$cofactor1}
-if (type == 'subgroup2' || independent_variable == 'cf2'){myframe$cofactor <- myframe$cofactor2}
-if (type == 'subgroup3' || independent_variable == 'cf3'){myframe$cofactor <- myframe$cofactor3}
-if (type == 'subgroup4' || independent_variable == 'cf4'){myframe$cofactor <- myframe$cofactor4}
-if (type == 'subgroup5' || independent_variable == 'cf5'){myframe$cofactor <- myframe$cofactor5}
-if (type == 'subgroup6' || independent_variable == 'cf6'){myframe$cofactor <- myframe$cofactor6}
-if (type == 'subgroup7' || independent_variable == 'cf7'){myframe$cofactor <- myframe$cofactor7}
-if (type == 'subgroup8' || independent_variable == 'cf8'){myframe$cofactor <- myframe$cofactor8}
-if (type == 'subgroup9' || independent_variable == 'cf9'){myframe$cofactor <- myframe$cofactor9}
-if (type == 'subgroup10' || independent_variable == 'cf10'){myframe$cofactor <- myframe$cofactor10}
-
+# Select subgroup from the subgroup menu; a previous meta-regression choice must not override it.
+if (type == 'subgroup.registration') {
+  myframe$cofactor <- myframe$registration
+} else if (grepl("^subgroup([1-9]|10)$", type)) {
+  selected_cofactor <- sub("^subgroup", "cofactor", type)
+  if (!selected_cofactor %in% names(myframe)) {
+    stop(paste("Selected", selected_cofactor, "is not present in the input data."))
+  }
+  myframe$cofactor <- myframe[[selected_cofactor]]
+}
 PosParenth1 <- regexpr("(", myframe$exp_events[1], fixed=TRUE)
 if (PosParenth1 > 0)
 	{
@@ -159,7 +150,7 @@ for(i in 1:length(myframe$Study))
 if(myframe$exp_events[i]==0 & myframe$control_events[i]==0)
 	{
 	# Continuity correction?
-	#myframe$exp_events[i] == 0.5 
+	#myframe$exp_events[i] == 0.5
 	#myframe$control_events[i] == 0.5
 	}
 }
@@ -227,10 +218,10 @@ if (type=="ignore") # Meta-analysis without subgroup
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste(topic,lefthand, righthand, sep=", "))
-	meta::forest (meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic, 
-			fixed = FALSE, common = FALSE, random = TRUE, 
+	meta::forest (meta1, sortvalue = sortvalue, xlim=xlimits, col.diamond="blue", col.diamond.lines="blue", title = topic,
+			fixed = FALSE, common = FALSE, random = TRUE,
 			resid.hetstat = TRUE, addrows = 2,
-			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE, 
+			print.I2.ci=TRUE, print.tau2=FALSE, print.p=FALSE,
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
 	grid.text(topic, 0.5, 0.97, gp = gpar(fontsize = 14, fontface = "bold"))
@@ -244,14 +235,14 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 	myframe$cofactor<-as.character(str_trim(myframe$cofactor))
 	if (measure %in% c('ROM','MD','SMD')) #means
 		{
-		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, 
+		meta1 <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd,
 		                  tau.common = TRUE, # added 2023-05-04 per Guido
 		                  data=myframe, sm = measure, print.tau2=FALSE, hakn = hartung, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		if (measure == "MD"){xlimits="s"}else{xlimits=c(-2, 2)}
 		#Publication bias
 		if (length(myframe$Study)>9)
 			{
-			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd, 
+			meta1.egger <- metacont(exp_total, exp_mean, exp_sd, control_total, control_mean, control_sd,
 			                        tau.common = TRUE, # added 2023-05-04 per Guido
 			                        data=myframe, print.tau2=FALSE, sm = measure)
 			pubbias = metabias(meta1.egger, method.bias="linreg", plotit=FALSE)
@@ -264,14 +255,14 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 		}
 	else
 		{
-		meta1 <- metabin(exp_events, exp_total, control_events,control_total, 
+		meta1 <- metabin(exp_events, exp_total, control_events,control_total,
 		                 tau.common = TRUE, # added 2023-05-04 per Guido
 		                 data=myframe, sm = measure, method="Inverse", hakn = hartung, level = 0.95, incr = "TA", allstudies = TRUE, studlab=paste(Study,", ", year, sep=""), label.left=lefthand, label.right=righthand, title = topic, subgroup=myframe$cofactor, print.subgroup.name = FALSE)
 		xlimits=c(0.1, 10)
 		#Publication bias / small study effect
 		if (length(myframe$Study)>9)
 			{
-			meta1.as <- metabin(exp_events, exp_total, control_events, control_total, 
+			meta1.as <- metabin(exp_events, exp_total, control_events, control_total,
 			                    tau.common = TRUE, # added 2023-05-04 per Guido
 			                    data=myframe, sm="ASD", method="I")
 			pubbias = metabias(meta1.as, plotit=FALSE)
@@ -287,11 +278,11 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 		sortvalue <- 1/meta1$w.random
 		}
 	#stop(paste("stop line 277 with: ", sortvalue, lefthand, righthand, analyticmethod, sep=", "))
-	forest(meta1, sortvalue = sortvalue, col.diamond="blue", col.diamond.lines="blue", 
-			fixed = FALSE, common = FALSE, random = TRUE, 
-			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE, 
+	forest(meta1, sortvalue = sortvalue, col.diamond="blue", col.diamond.lines="blue",
+			fixed = FALSE, common = FALSE, random = TRUE,
+			subgroup = TRUE, print.Q.subgroup = FALSE, print.pval.Q = TRUE,
 			resid.hetstat = TRUE, addrows = 2,# restored 05/02/2023 2023-05-02
-	       		#resid.hetlab = "Resid heterogeneity",
+	        		#resid.hetlab = "Resid heterogeneity",
 			print.I2.ci = TRUE, print.tau2=FALSE, print.Q=FALSE, print.p=FALSE, # restored 06/25/2023
 			label.left=lefthand, label.right=righthand,text.random=analyticmethod, fs.random=12, ff.random = 1, ff.hetstat=2, fs.hetstat=12)
 	#stop(paste("stop line 280 with: ", topic, pubbiastext, sep=", "))
@@ -306,83 +297,193 @@ if (grepl("subgroup",type)) #  Meta-analysis with subgroups
 	#byvartext = paste("Test for differences among subgroups: p = ", byvartext ,sep="");
 	#grid.text(byvartext, 0.1, 0.07, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
-if (type=="metaregression")
-	{
-	if (independent_variable=="year"){
-		myframe$x <- as.numeric(myframe$year)
-		}
-		else{
-			if (independent_variable=="size"){
-				myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
-				}else{
-				if (independent_variable=="size"){
-					myframe$x <- as.numeric(myframe$exp_total) + as.numeric(myframe$control_total)
-					}else{
-						if (independent_variable=="cr" | independent_variable=="tr"){
-							#Nothing now, assign after '(' checked for
-						}else{
-							myframe$x <- as.numeric(as.character(str_trim(myframe$cofactor)))
-							}
-						}
-					}
-				}
-    #stop(paste("stop with: ",PosParenth1, sep=""))
-	attach(myframe)
-	if (measure %in% c('MD','SMD'))  #means
-		{
-		#stop(paste(topic,myframe["Study"], sep=", "))
-		if (independent_variable=="cr"){myframe$x <- myframe$control_mean}
-		if (independent_variable=="tr"){myframe$x <- myframe$exp_total/myframe$control_total}
-		# Removing studies with missing data
-		myframe[order(myframe$x, na.last = NA),]
-		myframe <- na.omit(myframe)
-		# Meta-analysis
-		dat <- escalc(measure="MD", m1i=exp_mean, sd1i=exp_sd, n1i=exp_total, m2i=control_mean, sd2i=control_sd, n2i=control_total, data=myframe)
-		res <- rma.uni(yi, vi, mods = ~ myframe$x,  method="DL", knha=TRUE, data=dat, intercept = TRUE)
-		ylabel = "Mean difference"
-		}
-	else{
-		if (independent_variable=="cr"){myframe$x <- myframe$control_events/myframe$control_total}
-		if (independent_variable=="tr"){myframe$x <- myframe$exp_total/myframe$control_total}
-		# Removing studies with missing data
-		myframe[order(myframe$x, na.last = NA),]
-		myframe <- na.omit(myframe)
-		# Meta-analysis
-		dat <- escalc(measure="OR", ai=exp_events, bi=exp_total-exp_events, ci=control_events, di=control_total-control_events, data=myframe)
-		res <- rma(yi, vi, mods = ~ myframe$x, data=dat)
-		ylabel = "Odds ratio transformed to natural log (ln)"
-		}
-	# Make confidence limits
-	cofactor.range = seq(min(myframe$x), max(myframe$x), (max(myframe$x) - min(myframe$x))/100)
-	preds <- predict(res, newmods=cofactor.range)
-	preds <- data.frame(cofactor.range,preds$pred,preds$ci.lb,preds$ci.ub)
-	# Calculate point sizes by rescaling the standard errors
-	wi    <- 1/sqrt(dat$vi)
-	size  <- 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))
-	plot(dat$x, dat$yi, pch=19, cex=size, cex.lab = 1.5,font.axis=2,
-		xlab="", ylab=ylabel, main=paste("Meta-regression of ", topic),
-		xlim=c(min(dat$x)-0.1*(max(dat$x)-min(dat$x)),max(dat$x)+0.1*(max(dat$x)-min(dat$x))),
-		ylim=c(min(dat$yi),max(dat$yi)+0.15*(max(dat$yi)-min(dat$yi))),
-		las=1, bty="l")
-	if ( cofactorlabel != "")
-		{
-		mtext(side=1,line=2.25,paste("Cofactor: ",cofactorlabel), font=2, cex=1.5)
-		}
-	lines(preds$cofactor.range, preds$preds.pred)
-	lines(preds$cofactor.range, preds$preds.ci.lb, lty="dashed", col="blue")
-	lines(preds$cofactor.range, preds$preds.ci.ub, lty="dashed", col="blue")
-	#text(par("usr")[2],par("usr")[4]-1.25*strheight("A"),cex=1.2,adj=c(1,0),paste("p (correlation) = ",sprintf(res$pval[2], fmt='%#.3f'), sep=""), font=1)
-	#text(par("usr")[2],par("usr")[4]-2.25*strheight("A")-0.5*strheight("A"),cex=1.2,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
-	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")                     ,cex=1,adj=c(1,0),paste("R2 = ",round(res$R2),"% (QM = ",sprintf(res$QM, fmt='%#.1f'),", p = ",sprintf(res$pval[2], fmt='%#.3f'), ")", sep=""), font=1)
-	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")-1.4*strheight("A")  ,cex=1,adj=c(1,0),paste("Regression coefficient = ",sprintf(res$b[2], fmt='%#.1f'), sep=""), font=1)
-	text(par("usr")[2],par("usr")[4]-1.2*strheight("A")-2.8*strheight("A")  ,cex=1,adj=c(1,0),paste("Residual I2 = ",sprintf(res$I2, fmt='%#.1f'),'%', sep=""), font=1)
-	abline(h=0, lty="dotted")
-	if (label_location > 0)
-		{
-		text(dat$x, dat$yi, paste(dat$Study,", ",dat$year, sep=""), cex=.9, pos = label_location, offset = 1, col=dat$color)
-		}
-	legend("topleft", adj = 0, xjust = 1, inset = c(0,0), c("Regression line","95% Confidence\ninterval"), pch = NULL, pt.bg = "white", bty = "n", border = "white", lty=c("solid","dashed"), col=c("black","blue"))
-	}
+
+# Meta-regression: numeric and two-category cofactors ----
+if (type == "metaregression") {
+  # Select cofactor 1 by default if an older HTML client provides no moderator.
+  if (length(independent_variable) == 0 || is.na(independent_variable) ||
+      independent_variable %in% c("", "na")) {
+    independent_variable <- "cf1"
+  }
+
+  # Prepare the moderator without changing the meta-analysis/subgroup data.
+  moderator_categorical <- FALSE
+  moderator_levels <- NULL
+  if (independent_variable == "year") {
+    myframe$x <- myframe$year
+  } else if (independent_variable == "size") {
+    myframe$x <- myframe$exp_total + myframe$control_total
+  } else if (independent_variable == "cr") {
+    if (measure %in% c("MD", "SMD", "ROM")) {
+      myframe$x <- myframe$control_mean
+    } else {
+      myframe$x <- myframe$control_events / myframe$control_total
+    }
+  } else if (independent_variable == "tr") {
+    if (measure %in% c("MD", "SMD", "ROM")) {
+      myframe$x <- myframe$exp_mean
+    } else {
+      myframe$x <- myframe$exp_events / myframe$exp_total
+    }
+  } else if (grepl("^cf([1-9]|10)$", independent_variable)) {
+    moderator_column <- sub("^cf", "cofactor", independent_variable)
+    if (!moderator_column %in% names(myframe)) {
+      stop(paste("Selected", moderator_column, "is not present in the input data."))
+    }
+    # Preserve text values used by subgroup analysis; remove only outer apostrophes.
+    moderator_text <- trimws(as.character(myframe[[moderator_column]]))
+    moderator_text <- trimws(gsub("^'|'$", "", moderator_text))
+    moderator_text[toupper(moderator_text) %in% c("", "NA", "N/A", "NULL")] <- NA_character_
+    observed <- moderator_text[!is.na(moderator_text)]
+    if (length(observed) == 0) {
+      stop(paste("No non-missing values for", moderator_column, "."))
+    }
+    observed_numeric <- suppressWarnings(as.numeric(observed))
+    if (all(is.finite(observed_numeric))) {
+      # Numeric cofactors remain continuous, including numerical 0/1 indicators.
+      myframe$x <- suppressWarnings(as.numeric(moderator_text))
+    } else if (all(is.na(observed_numeric)) && length(unique(observed)) == 2) {
+      # Two named categories: code 0=reference, 1=comparison; show original labels.
+      moderator_categorical <- TRUE
+      moderator_levels <- sort(unique(observed))
+      myframe$x <- match(moderator_text, moderator_levels) - 1L
+    } else {
+      stop(paste("For meta-regression,", moderator_column,
+                 "must contain numeric values or exactly two distinct text categories.",
+                 "Mixed numeric/text values and more than two text categories are not supported."))
+    }
+  } else {
+    stop("Select an independent variable for meta-regression.")
+  }
+
+  # Exclude only studies with missing moderator or unusable outcomes.
+  excluded_moderator <- sum(!is.finite(myframe$x))
+  myframe <- myframe[is.finite(myframe$x), , drop = FALSE]
+  if (nrow(myframe) < 3) {
+    stop("Meta-regression needs at least three studies with non-missing moderator values.")
+  }
+  if (length(unique(myframe$x)) < 2) {
+    stop("Meta-regression needs at least two distinct moderator values.")
+  }
+
+  # Calculate the selected effect size, rather than always treating it as OR/MD.
+  if (measure %in% c("OR", "RR")) {
+    dat <- metafor::escalc(measure = measure,
+                           ai = exp_events, bi = exp_total - exp_events,
+                           ci = control_events, di = control_total - control_events,
+                           data = myframe)
+    ylabel <- if (measure == "OR") "Log odds ratio" else "Log risk ratio"
+    ratio_label <- if (measure == "OR") "Ratio of odds ratios" else "Ratio of risk ratios"
+  } else if (measure %in% c("MD", "SMD", "ROM")) {
+    dat <- metafor::escalc(measure = measure,
+                           m1i = exp_mean, sd1i = exp_sd, n1i = exp_total,
+                           m2i = control_mean, sd2i = control_sd, n2i = control_total,
+                           data = myframe)
+    ylabel <- switch(measure, MD = "Mean difference",
+                     SMD = "Standardized mean difference", ROM = "Log ratio of means")
+    ratio_label <- if (measure == "ROM") "Ratio of ratios of means" else NULL
+  } else {
+    stop(paste("Unsupported meta-regression effect measure:", measure))
+  }
+  valid_outcome <- is.finite(dat$yi) & is.finite(dat$vi) & dat$vi > 0
+  excluded_outcome <- sum(!valid_outcome)
+  dat <- dat[valid_outcome, , drop = FALSE]
+  if (nrow(dat) < 3 || length(unique(dat$x)) < 2) {
+    stop("Too few studies with valid effect estimates and different moderator values.")
+  }
+
+  # Keep the original model conventions: DL/Hartung-Knapp for continuous outcomes,
+  # and metafor::rma defaults (REML, z tests) for binary outcomes.
+  if (measure %in% c("MD", "SMD", "ROM")) {
+    res <- metafor::rma(yi, vi, mods = ~ x, method = "DL", test = "knha", data = dat)
+  } else {
+    res <- metafor::rma(yi, vi, mods = ~ x, data = dat)
+  }
+
+  # Generate valid predictions for numeric or binary categorical moderators.
+  pred_x <- if (moderator_categorical) c(0, 1) else
+    seq(min(dat$x), max(dat$x), length.out = 101)
+  predictions <- predict(res, newmods = pred_x)
+  pred_y <- as.numeric(predictions$pred)
+  pred_lb <- as.numeric(predictions$ci.lb)
+  pred_ub <- as.numeric(predictions$ci.ub)
+
+  # Weight study markers by inverse standard error; handle equal weights.
+  wi <- 1 / sqrt(dat$vi)
+  point_size <- if (diff(range(wi)) > 0) {
+    0.7 + 2.2 * (wi - min(wi)) / diff(range(wi))
+  } else {
+    rep(1.4, length(wi))
+  }
+
+  # Plot the study-level estimates and the model's predictions.
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar), add = TRUE)
+  par(mar = c(6, 5, 6.5, 2) + 0.1)
+  plot_y <- range(c(dat$yi, pred_lb, pred_ub), finite = TRUE)
+  plot_margin <- max(diff(plot_y) * 0.12, 0.1)
+  plot_y <- plot_y + c(-plot_margin, plot_margin)
+  plot_x <- if (moderator_categorical) c(-0.2, 1.2) else {
+    x_span <- diff(range(dat$x))
+    range(dat$x) + c(-0.08, 0.08) * x_span
+  }
+  plot(dat$x, dat$yi, pch = 19, cex = point_size,
+       xlim = plot_x, ylim = plot_y, xaxt = if (moderator_categorical) "n" else "s",
+       xlab = if (nzchar(cofactorlabel)) cofactorlabel else
+         if (grepl("^cf", independent_variable)) "Cofactor" else independent_variable,
+       ylab = ylabel, main = paste("Meta-regression of", topic),
+       las = 1, bty = "l", cex.lab = 1.2)
+  if (moderator_categorical) {
+    # Do not draw a numeric trend line through unordered categories.
+    axis(1, at = c(0, 1), labels = moderator_levels, cex.axis = 0.9)
+    segments(pred_x, pred_lb, pred_x, pred_ub, col = "blue", lwd = 2)
+    points(pred_x, pred_y, pch = 18, col = "blue", cex = 1.7)
+    legend("topleft", legend = c("Study effect", "Fitted category effect and 95% CI"),
+           pch = c(19, 18), col = c("black", "blue"), bty = "n", cex = 0.85)
+  } else {
+    lines(pred_x, pred_y)
+    lines(pred_x, pred_lb, lty = "dashed", col = "blue")
+    lines(pred_x, pred_ub, lty = "dashed", col = "blue")
+    legend("topleft", legend = c("Regression line", "95% confidence interval"),
+           lty = c("solid", "dashed"), col = c("black", "blue"), bty = "n")
+  }
+  abline(h = 0, lty = "dotted")
+
+  # Annotate the contrast and indicate the reference category explicitly.
+  beta <- as.numeric(res$b[2])
+  beta_lb <- as.numeric(res$ci.lb[2])
+  beta_ub <- as.numeric(res$ci.ub[2])
+  p_text <- format.pval(as.numeric(res$pval[2]), digits = 3, eps = 0.001)
+  if (moderator_categorical) {
+    mtext(paste0("Comparison: ", moderator_levels[2], " vs ", moderator_levels[1],
+                 " (reference)"), side = 3, line = 3.0, cex = 0.9)
+    mtext(sprintf("Between-category beta = %.3f (95%% CI %.3f to %.3f); p = %s",
+                  beta, beta_lb, beta_ub, p_text),
+          side = 3, line = 1.8, cex = 0.9)
+    if (!is.null(ratio_label)) {
+      mtext(sprintf("%s = %.3f (95%% CI %.3f to %.3f)",
+                    ratio_label, exp(beta), exp(beta_lb), exp(beta_ub)),
+            side = 3, line = 0.6, cex = 0.9)
+    }
+  } else {
+    mtext(sprintf("Slope per unit = %.3f; p = %s", beta, p_text),
+          side = 3, line = 2.2, cex = 0.95)
+    mtext(sprintf("R2 = %.1f%%; residual I2 = %.1f%%", res$R2, res$I2),
+          side = 3, line = 1.0, cex = 0.9)
+  }
+  # Optional study labels use the original study names.
+  label_pos <- suppressWarnings(as.integer(label_location))
+  if (length(label_pos) == 1 && !is.na(label_pos) && label_pos %in% 1:4) {
+    text(dat$x, dat$yi, paste(dat$Study, dat$year, sep = ", "),
+         cex = 0.8, pos = label_pos, offset = 1)
+  }
+  if (excluded_moderator + excluded_outcome > 0) {
+    mtext(sprintf("Excluded studies: %d missing moderator, %d invalid effects",
+                  excluded_moderator, excluded_outcome),
+          side = 1, line = 4.3, cex = 0.75)
+  }
+}
+
 if (type=="funnel")
 	{
 	if (measure %in% c('ROM','MD','SMD')) #means
@@ -397,7 +498,7 @@ if (type=="funnel")
 	if (length(meta1$studlab)>5)
 		{
 		meta1.as <- metabin(exp_events, exp_total, control_events, control_total, tau.common = TRUE, data=myframe, sm="ASD", method="I")
-		#meta1.as <- update(meta1, sm = "ASD", method="I") 
+		#meta1.as <- update(meta1, sm = "ASD", method="I")
 		pubbias = metabias(meta1.as, plotit=FALSE,k.min=6)
 		pubbiastext = paste(pubbiastext, ":\np (Rucker) = ",round(pubbias$p.value,3),' (may be falsely significant if < 10 studies)',sep="");
 		}
@@ -409,4 +510,4 @@ if (type=="funnel")
 	grid.text(pubbiastext, 0.125, 0.8, hjust = 0, gp = gpar(fontsize = 12, fontface = "bold"))
 	}
 #if(theme=="KU"){display_logo(x=1.2,y=0.05)}
-}  
+}
