@@ -129,13 +129,13 @@ $( "#dialog" ).dialog();
     e.preventDefault();
     if ($("#column_names").css("display") == "none"){
 		$("#column_names").css("display","inline")
-		$("#fieldset").css("height","900px")
+		$("#fieldset").css("min-height","900px")
 		$("#topic").val("Example data set")
 		$("#measure").val("RR");
 		}
 	else {
 		$("#column_names").css("display","none")
-		$("#fieldset").css("height","800px")
+		$("#fieldset").css("min-height","800px")
 	}
   });
 
@@ -444,8 +444,12 @@ fieldset.options{
 	background-color: #FFFFFF;
 	width:575px;height:100px;
 }
+/* Allow the meta-regression settings box to fit its explanatory text.
+   A fixed height caused excess empty space and contributed to footer overlap. */
 #metaregression_form fieldset.options {
-  height: 160px;
+  height: auto;
+  min-height: 0;
+  padding-bottom: 12px;
 }
 
 #editor { 
@@ -612,7 +616,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
       <div style="width:600px;float:left;">
 <span style="color:red;font-weight:bold">News 08/07/2021:</span> registration data required in a new column 4. Enter No if not registered or NA if either unknown resistration or you do not intend a subgroup by registration. Note, this only addresses whether registration done and not whether done timely and without changes in primary outcome or other attributes that could bias the results. The rationale for this is re-analysis of the role of tramadol for chronic back pain (PMID <a href="http://pubmed.gov/29204613">29204613</a>). In this example, the data is further weakened by the outcome in the Lee study not matching the outcome in the trial registration.
         <form id="paramform" target="target" style="width:600px;">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:800px;" id="fieldset">
+          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;min-height:800px;height:auto;" id="fieldset">
             <legend style="font-weight:bold">Enter inputs</legend>
             <div>To perform a <a href="https://en.wikipedia.org/wiki/Meta-analysis">meta-analysis</a> of interventions:</div>
 			<ul>
@@ -746,24 +750,27 @@ Malthus, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
 			<input type="text" id="cofactorlabel" placeholder="Label for cofactor on x-axis" style="width:250px;float:right" /> 
             </div>
             <div style="clear:both; padding-top:10px; font-size:12px; line-height:1.35;">
-              Numeric cofactors are analyzed as continuous variables. Cofactors with exactly two
-              text categories are compared using their original category names; the
-              alphabetically first category is the reference. More than two text categories
-              require recoding before meta-regression.
+              <b>Metaregression analyses:</b> Numeric cofactors are analyzed as continuous variables.
+              Cofactors with exactly two text categories are compared using their original category
+              names; the alphabetically first category is the reference. More than two text
+              categories require recoding before meta-regression.
             </div>
 			</fieldset>
 			</div>
 			
 			<div style="clear:both">&nbsp;</div>
-			<div>
+			<div style="clear:both; min-height:28px;">
             <label>Topic (for title - optional):</label> 
             <input type="text" id="topic" placeholder="Topic" style="float:right;width:375px"/> 
             <select id="theme" style="display:none">
               <option value="white" selected>None theme</option>
               <option value="KU">KU</option>
             </select>
-			</div> 
-            <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot (below)</button>
+			</div>
+            <!-- Keep the plot button below the floated topic field in both analysis modes. -->
+            <div style="clear:both; padding-top:10px; padding-bottom:6px;">
+              <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot (below)</button>
+            </div>
           </fieldset>
         </form>
       </div>
