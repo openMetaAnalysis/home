@@ -139,26 +139,18 @@ $( "#dialog" ).dialog();
 	}
   });
 
+  // Analysis selection: retain subgroup choices and default an unspecified
+  // meta-regression independent variable to cofactor 1.
   $("#type").on("change", function(e){
     e.preventDefault();
-	if ($("#type").val() == "ignore") // plain meta-analysis
-		{
-		$("#metaregression_form").css("display","none")
-		$("#metaanalysis_form").css("display","block")
-		$("#labels").css("display","block")
-		}
-    if ($("#type").val() == "metaregression")
-		{
-		$("#metaregression_form").css("display","block")
-		$("#metaanalysis_form").css("display","none")
-		$("#labels").css("display","none")
-		}
-    else //meta-analysis with subgroups
-		{
-		$("#metaregression_form").css("display","none")
-		$("#metaanalysis_form").css("display","block")
-		$("#labels").css("display","block")
-		}
+    var isMetaRegression = $("#type").val() === "metaregression";
+    $("#metaregression_form").css("display", isMetaRegression ? "block" : "none");
+    $("#metaanalysis_form").css("display", isMetaRegression ? "none" : "block");
+    $("#labels").css("display", isMetaRegression ? "none" : "block");
+    if (isMetaRegression &&
+        (!$("#independent_variable").val() || $("#independent_variable").val() === "na")) {
+      $("#independent_variable").val("cf1").trigger("change");
+    }
   });
   
   $("#independent_variable").on("change", function(e){
@@ -259,6 +251,17 @@ $( "#dialog" ).dialog();
 		$("#topic").val("Vitamin D supplementation for fracture prevention");
 		editor.setValue("Law, 2006, 16641143, NA, 24, 1762, 20, 1955, 'INeffective dose',\nLips, 1996, 8554248, NA, 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 2007, 17473911, NA,202, 1725, 209, 1715, 'Effective dose',\nTrivedi, 2003, 12609940, NA, 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 1994, 8173430, NA, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 2002, 11991447, NA, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 1997, 9278463, NA, 11, 187, 26, 202, 'Effective dose',\nGrant, 2005, 15885294, NA, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 2000, 14695863, NA, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2006, 16481635, NA, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 2002, 11918228, NA, 69, 569, 76, 575, 'INeffective dose',\nPfeifer, 2000, 10841179, NA, 3, 70, 6, 67, 'Effective dose',\nPfeifer, 2009, 18629569, NA, 9, 121, 16, 121, 'Effective dose',\nSalovaara, 2010, 20200964, NA, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 2010, 20460620, NA, 171, 1131, 135, 1125, 'INeffective dose',",1);
 		}
+
+  if($(this).val()=="ex_1c") {
+    // Categorical meta-regression example using exactly the subgroup dataset.
+    $("#type").val("metaregression").trigger("change");
+    $("#independent_variable").val("cf1").trigger("change");
+    $("#cofactorlabel").val("Dose category");
+    $("#measure").val("OR");
+    $("#topic").val("Vitamin D supplementation for fracture prevention, by dose category");
+    editor.setValue("Law, 2006, 16641143, NA, 24, 1762, 20, 1955, 'INeffective dose',\nLips, 1996, 8554248, NA, 135, 1291, 122, 1287, 'INeffective dose',\nLyons, 2007, 17473911, NA,202, 1725, 209, 1715, 'Effective dose',\nTrivedi, 2003, 12609940, NA, 43, 1345, 62, 1341, 'Effective dose',\nChapuy, 1994, 8173430, NA, 255, 1176, 308, 1127, 'Effective dose',\nChapuy, 2002, 11991447, NA, 97, 393, 55, 190, 'Effective dose',\nDawson-Hughes, 1997, 9278463, NA, 11, 187, 26, 202, 'Effective dose',\nGrant, 2005, 15885294, NA, 349, 2649, 341, 2643, 'INeffective dose',\nHarwood, 2000, 14695863, NA, 8, 114, 5, 37, 'INeffective dose',\nJackson, 2006, 16481635, NA, 2102, 18176, 2158, 18106, 'INeffective dose',\nMeyer, 2002, 11918228, NA, 69, 569, 76, 575, 'INeffective dose',\nPfeifer, 2000, 10841179, NA, 3, 70, 6, 67, 'Effective dose',\nPfeifer, 2009, 18629569, NA, 9, 121, 16, 121, 'Effective dose',\nSalovaara, 2010, 20200964, NA, 78, 1586, 94, 1609, 'INeffective dose',\nSanders, 2010, 20460620, NA, 171, 1131, 135, 1125, 'INeffective dose',",1);
+  }
+
 	if($(this).val()=="ex_2a") {
 		$("#type").val("ignore");
 		$("#measure").val("MD");
@@ -441,6 +444,10 @@ fieldset.options{
 	background-color: #FFFFFF;
 	width:575px;height:100px;
 }
+#metaregression_form fieldset.options {
+  height: 160px;
+}
+
 #editor { 
   position: relative;
   width: 950px;
@@ -719,7 +726,7 @@ Malthus, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
             </div>
 			<div id="metaanalysis_form_right" style="width:250px;float:right">
 			<select id="independent_variable" style="width:250px;float:right">
-              <option value="na" selected>Select independent variable</option>
+              <option value="na" selected>Select independent variable (default: cofactor 1)</option>
               <option value="size">Study size</option>
               <option value="year">Year</option>
               <option value="cr">Control rate</option>
@@ -737,6 +744,12 @@ Malthus, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
             </select>
 			<br>
 			<input type="text" id="cofactorlabel" placeholder="Label for cofactor on x-axis" style="width:250px;float:right" /> 
+            </div>
+            <div style="clear:both; padding-top:10px; font-size:12px; line-height:1.35;">
+              Numeric cofactors are analyzed as continuous variables. Cofactors with exactly two
+              text categories are compared using their original category names; the
+              alphabetically first category is the reference. More than two text categories
+              require recoding before meta-regression.
             </div>
 			</fieldset>
 			</div>
@@ -759,7 +772,7 @@ Malthus, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:350px;height:800px;">
 		  <legend style="font-weight:bold">Example analyses</legend>
 			<h3 style="margin-bottom:0px">Teaching example 1: Soma (fictitious)</h3>
-			<div >Fictitious example based on <a href="http://en.wikipedia.org/wiki/Brave_New_World">Brave New World</a></div>
+			<div >Fictitious example based on <a href="https://en.wikipedia.org/wiki/Brave_New_World">Brave New World</a></div>
 			<div><input type="radio" name="example" class="example" value="ex_0" id="ex_0" /><label for="ex_0">Soma dataset</label>
 				<i>
 				<div class="teach">Before making the plot</div>
@@ -796,6 +809,7 @@ Malthus, 2016, 12345678, NCT12345678, 40, 100, 50, 100, high-dose, 50,</div>
 			<i class="teach">When pooled, is there a significant difference? What does i-squared suggest?</i></div>
 			<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Subgroup</label> 
 			<i class="teach">What does subgrouping reveal?</i></div>
+            <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Meta-regression by named dose category (two groups)</label></div>
 
 			<h3 style="margin-bottom:0px">Meta-analysis of continuous outcomes</h3>
 		  <div >Example: <a href="http://openmetaanalysis.github.io/Hypertonic-Saline-for-Bronchiolitis/">hypertonic saline to reduce length of stay in hospitalized children with bronchiolitis</a></div>
